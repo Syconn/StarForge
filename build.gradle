@@ -14,8 +14,8 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
-group = 'mod.syconn.drone'
-archivesBaseName = 'drone'
+group = 'mod.stf.syconn'
+archivesBaseName = 'stf'
 version = '1.0'
 
 java {

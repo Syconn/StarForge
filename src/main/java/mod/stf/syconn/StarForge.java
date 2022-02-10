@@ -1,6 +1,7 @@
 package mod.stf.syconn;
 
 import mod.stf.syconn.client.ClientHandler;
+import mod.stf.syconn.client.models.items.ModelBaker;
 import mod.stf.syconn.init.ModItems;
 import mod.stf.syconn.network.Network;
 import net.minecraftforge.common.MinecraftForge;
@@ -21,6 +22,7 @@ public class StarForge {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         ModItems.REGISTER.register(bus);
+        MinecraftForge.EVENT_BUS.register(new ModelBaker());
     }
 
     private void onCommonSetup(FMLCommonSetupEvent event)
