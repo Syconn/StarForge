@@ -1,9 +1,13 @@
 package mod.stf.syconn;
 
 import mod.stf.syconn.client.ClientHandler;
-import mod.stf.syconn.client.models.items.ModelBaker;
+import mod.stf.syconn.init.ModBlockEntities;
+import mod.stf.syconn.init.ModBlocks;
+import mod.stf.syconn.init.ModContainers;
 import mod.stf.syconn.init.ModItems;
 import mod.stf.syconn.network.Network;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -17,13 +21,22 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class StarForge {
 
     public StarForge() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.commonSpec);
+        //ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.commonSpec);
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         ModItems.REGISTER.register(bus);
-        MinecraftForge.EVENT_BUS.register(new ModelBaker());
+        ModBlocks.REGISTER.register(bus);
+        ModBlockEntities.REGISTER.register(bus);
+        ModContainers.REGISTER.register(bus);
     }
+
+    public static CreativeModeTab Tab = new CreativeModeTab("StarForge") {
+        @Override
+        public ItemStack makeIcon() {
+            return ModItems.F_11D.get().getDefaultInstance();
+        }
+    };
 
     private void onCommonSetup(FMLCommonSetupEvent event)
     {
@@ -32,7 +45,7 @@ public class StarForge {
 
     private void onClientSetup(FMLClientSetupEvent event)
     {
-        ClientHandler.setup(event);
+        event.enqueueWork(ClientHandler::setup);
         MinecraftForge.EVENT_BUS.register(new ClientHandler());
     }
 }

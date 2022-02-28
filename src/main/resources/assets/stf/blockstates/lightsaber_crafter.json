@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "facing=north,state=co": {
+      "y": 0,
+      "model": "stf:block/lw_construction"
+    },
+    "facing=east,state=co": {
+      "y": 90,
+      "model": "stf:block/lw_construction"
+    },
+    "facing=south,state=co": {
+      "y": 180,
+      "model": "stf:block/lw_construction"
+    },
+    "facing=west,state=co": {
+      "y": 270,
+      "model": "stf:block/lw_construction"
+    },
+    "facing=north,state=h": {
+      "y": 0,
+      "model": "stf:block/lw_hilts"
+    },
+    "facing=east,state=h": {
+      "y": 90,
+      "model": "stf:block/lw_hilts"
+    },
+    "facing=south,state=h": {
+      "y": 180,
+      "model": "stf:block/lw_hilts"
+    },
+    "facing=west,state=h": {
+      "y": 270,
+      "model": "stf:block/lw_hilts"
+    },
+    "facing=north,state=cr": {
+      "y": 0,
+      "model": "stf:block/lw_crystal"
+    },
+    "facing=east,state=cr": {
+      "y": 90,
+      "model": "stf:block/lw_crystal"
+    },
+    "facing=south,state=cr": {
+      "y": 180,
+      "model": "stf:block/lw_crystal"
+    },
+    "facing=west,state=cr": {
+      "y": 270,
+      "model": "stf:block/lw_crystal"
+    }
+  }
+}

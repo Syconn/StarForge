@@ -1,0 +1,8 @@
+{
+  "block.stf.lightsaber_crafter": "Lightsaber Workstation",
+  "item.stf.f11": "F-11 Blaster",
+  "item.stf.lightsaber": "Lightsaber",
+  "itemGroup.StarForge": "StarForge",
+  "key.categories.stf": "StarForge",
+  "key.lightsaber.activate": "Key Activate Lightsaber"
+}

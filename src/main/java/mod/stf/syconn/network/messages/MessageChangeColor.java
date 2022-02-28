@@ -1,0 +1,59 @@
+package mod.stf.syconn.network.messages;
+
+import mod.stf.syconn.client.screen.CrafterScreen;
+import mod.stf.syconn.common.containers.CrafterContainer;
+import mod.stf.syconn.item.Lightsaber;
+import mod.stf.syconn.item.lightsaber.LColor;
+import mod.stf.syconn.item.lightsaber.LightsaberData;
+import mod.stf.syconn.item.lightsaber.LightsaberHelper;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.network.NetworkEvent;
+
+import java.util.function.Supplier;
+
+public class MessageChangeColor implements IMessage<MessageChangeColor> {
+
+    private int color;
+
+    public MessageChangeColor() {}
+
+    public MessageChangeColor(int color) {
+        this.color = color;
+    }
+
+    @Override
+    public void encode(MessageChangeColor message, FriendlyByteBuf buffer) {
+        buffer.writeInt(message.color);
+    }
+
+    @Override
+    public MessageChangeColor decode(FriendlyByteBuf buffer) {
+        return new MessageChangeColor(buffer.readInt());
+    }
+
+    @Override
+    public void handle(MessageChangeColor message, Supplier<NetworkEvent.Context> supplier) {
+        supplier.get().enqueueWork(() -> {
+            ServerPlayer player = supplier.get().getSender();
+
+            if(!(player.containerMenu instanceof CrafterContainer))
+                return;
+
+            CrafterContainer crafter = (CrafterContainer) player.containerMenu;
+
+            LazyOptional<IItemHandler> cap = crafter.getBlockEntity().getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+
+            if (cap.isPresent()) {
+                IItemHandler handler = cap.resolve().get();
+                LightsaberData data = LightsaberHelper.getData(handler.getStackInSlot(0)).setColor(new LColor(message.color));
+                LightsaberHelper.setData(handler.getStackInSlot(0), data);
+            }
+        });
+        supplier.get().setPacketHandled(true);
+    }
+}
