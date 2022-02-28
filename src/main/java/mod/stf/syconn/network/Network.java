@@ -1,7 +1,9 @@
 package mod.stf.syconn.network;
 
 import mod.stf.syconn.Reference;
-import mod.stf.syconn.network.message.IMessage;
+import mod.stf.syconn.network.messages.IMessage;
+import mod.stf.syconn.network.messages.MessageActivateLightsaber;
+import mod.stf.syconn.network.messages.MessageChangeColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -23,6 +25,8 @@ public class Network {
                 .clientAcceptedVersions(PROTOCOL_VERSION::equals)
                 .serverAcceptedVersions(PROTOCOL_VERSION::equals)
                 .simpleChannel();
+        register(MessageActivateLightsaber.class, new MessageActivateLightsaber(), NetworkDirection.PLAY_TO_SERVER);
+        register(MessageChangeColor.class, new MessageChangeColor(), NetworkDirection.PLAY_TO_SERVER);
     }
 
     private static <T> void register(Class<T> clazz, IMessage<T> message, NetworkDirection direction)

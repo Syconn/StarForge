@@ -1,4 +1,4 @@
-package mod.stf.syconn.network.message;
+package mod.stf.syconn.network.messages;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
