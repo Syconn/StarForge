@@ -3,7 +3,7 @@ loaderVersion="[39,)"
 license="All Rights Reserved"
 [[mods]]
 modId="stf"
-version="${file.jarVersion}" #mandatory
+version="0.1 Beta" #mandatory
 displayName="StarForge" #mandatory
 authors="Syconn" #optional
 description='''
