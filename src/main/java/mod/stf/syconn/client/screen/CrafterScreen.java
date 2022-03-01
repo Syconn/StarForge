@@ -5,12 +5,15 @@ import com.mojang.blaze3d.vertex.*;
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.client.screen.componets.MutableSlider;
 import mod.stf.syconn.common.containers.CrafterContainer;
+import mod.stf.syconn.item.lightsaber.LColor;
 import mod.stf.syconn.item.lightsaber.LightsaberData;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import mod.stf.syconn.network.Network;
 import mod.stf.syconn.network.messages.MessageChangeColor;
 import mod.stf.syconn.util.ColorConverter;
+import mod.stf.syconn.util.GuiHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -57,7 +60,7 @@ public class CrafterScreen extends AbstractContainerScreen<CrafterContainer> {
         relX = (this.width - this.imageWidth) / 2;
         relY = (this.height - this.imageHeight) / 2;
 
-        if (getData() != null) fillRect(relX + 75, relY + 6, imageWidth / 2, 20, rgb[0], rgb[1], rgb[2], 255);
+        if (getData() != null) GuiHelper.fillRect(relX + 75, relY + 6, imageWidth / 2, 20, rgb[0], rgb[1], rgb[2], 255);
 
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
@@ -75,12 +78,12 @@ public class CrafterScreen extends AbstractContainerScreen<CrafterContainer> {
         addRenderableWidget(saveButton = new ExtendedButton(relX + 30, relY + 6, 40, 20, new TextComponent("Modify"), this::buttonShit));
     }
 
-    public void sliderShit(Button button){
-        textColor[((MutableSlider)button).getId()].setValue(String.valueOf(((MutableSlider)button).getValueInt()));
-        rgb[((MutableSlider)button).getId()] = ((MutableSlider)button).getValueInt();
-        System.out.println("SCROLL");
-    }
 
+    public void sliderShit(Button button) {
+        if (button instanceof MutableSlider && textColor[0] != null && sliderColor[0] != null){
+            textColor[((MutableSlider) button).getId()].setValue(String.valueOf(((MutableSlider)button).getValueInt()));
+        }
+    }
     public void buttonShit(Button button){
         Network.getPlayChannel().sendToServer(new MessageChangeColor(ColorConverter.convert(rgb[0], rgb[1], rgb[2])));
     }
@@ -111,12 +114,16 @@ public class CrafterScreen extends AbstractContainerScreen<CrafterContainer> {
                 sliderColor[0].setValue(getData().getColor().getR());
                 sliderColor[1].setValue(getData().getColor().getG());
                 sliderColor[2].setValue(getData().getColor().getB());
+                textColor[0].setValue(Integer.toString(getData().getColor().getR()));
+                textColor[1].setValue(Integer.toString(getData().getColor().getG()));
+                textColor[2].setValue(Integer.toString(getData().getColor().getB()));
                 sliderColor[0].updateSlider();
                 sliderColor[1].updateSlider();
                 sliderColor[2].updateSlider();
                 updateSliders = false;
             }
         } else updateSliders = true;
+        //System.out.println(sliderColor[0].getMessage());
 
         rgb[0] = sliderColor[0].getValueInt();
         rgb[1] = sliderColor[1].getValueInt();
@@ -124,45 +131,52 @@ public class CrafterScreen extends AbstractContainerScreen<CrafterContainer> {
     }
 
     public void updateText(){
-        for (int i = 0; i < sliderColor.length; i++) {
-            int textNum;
-            try {
-                textNum = Integer.parseInt(textColor[i].getValue());
-            } catch (NumberFormatException ignored){
-                textColor[i].setValue(String.valueOf(1));
-                textNum = 1;
-            }
+        for (int i = 0; i < textColor.length; i++) {
+            if (textColor[i] != null) {
+                int textNum;
+                try {
+                    textNum = Integer.parseInt(textColor[i].getValue());
+                } catch (NumberFormatException ignored){
+                    textColor[i].setValue(String.valueOf(1));
+                    textNum = 1;
+                }
 
+                if (sliderColor[i].getValueInt() != textNum){
+                    sliderColor[i].setValue(textNum);
+                    sliderColor[i].updateSlider();
+                }
+            }
         }
     }
 
     @Override
     protected void containerTick() {
-        updateText();
-        updateSliders();
+        if (sliderColor[0] != null) {
+            updateText();
+            updateSliders();
 
-        if (handler() != null) {
-            if (handler().getStackInSlot(0) != ItemStack.EMPTY) {
-                for (int i = 0; i < sliderColor.length; i++) {
-                    sliderColor[i].visible = true;
-                    textColor[i].visible = true;
+            if (handler() != null) {
+                if (handler().getStackInSlot(0) != ItemStack.EMPTY) {
+                    for (int i = 0; i < sliderColor.length; i++) {
+                        sliderColor[i].visible = true;
+                        textColor[i].visible = true;
+                    }
+                    saveButton.visible = true;
+                } else {
+                    for (int i = 0; i < sliderColor.length; i++) {
+                        sliderColor[i].visible = false;
+                        textColor[i].visible = false;
+                    }
+                    saveButton.visible = false;
                 }
-                saveButton.visible = true;
-            }
-
-            else  {
-                for (int i = 0; i < sliderColor.length; i++) {
-                    sliderColor[i].visible = false;
-                    textColor[i].visible = false;
-                }
-                saveButton.visible = false;
             }
         }
     }
 
     @Override
     protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
-        drawString(matrixStack, Minecraft.getInstance().font, "Lightsaber Workstation", relX, relY - 10, 0xffffff);
+        drawString(matrixStack, font, "Lightsaber Workstation", relX, relY - 10, 0xffffff);
+        drawCenteredString(matrixStack, font, new LColor(rgb[0], rgb[1], rgb[2]).getClosetColor().getName().toUpperCase(), relX + 120, relY + 13, 0xffffff);
     }
 
     @Override
@@ -172,17 +186,5 @@ public class CrafterScreen extends AbstractContainerScreen<CrafterContainer> {
         relY = (this.height - this.imageHeight) / 2;
         this.blit(matrixStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
         //fill(matrixStack, relX, relY, relX + 100, relY + 40, 15435844);
-    }
-
-    private void fillRect(int pX, int pY, int pWidth, int pHeight, int pRed, int pGreen, int pBlue, int pAlpha) {
-        BufferBuilder pRenderer = Tesselator.getInstance().getBuilder();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        pRenderer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        pRenderer.vertex((double)(pX + 0), (double)(pY + 0), 0.0D).color(pRed, pGreen, pBlue, pAlpha).endVertex();
-        pRenderer.vertex((double)(pX + 0), (double)(pY + pHeight), 0.0D).color(pRed, pGreen, pBlue, pAlpha).endVertex();
-        pRenderer.vertex((double)(pX + pWidth), (double)(pY + pHeight), 0.0D).color(pRed, pGreen, pBlue, pAlpha).endVertex();
-        pRenderer.vertex((double)(pX + pWidth), (double)(pY + 0), 0.0D).color(pRed, pGreen, pBlue, pAlpha).endVertex();
-        pRenderer.end();
-        BufferUploader.end(pRenderer);
     }
 }

@@ -30,7 +30,6 @@ public class CrafterBE extends BlockEntity {
         super(ModBlockEntities.CRAFTER_BE.get(), pos, state);
     }
 
-
     @Override
     public void setRemoved() {
         super.setRemoved();

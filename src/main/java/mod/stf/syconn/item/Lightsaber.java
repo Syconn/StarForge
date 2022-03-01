@@ -74,7 +74,10 @@ public class Lightsaber extends Item {
 
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
-        pPlayer.startUsingItem(pHand);
+        LightsaberData data = LightsaberHelper.getData(itemstack);
+        if (data != null && data.isActive()) {
+            pPlayer.startUsingItem(pHand);
+        }
         return InteractionResultHolder.consume(itemstack);
     }
 
