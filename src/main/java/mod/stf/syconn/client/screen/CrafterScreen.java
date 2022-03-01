@@ -3,6 +3,7 @@ package mod.stf.syconn.client.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import mod.stf.syconn.Reference;
+import mod.stf.syconn.block.LightsaberCrafter;
 import mod.stf.syconn.client.screen.componets.MutableSlider;
 import mod.stf.syconn.common.containers.CrafterContainer;
 import mod.stf.syconn.item.lightsaber.LColor;
@@ -18,6 +19,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -34,6 +36,8 @@ public class CrafterScreen extends AbstractContainerScreen<CrafterContainer> {
 
     private final ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/lightsaber_forge.png");
     private CrafterContainer inv;
+    private BlockPos pos;
+    private Inventory playerInv;
 
     private MutableSlider[] sliderColor = new MutableSlider[3];
     private EditBox[] textColor = new EditBox[3];
@@ -47,7 +51,9 @@ public class CrafterScreen extends AbstractContainerScreen<CrafterContainer> {
 
     public CrafterScreen(CrafterContainer container, Inventory inv, Component name) {
         super(container, inv, name);
+        this.playerInv = inv;
         this.inv = container;
+        this.pos = container.getBlockEntity().getBlockPos();
         imageHeight = 182;
         imageWidth = 176;
     }
@@ -67,6 +73,10 @@ public class CrafterScreen extends AbstractContainerScreen<CrafterContainer> {
 
     @Override
     protected void init() {
+        switch (inv.getBlockEntity().getBlockState().getValue(LightsaberCrafter.MODE)){
+            case HILT -> minecraft.setScreen(new HiltScreen(menu, playerInv, title));
+        }
+
         relX = (this.width - this.imageWidth) / 2;
         relY = (this.height - this.imageHeight) / 2;
         addRenderableWidget(sliderColor[0] = new MutableSlider(0, relX + 10, relY + 33, "R", 0, 255, 185, this::sliderShit));

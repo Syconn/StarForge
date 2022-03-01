@@ -2,6 +2,7 @@ package mod.stf.syconn.client;
 
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.client.screen.CrafterScreen;
+import mod.stf.syconn.client.screen.HiltScreen;
 import mod.stf.syconn.init.ModBlocks;
 import mod.stf.syconn.init.ModContainers;
 import mod.stf.syconn.init.ModItems;
@@ -38,6 +39,7 @@ public class ClientHandler {
         ClientRegistry.registerKeyBinding(KEY_LIGHTSABER_ACTIVATE);
 
         MenuScreens.register(ModContainers.CRAFTER_CONTAINER.get(), CrafterScreen::new);
+        MenuScreens.register(ModContainers.CRAFTER_CONTAINER.get(), HiltScreen::new);
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.LIGHTSABER_CRAFTER.get(), RenderType.translucent());
 
         registerProperties();
