@@ -3,22 +3,23 @@ package mod.stf.syconn.client.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import mod.stf.syconn.Reference;
+import mod.stf.syconn.api.screens.TabbedScreen;
+import mod.stf.syconn.api.screens.componet.TabButton;
+import mod.stf.syconn.api.util.Tab;
 import mod.stf.syconn.block.LightsaberCrafter;
-import mod.stf.syconn.client.screen.componets.MutableSlider;
-import mod.stf.syconn.common.containers.CrafterContainer;
+import mod.stf.syconn.client.screen.componets.ColorSlider;
+import mod.stf.syconn.common.containers.ColorContainer;
 import mod.stf.syconn.item.lightsaber.LColor;
 import mod.stf.syconn.item.lightsaber.LightsaberData;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import mod.stf.syconn.network.Network;
 import mod.stf.syconn.network.messages.MessageChangeColor;
+import mod.stf.syconn.network.messages.MessageClickTab;
 import mod.stf.syconn.util.ColorConverter;
 import mod.stf.syconn.util.GuiHelper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.gui.screens.inventory.StonecutterScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -31,25 +32,25 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CrafterScreen extends AbstractContainerScreen<CrafterContainer> {
+public class ColorScreen extends TabbedScreen<ColorContainer> {
 
     private final ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/lightsaber_forge.png");
-    private CrafterContainer inv;
+    private ColorContainer inv;
     private BlockPos pos;
     private Inventory playerInv;
 
-    private MutableSlider[] sliderColor = new MutableSlider[3];
+    private ColorSlider[] sliderColor = new ColorSlider[3];
     private EditBox[] textColor = new EditBox[3];
     private ExtendedButton saveButton;
     private boolean updateSliders = true;
+    private int relX, relY;
     private int[] rgb = new int[sliderColor.length];
     private String[] lastTextValue = new String[textColor.length];
 
-    private int relX;
-    private int relY;
-
-    public CrafterScreen(CrafterContainer container, Inventory inv, Component name) {
+    public ColorScreen(ColorContainer container, Inventory inv, Component name) {
         super(container, inv, name);
         this.playerInv = inv;
         this.inv = container;
@@ -63,9 +64,6 @@ public class CrafterScreen extends AbstractContainerScreen<CrafterContainer> {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
 
-        relX = (this.width - this.imageWidth) / 2;
-        relY = (this.height - this.imageHeight) / 2;
-
         if (getData() != null) GuiHelper.fillRect(relX + 75, relY + 6, imageWidth / 2, 20, rgb[0], rgb[1], rgb[2], 255);
 
         this.renderTooltip(matrixStack, mouseX, mouseY);
@@ -73,25 +71,32 @@ public class CrafterScreen extends AbstractContainerScreen<CrafterContainer> {
 
     @Override
     protected void init() {
-        switch (inv.getBlockEntity().getBlockState().getValue(LightsaberCrafter.MODE)){
-            case HILT -> minecraft.setScreen(new HiltScreen(menu, playerInv, title));
-        }
-
+        super.init();
         relX = (this.width - this.imageWidth) / 2;
         relY = (this.height - this.imageHeight) / 2;
-        addRenderableWidget(sliderColor[0] = new MutableSlider(0, relX + 10, relY + 33, "R", 0, 255, 185, this::sliderShit));
-        addRenderableWidget(sliderColor[1] = new MutableSlider(1, relX + 10, relY + 54, "G", 0, 255, 185, this::sliderShit));
-        addRenderableWidget(sliderColor[2] = new MutableSlider(2, relX + 10, relY + 75, "B", 0, 255, 185, this::sliderShit));
+        addRenderableWidget(sliderColor[0] = new ColorSlider(0, relX + 10, relY + 33, "R", 0, 255, 185, this::sliderShit).hide());
+        addRenderableWidget(sliderColor[1] = new ColorSlider(1, relX + 10, relY + 54, "G", 0, 255, 185, this::sliderShit).hide());
+        addRenderableWidget(sliderColor[2] = new ColorSlider(2, relX + 10, relY + 75, "B", 0, 255, 185, this::sliderShit).hide());
         addRenderableWidget(textColor[0] = new EditBox(font, relX - 70, relY + 33, 60, 18, new TextComponent("R")));
         addRenderableWidget(textColor[1] = new EditBox(font, relX - 70, relY + 54, 60, 18, new TextComponent("G")));
         addRenderableWidget(textColor[2] = new EditBox(font, relX - 70, relY + 75, 60, 18, new TextComponent("B")));
         addRenderableWidget(saveButton = new ExtendedButton(relX + 30, relY + 6, 40, 20, new TextComponent("Modify"), this::buttonShit));
     }
 
+    @Override
+    protected int startingTabId() {
+        return inv.getBlockEntity().getBlockState().getValue(LightsaberCrafter.MODE).getId() - 1;
+    }
+
+    @Override
+    public void tabbedClicked(Button button) {
+        super.tabbedClicked(button);
+        Network.getPlayChannel().sendToServer(new MessageClickTab(((TabButton)button).getId(), inv.getBlockEntity().getBlockPos()));
+    }
 
     public void sliderShit(Button button) {
-        if (button instanceof MutableSlider && textColor[0] != null && sliderColor[0] != null){
-            textColor[((MutableSlider) button).getId()].setValue(String.valueOf(((MutableSlider)button).getValueInt()));
+        if (button instanceof ColorSlider && textColor[0] != null && sliderColor[0] != null){
+            textColor[((ColorSlider) button).getId()].setValue(String.valueOf(((ColorSlider)button).getValueInt()));
         }
     }
     public void buttonShit(Button button){
@@ -133,7 +138,6 @@ public class CrafterScreen extends AbstractContainerScreen<CrafterContainer> {
                 updateSliders = false;
             }
         } else updateSliders = true;
-        //System.out.println(sliderColor[0].getMessage());
 
         rgb[0] = sliderColor[0].getValueInt();
         rgb[1] = sliderColor[1].getValueInt();
@@ -161,6 +165,24 @@ public class CrafterScreen extends AbstractContainerScreen<CrafterContainer> {
 
     @Override
     protected void containerTick() {
+        hiltTick();
+    }
+
+    @Override
+    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
+        relX = (this.width - this.imageWidth) / 2;
+        relY = (this.height - this.imageHeight) / 2;
+        drawCenteredString(matrixStack, font, new LColor(rgb[0], rgb[1], rgb[2]).getClosetColor().getName().toUpperCase(), 120, 13, 0xffffff);
+    }
+
+    @Override
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+        RenderSystem.setShaderTexture(0, GUI);
+        this.blit(matrixStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
+        //fill(matrixStack, relX, relY, relX + 100, relY + 40, 15435844);
+    }
+
+    public void hiltTick(){
         if (sliderColor[0] != null) {
             updateText();
             updateSliders();
@@ -183,18 +205,11 @@ public class CrafterScreen extends AbstractContainerScreen<CrafterContainer> {
         }
     }
 
-    @Override
-    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
-        drawString(matrixStack, font, "Lightsaber Workstation", relX, relY - 10, 0xffffff);
-        drawCenteredString(matrixStack, font, new LColor(rgb[0], rgb[1], rgb[2]).getClosetColor().getName().toUpperCase(), relX + 120, relY + 13, 0xffffff);
-    }
-
-    @Override
-    protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.setShaderTexture(0, GUI);
-        relX = (this.width - this.imageWidth) / 2;
-        relY = (this.height - this.imageHeight) / 2;
-        this.blit(matrixStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
-        //fill(matrixStack, relX, relY, relX + 100, relY + 40, 15435844);
+    protected List<Tab> createTabs(){
+        List<Tab> tabs = new ArrayList<>();
+        for (LightsaberCrafter.States state : LightsaberCrafter.States.values()){
+            tabs.add(new Tab(state.getId(), state.icon()));
+        }
+        return tabs;
     }
 }

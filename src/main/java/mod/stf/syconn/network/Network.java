@@ -4,6 +4,7 @@ import mod.stf.syconn.Reference;
 import mod.stf.syconn.network.messages.IMessage;
 import mod.stf.syconn.network.messages.MessageActivateLightsaber;
 import mod.stf.syconn.network.messages.MessageChangeColor;
+import mod.stf.syconn.network.messages.MessageClickTab;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -27,6 +28,7 @@ public class Network {
                 .simpleChannel();
         register(MessageActivateLightsaber.class, new MessageActivateLightsaber(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageChangeColor.class, new MessageChangeColor(), NetworkDirection.PLAY_TO_SERVER);
+        register(MessageClickTab.class, new MessageClickTab(), NetworkDirection.PLAY_TO_SERVER);
     }
 
     private static <T> void register(Class<T> clazz, IMessage<T> message, NetworkDirection direction)

@@ -1,38 +1,29 @@
-package mod.stf.syconn.common.containers;
+package mod.stf.syconn.api.containers;
 
 import mod.stf.syconn.init.ModBlocks;
-import mod.stf.syconn.init.ModContainers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
+import org.jetbrains.annotations.Nullable;
 
-public class CrafterContainer extends AbstractContainerMenu {
+public abstract class ContainerMenu extends AbstractContainerMenu {
 
-    private BlockEntity blockEntity;
-    private Player playerEntity;
-    private IItemHandler playerInventory;
+    protected BlockEntity blockEntity;
+    protected Player playerEntity;
+    protected Inventory playerInventory;
+    protected Block block;
 
-    public CrafterContainer(int windowId, BlockPos pos, Inventory playerInventory, Player player) {
-        super(ModContainers.CRAFTER_CONTAINER.get(), windowId);
+    public ContainerMenu(@Nullable MenuType<?> pMenuType, int windowId, BlockPos pos, Inventory playerInventory, Player player, Block block) {
+        super(pMenuType, windowId);
         blockEntity = player.getCommandSenderWorld().getBlockEntity(pos);
         this.playerEntity = player;
-        this.playerInventory = new InvWrapper(playerInventory);
-
-        if (blockEntity != null) {
-            blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                addSlot(new SlotItemHandler(h, 0, 187, 55));
-            });
-        }
-        layoutPlayerInventorySlots(187, 147);
+        //this.playerInventory = new InvWrapper(playerInventory);
+        this.playerInventory = playerInventory;
+        this.block = block;
     }
 
     public BlockEntity getBlockEntity() {
@@ -41,7 +32,7 @@ public class CrafterContainer extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player playerIn) {
-        return stillValid(ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos()), playerEntity, ModBlocks.LIGHTSABER_CRAFTER.get());
+        return stillValid(ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos()), playerEntity, block);
     }
 
     @Override
@@ -83,16 +74,16 @@ public class CrafterContainer extends AbstractContainerMenu {
     }
 
 
-    private int addSlotRange(IItemHandler handler, int index, int x, int y, int amount, int dx) {
+    protected int addSlotRange(Inventory handler, int index, int x, int y, int amount, int dx) {
         for (int i = 0 ; i < amount ; i++) {
-            addSlot(new SlotItemHandler(handler, index, x, y));
+            addSlot(new Slot(handler, index, x, y));
             x += dx;
             index++;
         }
         return index;
     }
 
-    private int addSlotBox(IItemHandler handler, int index, int x, int y, int horAmount, int dx, int verAmount, int dy) {
+    protected int addSlotBox(Inventory handler, int index, int x, int y, int horAmount, int dx, int verAmount, int dy) {
         for (int j = 0 ; j < verAmount ; j++) {
             index = addSlotRange(handler, index, x, y, horAmount, dx);
             y += dy;
@@ -100,7 +91,7 @@ public class CrafterContainer extends AbstractContainerMenu {
         return index;
     }
 
-    private void layoutPlayerInventorySlots(int leftCol, int topRow) {
+    protected void layoutPlayerInventorySlots(int leftCol, int topRow) {
         // Player inventory
         addSlotBox(playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
 
