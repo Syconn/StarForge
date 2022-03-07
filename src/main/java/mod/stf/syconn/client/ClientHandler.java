@@ -1,7 +1,7 @@
 package mod.stf.syconn.client;
 
 import mod.stf.syconn.Reference;
-import mod.stf.syconn.client.screen.CrafterScreen;
+import mod.stf.syconn.client.screen.ColorScreen;
 import mod.stf.syconn.client.screen.HiltScreen;
 import mod.stf.syconn.init.ModBlocks;
 import mod.stf.syconn.init.ModContainers;
@@ -24,7 +24,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.Nullable;
@@ -38,15 +37,15 @@ public class ClientHandler {
     public static void setup(){
         ClientRegistry.registerKeyBinding(KEY_LIGHTSABER_ACTIVATE);
 
-        MenuScreens.register(ModContainers.CRAFTER_CONTAINER.get(), CrafterScreen::new);
-        MenuScreens.register(ModContainers.CRAFTER_CONTAINER.get(), HiltScreen::new);
+        MenuScreens.register(ModContainers.COLOR_CONTAINER.get(), ColorScreen::new);
+        //MenuScreens.register(ModContainers.HILT_CONTAINER.get(), HiltScreen::new);
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.LIGHTSABER_CRAFTER.get(), RenderType.translucent());
 
         registerProperties();
     }
 
     public static void registerProperties(){
-        ItemProperties.register(ModItems.Lightsaber.get(), new ResourceLocation("model"), new ItemPropertyFunction(){
+        ItemProperties.register(ModItems.LIGHTSABER.get(), new ResourceLocation("model"), new ItemPropertyFunction(){
 
             @Override
             public float call(ItemStack pStack, @Nullable ClientLevel pLevel, @Nullable LivingEntity pEntity, int pSeed) {
@@ -57,7 +56,7 @@ public class ClientHandler {
                 return 1f;
             }
         });
-        ItemProperties.register(ModItems.Lightsaber.get(), new ResourceLocation("active"), new ItemPropertyFunction(){
+        ItemProperties.register(ModItems.LIGHTSABER.get(), new ResourceLocation("active"), new ItemPropertyFunction(){
 
             @Override
             public float call(ItemStack pStack, @Nullable ClientLevel pLevel, @Nullable LivingEntity pEntity, int pSeed) {
@@ -73,7 +72,7 @@ public class ClientHandler {
 
     @SubscribeEvent
     public static void registerColors(final ColorHandlerEvent.Item event) {
-        event.getItemColors().register(((pStack, pTintIndex) -> LightsaberHelper.getData(pStack) != null ? LightsaberHelper.getData(pStack).getColor().getDecimal() : -1), ModItems.Lightsaber.get());
+        event.getItemColors().register(((pStack, pTintIndex) -> LightsaberHelper.getData(pStack) != null ? LightsaberHelper.getData(pStack).getColor().getDecimal() : -1), ModItems.LIGHTSABER.get());
     }
 
     @SubscribeEvent
