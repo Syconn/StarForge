@@ -4,8 +4,10 @@ import mod.stf.syconn.block.LightsaberCrafter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkHooks;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -39,6 +41,7 @@ public class MessageClickTab implements IMessage<MessageClickTab> {
             ServerPlayer player = supplier.get().getSender();
             BlockState oldState = player.level.getBlockState(message.pos);
             player.level.setBlock(message.pos, oldState.setValue(LightsaberCrafter.MODE, LightsaberCrafter.States.getById(message.id)), 2);
+            //NetworkHooks.openGui(player, (MenuProvider) player.level.getBlockEntity(message.pos), message.pos);
         });
         supplier.get().setPacketHandled(true);
     }

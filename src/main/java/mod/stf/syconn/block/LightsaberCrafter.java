@@ -3,7 +3,6 @@ package mod.stf.syconn.block;
 import mod.stf.syconn.api.blocks.InventoryBlock;
 import mod.stf.syconn.api.util.TabAble;
 import mod.stf.syconn.common.blockEntity.CrafterBE;
-import mod.stf.syconn.init.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
@@ -30,11 +29,11 @@ public class LightsaberCrafter extends InventoryBlock {
 
     public LightsaberCrafter() {
         super(BlockBehaviour.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.METAL).noOcclusion());
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(MODE, States.HILT));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(MODE, States.COLOR));
     }
 
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite()).setValue(MODE, States.HILT);
+        return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite()).setValue(MODE, States.COLOR);
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
@@ -54,7 +53,7 @@ public class LightsaberCrafter extends InventoryBlock {
 
     public enum States implements StringRepresentable, TabAble {
 
-        CRYSTAL("cr", 1, Items.QUARTZ),
+        COLOR("cr", 1, Items.QUARTZ),
         HILT("h", 2,Items.IRON_INGOT),
         CONSTRUCTION("co", 3, Items.IRON_PICKAXE);
 

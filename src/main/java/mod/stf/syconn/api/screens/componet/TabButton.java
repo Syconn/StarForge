@@ -8,6 +8,7 @@ import mod.stf.syconn.api.util.Tab;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 public class TabButton extends ExtendedButton {
@@ -38,7 +39,7 @@ public class TabButton extends ExtendedButton {
             if (state == State.RIGHT) blit(mStack, x, y - 2, 56, 30, 28, 31);
         }
 
-        //Minecraft.getInstance().getItemRenderer().renderAndDecorateItem();
+        Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(new ItemStack(tab.getIcon()), x + 6, y + 6);
     }
 
     public int getId() {
