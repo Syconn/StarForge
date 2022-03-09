@@ -38,7 +38,12 @@ public class Lightsaber extends Item {
         LightsaberData data = LightsaberHelper.getData(pStack);
 
         pTooltipComponents.add(new TextComponent(data.getColor().getClosetColor().getName()).withStyle(ColorConverter.convert(data.getColor().getClosetColor())));
-        pStack.setHoverName(new TextComponent(data.getHandle().getName()).append(new TextComponent(" Lightsaber").withStyle(ColorConverter.convert(data.getColor().getClosetColor()))));
+        if (data.isActive()) {
+            pStack.setHoverName(new TextComponent(data.getHandle().getName()).append(new TextComponent(" Lightsaber").withStyle(ColorConverter.convert(data.getColor().getClosetColor()))));
+        } else {
+            pStack.setHoverName(new TextComponent(data.getHandle().getName()).append(new TextComponent(" Handle").withStyle(ColorConverter.convert(data.getColor().getClosetColor()))));
+
+        }
 
         if (pIsAdvanced.isAdvanced()){
             pTooltipComponents.add(new TextComponent("").withStyle(ChatFormatting.GREEN));

@@ -1,10 +1,7 @@
 package mod.stf.syconn;
 
 import mod.stf.syconn.client.ClientHandler;
-import mod.stf.syconn.init.ModBlockEntities;
-import mod.stf.syconn.init.ModBlocks;
-import mod.stf.syconn.init.ModContainers;
-import mod.stf.syconn.init.ModItems;
+import mod.stf.syconn.init.*;
 import mod.stf.syconn.network.Network;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -41,6 +38,7 @@ public class StarForge {
     private void onCommonSetup(FMLCommonSetupEvent event)
     {
         Network.init();
+        ModRecipes.init();
     }
 
     private void onClientSetup(FMLClientSetupEvent event)

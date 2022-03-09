@@ -41,7 +41,7 @@ public class MessageClickTab implements IMessage<MessageClickTab> {
             ServerPlayer player = supplier.get().getSender();
             BlockState oldState = player.level.getBlockState(message.pos);
             player.level.setBlock(message.pos, oldState.setValue(LightsaberCrafter.MODE, LightsaberCrafter.States.getById(message.id)), 2);
-            //NetworkHooks.openGui(player, (MenuProvider) player.level.getBlockEntity(message.pos), message.pos);
+            NetworkHooks.openGui(player, (MenuProvider) player.level.getBlockEntity(message.pos), message.pos);
         });
         supplier.get().setPacketHandled(true);
     }

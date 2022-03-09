@@ -38,7 +38,7 @@ public class ClientHandler {
         ClientRegistry.registerKeyBinding(KEY_LIGHTSABER_ACTIVATE);
 
         MenuScreens.register(ModContainers.COLOR_CONTAINER.get(), ColorScreen::new);
-        //MenuScreens.register(ModContainers.HILT_CONTAINER.get(), HiltScreen::new);
+        MenuScreens.register(ModContainers.HILT_CONTAINER.get(), HiltScreen::new);
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.LIGHTSABER_CRAFTER.get(), RenderType.translucent());
 
         registerProperties();

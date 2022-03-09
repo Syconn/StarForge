@@ -1,19 +1,84 @@
 package mod.stf.syconn.client.screen;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import mod.stf.syconn.Reference;
+import mod.stf.syconn.api.screens.TabbedScreen;
+import mod.stf.syconn.api.util.Tab;
+import mod.stf.syconn.block.LightsaberCrafter;
+import mod.stf.syconn.common.containers.ColorContainer;
 import mod.stf.syconn.common.containers.HiltContainer;
+import mod.stf.syconn.item.lightsaber.LColor;
+import mod.stf.syconn.util.GuiHelper;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class HiltScreen extends AbstractContainerScreen<HiltContainer> {
+import java.util.ArrayList;
+import java.util.List;
 
-    public HiltScreen(HiltContainer pMenu, Inventory pPlayerInventory, Component pTitle) {
-        super(pMenu, pPlayerInventory, pTitle);
+public class HiltScreen extends TabbedScreen<HiltContainer> {
+
+    private final ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/containers/workstation_hilt.png");
+    private HiltContainer inv;
+    private BlockPos pos;
+    private Inventory playerInv;
+
+    public HiltScreen(HiltContainer container, Inventory inv, Component name) {
+        super(container, inv, new TextComponent(""));
+        this.playerInv = inv;
+        this.inv = container;
+        this.pos = container.getBlockEntity().getBlockPos();
+        imageWidth = 198;
+        imageHeight = 184;
+    }
+
+    @Override
+    protected List<Tab> createTabs() {
+        List<Tab> tabs = new ArrayList<>();
+        for (LightsaberCrafter.States state : LightsaberCrafter.States.values()){
+            tabs.add(new Tab(state.getId(), state.icon()));
+        }
+        return tabs;
+    }
+
+    @Override
+    protected int startingTabId() {
+        return inv.getBlockEntity().getBlockState().getValue(LightsaberCrafter.MODE).getId() - 1;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+    }
+
+    @Override
+    public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+        int relX = (this.width - this.imageWidth) / 2;
+        int relY = (this.height - this.imageHeight) / 2;
+
+        this.renderBackground(pPoseStack);
+        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        this.renderTooltip(pPoseStack, pMouseX, pMouseY);
+
+        this.blit(pPoseStack, relX + 12, relY + 77, 198, 20, 18, 18);
+        this.blit(pPoseStack, relX + 39, relY + 77, 198, 20, 18, 18);
+    }
+
+    @Override
+    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
+        int relX = (this.width - this.imageWidth) / 2;
+        int relY = (this.height - this.imageHeight) / 2;
     }
 
     @Override
     protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
-
+        int relX = (this.width - this.imageWidth) / 2;
+        int relY = (this.height - this.imageHeight) / 2;
+        RenderSystem.setShaderTexture(0, GUI);
+        this.blit(pPoseStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
     }
 }
