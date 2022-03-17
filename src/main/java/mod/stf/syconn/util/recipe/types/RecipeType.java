@@ -9,11 +9,11 @@ import java.util.List;
 
 public abstract class RecipeType<T extends Recipe> {
 
-    private List<T> RECIPES = new ArrayList<T>();
-
-    protected void addRecipes(T recipe){
-        RECIPES.add(recipe);
+    public RecipeType() {
+        createRecipes();
     }
+
+    public List<T> RECIPES = new ArrayList<T>();
     public List<T> getRecipes(){ return RECIPES; }
     public ModIngredient ingredient(Item item, int count){
         return new ModIngredient(item, count);

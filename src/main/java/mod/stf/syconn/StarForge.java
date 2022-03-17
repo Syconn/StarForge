@@ -38,7 +38,6 @@ public class StarForge {
     private void onCommonSetup(FMLCommonSetupEvent event)
     {
         Network.init();
-        ModRecipes.init();
     }
 
     private void onClientSetup(FMLClientSetupEvent event)
