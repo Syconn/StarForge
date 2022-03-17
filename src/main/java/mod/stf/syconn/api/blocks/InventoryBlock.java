@@ -37,7 +37,7 @@ public abstract class InventoryBlock extends Block implements EntityBlock {
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
         if (!level.isClientSide) {
             BlockEntity be = level.getBlockEntity(pos);
-            if (be instanceof CrafterBE) {
+            if (be instanceof MenuBlockEntity) {
                 NetworkHooks.openGui((ServerPlayer) player, (MenuProvider) be, be.getBlockPos());
             } else {
                 throw new IllegalStateException("Our named container provider is missing!");

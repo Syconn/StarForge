@@ -4,5 +4,8 @@
   "item.stf.lightsaber": "Lightsaber",
   "itemGroup.StarForge": "StarForge",
   "key.categories.stf": "StarForge",
-  "key.lightsaber.activate": "Key Activate Lightsaber"
+  "key.lightsaber.activate": "Key Activate Lightsaber",
+  "tab.lightsaber_crafter.co": "Part Crafter",
+  "tab.lightsaber_crafter.cr": "Colorizer",
+  "tab.lightsaber_crafter.h": "Hilt Crafter"
 }

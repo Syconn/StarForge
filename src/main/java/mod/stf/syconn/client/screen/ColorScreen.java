@@ -9,6 +9,7 @@ import mod.stf.syconn.api.util.Tab;
 import mod.stf.syconn.block.LightsaberCrafter;
 import mod.stf.syconn.client.screen.componets.ColorSlider;
 import mod.stf.syconn.common.containers.ColorContainer;
+import mod.stf.syconn.init.ModBlocks;
 import mod.stf.syconn.item.lightsaber.LColor;
 import mod.stf.syconn.item.lightsaber.LightsaberData;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
@@ -85,7 +86,7 @@ public class ColorScreen extends TabbedScreen<ColorContainer> {
 
     @Override
     protected int startingTabId() {
-        return inv.getBlockEntity().getBlockState().getValue(LightsaberCrafter.MODE).getId() - 1;
+        return LightsaberCrafter.States.COLOR.getId();
     }
 
     @Override
@@ -179,7 +180,6 @@ public class ColorScreen extends TabbedScreen<ColorContainer> {
     protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.setShaderTexture(0, GUI);
         this.blit(matrixStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
-        //fill(matrixStack, relX, relY, relX + 100, relY + 40, 15435844);
     }
 
     public void hiltTick(){
@@ -208,7 +208,7 @@ public class ColorScreen extends TabbedScreen<ColorContainer> {
     protected List<Tab> createTabs(){
         List<Tab> tabs = new ArrayList<>();
         for (LightsaberCrafter.States state : LightsaberCrafter.States.values()){
-            tabs.add(new Tab(state.getId(), state.icon()));
+            tabs.add(new Tab(state.getId(), state.icon(), "tab." + ModBlocks.LIGHTSABER_CRAFTER.getId().getPath() + "." + state.getSerializedName()));
         }
         return tabs;
     }

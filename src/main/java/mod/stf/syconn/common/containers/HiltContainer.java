@@ -26,6 +26,7 @@ public class HiltContainer extends ContainerMenu {
                 addSlot(new ToggleSlotHandler(h, 3, 93, 77));
                 addSlot(new ToggleSlotHandler(h, 4, 120, 77));
                 addSlot(new ToggleSlotHandler(h, 5, 147, 77));
+                addSlot(new ToggleSlotHandler(h, 6, 176, 31));
             });
         }
         layoutPlayerInventorySlots(8, 102);

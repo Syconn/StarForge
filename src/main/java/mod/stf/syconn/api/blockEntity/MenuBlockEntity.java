@@ -32,15 +32,7 @@ public abstract class MenuBlockEntity extends BlockEntity implements MenuProvide
         handler.invalidate();
     }
 
-    private ItemStackHandler createHandler() {
-        return new ItemStackHandler(3) {
-
-            @Override
-            protected void onContentsChanged(int slot) {
-                setChanged();
-            }
-        };
-    }
+    protected abstract ItemStackHandler createHandler();
 
     @Nonnull
     @Override

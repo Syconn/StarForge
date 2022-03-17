@@ -34,12 +34,12 @@ public abstract class TabbedScreen<T extends AbstractContainerMenu> extends Abst
             if (i == 0) //LEFT
                 addRenderableWidget(tabButtons[i] = new TabButton(leftPos, topPos, TabButton.State.LEFT, tabs.get(i), this::tabbedClicked));
             else if (i == size) //RIGHT
-                addRenderableWidget(tabButtons[i] = new TabButton(calcUnit(i) + leftPos, topPos, TabButton.State.RIGHT, tabs.get(i), this::tabbedClicked));
+                addRenderableWidget(tabButtons[i] = new TabButton(leftPos + imageWidth - 28, topPos, TabButton.State.RIGHT, tabs.get(i), this::tabbedClicked));
             //MIDDLE
             else addRenderableWidget(tabButtons[i] = new TabButton(calcUnit(i) + leftPos, topPos, TabButton.State.MIDDLE, tabs.get(i), this::tabbedClicked));
         }
 
-        tabButtons[startingTabId()].setSelected(true);
+        tabButtons[startingTabId() - 1].setSelected(true);
     }
 
     private int calcUnit(int i){
@@ -59,9 +59,4 @@ public abstract class TabbedScreen<T extends AbstractContainerMenu> extends Abst
 
     protected abstract List<Tab> createTabs();
     protected abstract int startingTabId();
-
-    @Override
-    protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
-
-    }
 }

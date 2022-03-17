@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
@@ -24,6 +25,17 @@ public class CrafterBE extends MenuBlockEntity {
 
     public void tickServer() {
 
+    }
+
+    @Override
+    protected ItemStackHandler createHandler() {
+        return new ItemStackHandler(7) {
+
+            @Override
+            protected void onContentsChanged(int slot) {
+                setChanged();
+            }
+        };
     }
 
     @Override
