@@ -12,13 +12,5 @@ import java.util.Map;
 
 public class ModRecipes {
 
-    //public static final List<RecipeType<?>> RECIPE_TYPES = new ArrayList<>();
-    public static final Map<RecipeType<?>, List<Recipe>> RECIPE_TYPES = createRecipes();
-    public static final HiltRecipeType HILT_RECIPE_TYPE = new HiltRecipeType();
-
-    public static Map<RecipeType<?>, List<Recipe>> createRecipes(){
-        Map<RecipeType<?>, List<Recipe>> recipes = new HashMap<>();
-        recipes.put(HILT_RECIPE_TYPE, new HiltRecipeType().getRecipes());
-        return recipes;
-    }
+    public static final List<Recipe> HILT_RECIPES = new HiltRecipeType().createRecipes();
 }

@@ -14,7 +14,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import java.util.List;
 
-public abstract class TabbedScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> {
+public abstract class TabbedScreen<T extends AbstractContainerMenu> extends BasicContainerScreen<T> {
 
     private final List<Tab> tabs;
     private TabButton[] tabButtons;

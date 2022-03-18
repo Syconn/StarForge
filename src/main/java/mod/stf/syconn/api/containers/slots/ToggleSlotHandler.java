@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ToggleSlotHandler extends SlotItemHandler {
 
-    private boolean active = true;
+    private boolean active;
 
     public ToggleSlotHandler(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
         super(itemHandler, index, xPosition, yPosition);
@@ -16,6 +16,7 @@ public class ToggleSlotHandler extends SlotItemHandler {
     @Override
     public boolean mayPlace(@NotNull ItemStack stack) {
         return active;
+
     }
 
     public void setActive(boolean active) {

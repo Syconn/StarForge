@@ -9,10 +9,12 @@ public class Recipe {
 
     private ModIngredient[] inputs;
     private ItemStack output;
+    private int id;
 
-    public Recipe(ItemStack output, ModIngredient... inputs) {
+    public Recipe(ItemStack output, int id, ModIngredient... inputs) {
         this.inputs = inputs;
         this.output = output;
+        this.id = id;
     }
 
     public ItemStack getOutput() {
@@ -21,5 +23,9 @@ public class Recipe {
 
     public ModIngredient[] getInputs() {
         return inputs;
+    }
+
+    public int getId() {
+        return id;
     }
 }
