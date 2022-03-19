@@ -1,14 +1,18 @@
 package mod.stf.syconn.network.messages;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mod.stf.syconn.common.containers.ColorContainer;
 import mod.stf.syconn.common.containers.HiltContainer;
 import mod.stf.syconn.init.ModRecipes;
 import mod.stf.syconn.item.lightsaber.LColor;
 import mod.stf.syconn.item.lightsaber.LightsaberData;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
+import mod.stf.syconn.util.recipe.ModIngredient;
 import mod.stf.syconn.util.recipe.Recipe;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -51,16 +55,26 @@ public class MessageCraftHilt implements IMessage<MessageCraftHilt> {
 
             if (cap.isPresent()) {
                 IItemHandler handler = cap.resolve().get();
+                if (handler.getStackInSlot(0) == ItemStack.EMPTY) {
+                    for (int i = 0; i < message.recipe.getInputs().length; i++) {
+                        int count = message.recipe.getInputs()[i].amount();
 
-                for (int i = 0; i < message.recipe.getInputs().length; i++) {
-                    if (handler.getStackInSlot(i).getItem() != message.recipe.getInputs()[i].item() || handler.getStackInSlot(i).getCount() < message.recipe.getInputs()[i].amount())
-                        return;
+                        for (int j = 0; j < player.getInventory().getContainerSize(); j++) {
+                            if (player.getInventory().getItem(j).getItem() == message.recipe.getInputs()[i].item()){
+                                int num = player.getInventory().getItem(j).getCount();
+                                if (num >= count){
+                                    player.getInventory().removeItem(j, count);
+                                    count -= num;
+                                } else {
+                                    count -= num;
+                                    player.getInventory().removeItem(j, num);
+                                }
+                            }
+                        }
+                    }
+
+                    handler.insertItem(0, message.recipe.getOutput().copy(), false);
                 }
-
-                for (int i = 0; i < message.recipe.getInputs().length; i++)
-                    handler.extractItem(i, message.recipe.getInputs()[i].amount(), false);
-                
-                handler.insertItem(7, message.recipe.getOutput(), false);
             }
         });
         supplier.get().setPacketHandled(true);

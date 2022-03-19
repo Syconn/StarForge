@@ -46,7 +46,7 @@ public class TabButton extends ExtendedButton {
         Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(new ItemStack(tab.icon()), x + 6, y + 6);
 
         if (isMouseOver(mouseX, mouseY))
-            drawString(mStack, Minecraft.getInstance().font, new TranslatableComponent(tab.name()), x - 10, y - 5, 14737632);
+            drawString(mStack, Minecraft.getInstance().font, new TranslatableComponent(tab.name()), x - 10, y - 10, 14737632);
     }
 
     public int getId() {
