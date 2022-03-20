@@ -25,6 +25,7 @@ public class StarForge {
         ModItems.REGISTER.register(bus);
         ModBlocks.REGISTER.register(bus);
         ModBlockEntities.REGISTER.register(bus);
+        ModEntities.REGISTER.register(bus);
         ModContainers.REGISTER.register(bus);
     }
 

@@ -17,7 +17,7 @@ public class LightsaberHelper {
         tag.putBoolean("state", data.isActive());
         LColor.save(tag, data.getColor());
         stack.getOrCreateTag().put("ldata", tag);
-        stack.setHoverName(new TextComponent(data.getHandle().getName()).append(new TextComponent(" Lightsaber").withStyle(ColorConverter.convert(data.getColor().getClosetColor()))));
+        //stack.setHoverName(new TextComponent(data.getHandle().getName()).append(new TextComponent(" Lightsaber").withStyle(ColorConverter.convert(data.getColor().getClosetColor()))));
     }
 
     private static boolean hasData(ItemStack stack){
@@ -38,7 +38,7 @@ public class LightsaberHelper {
 
         for (LightsaberData.HandleType type : LightsaberData.HandleType.values()){
             ItemStack stack = new ItemStack(ModItems.LIGHTSABER.get());
-            stack.setHoverName(new TextComponent(type.getName()).append(new TextComponent(" Lightsaber").withStyle(ColorConverter.convert(type.getDefaultColor()))));
+            //stack.setHoverName(new TextComponent(type.getName()).append(new TextComponent(" Lightsaber").withStyle(ColorConverter.convert(type.getDefaultColor()))));
                     //.withStyle(ColorConverter.convert(type.getDefaultColor())));
             LightsaberData data = new LightsaberData(type, false, new LColor(type.getColor()));
             LightsaberHelper.setData(stack, data);
@@ -46,5 +46,20 @@ public class LightsaberHelper {
         }
 
         return pItems;
+    }
+
+    public static ItemStack activate(ItemStack stack){
+        LightsaberData data = getData(stack);
+        data.setState(true);
+        setData(stack, data);
+        return stack;
+    }
+
+    public static ItemStack customLightsaber(LightsaberData.HandleType type, boolean state, LColor color){
+        ItemStack stack = new ItemStack(ModItems.LIGHTSABER.get());
+        //stack.setHoverName(new TextComponent(type.getName()).append(new TextComponent(" Lightsaber").withStyle(ColorConverter.convert(type.getDefaultColor()))));
+        LightsaberData data = new LightsaberData(type, state, color);
+        LightsaberHelper.setData(stack, data);
+        return stack;
     }
 }

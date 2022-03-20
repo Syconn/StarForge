@@ -3,11 +3,11 @@ loaderVersion="[39,)"
 license="All Rights Reserved"
 [[mods]]
 modId="stf"
-version="0.1 Beta" #mandatory
+version="1.0" #mandatory
 displayName="StarForge" #mandatory
 authors="Syconn" #optional
 description='''
-Star Wars
+Travel To a world Far Away. Meet your favorite Star Wars Characters and adventure in custom dimensions and biome.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.stf]] #optional

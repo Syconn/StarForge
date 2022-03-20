@@ -2,6 +2,7 @@ package mod.stf.syconn.item.lightsaber;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 
 import java.awt.*;
 
@@ -10,6 +11,8 @@ public class LColor {
     private final int r;
     private final int g;
     private final int b;
+    private int cycle = 0;
+    private int timer = 0;
 
     public LColor(int r, int g, int b) {
         this.r = r;
@@ -21,6 +24,14 @@ public class LColor {
         r = color >> 16 & 255;
         g = color >> 8 & 255;
         b = color & 255;
+    }
+
+    public LColor(int r, int g, int b, int cycle, int timer) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.cycle = cycle;
+        this.timer = timer;
     }
 
     public int getR() {
@@ -69,13 +80,31 @@ public class LColor {
         return closetColor;
     }
 
+    public void setCycle(int cycle) {
+        this.cycle = cycle;
+    }
+
+    public int rainbow(ItemStack stack){
+        DyeColor color = DyeColor.byId(cycle);
+        int t = timer+=1;
+        if (t >= 1000) {
+            int i = cycle+=1;
+            if (cycle >= 15) LightsaberHelper.setData(stack, LightsaberHelper.getData(stack).setColor(new LColor(r, b, g, 0, 0)));
+            else LightsaberHelper.setData(stack, LightsaberHelper.getData(stack).setColor(new LColor(r, b, g, i, 0)));
+        }
+        else LightsaberHelper.setData(stack, LightsaberHelper.getData(stack).setColor(new LColor(r, b, g, cycle, t)));
+        return color.getFireworkColor();
+    }
+
     public static void save(CompoundTag tag, LColor color){
         tag.putInt("r", color.r);
         tag.putInt("g", color.g);
         tag.putInt("b", color.b);
+        tag.putInt("cycle", color.cycle);
+        tag.putInt("timer", color.timer);
     }
 
     public static LColor read(CompoundTag tag){
-        return new LColor(tag.getInt("r"), tag.getInt("g"), tag.getInt("b"));
+        return new LColor(tag.getInt("r"), tag.getInt("g"), tag.getInt("b"), tag.getInt("cycle"), tag.getInt("timer"));
     }
 }
