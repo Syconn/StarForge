@@ -24,6 +24,7 @@ public class Network {
                 .serverAcceptedVersions(PROTOCOL_VERSION::equals)
                 .simpleChannel();
         register(MessageActivateLightsaber.class, new MessageActivateLightsaber(), NetworkDirection.PLAY_TO_SERVER);
+        register(MessageThrowLightsaber.class, new MessageThrowLightsaber(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageChangeColor.class, new MessageChangeColor(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageClickTab.class, new MessageClickTab(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageCraftHilt.class, new MessageCraftHilt(), NetworkDirection.PLAY_TO_SERVER);

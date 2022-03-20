@@ -3,26 +3,33 @@ package mod.stf.syconn.client;
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.client.screen.ColorScreen;
 import mod.stf.syconn.client.screen.HiltScreen;
+import mod.stf.syconn.client.rendering.LightsaberRenderer;
 import mod.stf.syconn.init.ModBlocks;
 import mod.stf.syconn.init.ModContainers;
+import mod.stf.syconn.init.ModEntities;
 import mod.stf.syconn.init.ModItems;
+import mod.stf.syconn.item.Lightsaber;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import mod.stf.syconn.network.Network;
 import mod.stf.syconn.network.messages.MessageActivateLightsaber;
+import mod.stf.syconn.network.messages.MessageThrowLightsaber;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -61,7 +68,6 @@ public class ClientHandler {
             @Override
             public float call(ItemStack pStack, @Nullable ClientLevel pLevel, @Nullable LivingEntity pEntity, int pSeed) {
                 if (LightsaberHelper.getData(pStack) != null){
-
                     return LightsaberHelper.getData(pStack).isActive() ? 1.0f : 0.0f;
                 }
 
@@ -78,12 +84,22 @@ public class ClientHandler {
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent event)
     {
-        if(KEY_LIGHTSABER_ACTIVATE.isDown() && KEY_LIGHTSABER_ACTIVATE.consumeClick())
-        {
-            if(Minecraft.getInstance().player != null)
+        LocalPlayer player = Minecraft.getInstance().player;
+
+        if (player != null) {
+            if(KEY_LIGHTSABER_ACTIVATE.isDown() && KEY_LIGHTSABER_ACTIVATE.consumeClick())
             {
                 Network.getPlayChannel().sendToServer(new MessageActivateLightsaber());
             }
+            if (Minecraft.getInstance().options.keyDrop.isDown() && player.isShiftKeyDown() && player.getMainHandItem().getItem() instanceof Lightsaber){
+                Network.getPlayChannel().sendToServer(new MessageThrowLightsaber());
+                Minecraft.getInstance().options.keyDrop.consumeClick();
+            }
         }
+    }
+
+    @SubscribeEvent
+    public static void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(ModEntities.LIGHTSABER.get(), LightsaberRenderer::new);
     }
 }
