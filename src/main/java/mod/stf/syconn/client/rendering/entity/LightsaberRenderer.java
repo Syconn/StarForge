@@ -1,4 +1,4 @@
-package mod.stf.syconn.client.rendering;
+package mod.stf.syconn.client.rendering.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
