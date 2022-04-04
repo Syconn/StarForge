@@ -1,6 +1,7 @@
 package mod.stf.syconn.init;
 
 import mod.stf.syconn.Reference;
+import mod.stf.syconn.common.entity.BlasterBoltEntity;
 import mod.stf.syconn.common.entity.LightsaberEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -17,10 +18,11 @@ public class ModEntities {
 
     public static final DeferredRegister<EntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.ENTITIES, Reference.MOD_ID);
     public static final RegistryObject<EntityType<LightsaberEntity>> LIGHTSABER = registerBasic("lightsaber", LightsaberEntity::new);
+    public static final RegistryObject<EntityType<BlasterBoltEntity>> BLASTER_BOLT = registerBasic("blaster", BlasterBoltEntity::new);
 
     private static <T extends Entity> RegistryObject<EntityType<T>> registerBasic(String id, BiFunction<EntityType<T>, Level, T> function)
     {
-        EntityType<T> type = EntityType.Builder.of(function::apply, MobCategory.MISC).sized(0.25F, 0.25F).setTrackingRange(100).setUpdateInterval(1).fireImmune().setShouldReceiveVelocityUpdates(true).build(id);
+        EntityType<T> type = EntityType.Builder.of(function::apply, MobCategory.MISC).sized(0.5F, 0.5F).setTrackingRange(100).setUpdateInterval(1).fireImmune().setShouldReceiveVelocityUpdates(true).build(id);
         return REGISTER.register(id, () -> type);
     }
 }

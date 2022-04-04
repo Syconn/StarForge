@@ -1,6 +1,9 @@
 package mod.stf.syconn.client;
 
 import mod.stf.syconn.Reference;
+import mod.stf.syconn.client.rendering.entity.BlasterBoltRenderer;
+import mod.stf.syconn.client.rendering.model.BoltModel;
+import mod.stf.syconn.client.rendering.model.TestModel;
 import mod.stf.syconn.client.screen.ColorScreen;
 import mod.stf.syconn.client.screen.HiltScreen;
 import mod.stf.syconn.client.rendering.entity.LightsaberRenderer;
@@ -101,5 +104,12 @@ public class ClientHandler {
     @SubscribeEvent
     public static void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.LIGHTSABER.get(), LightsaberRenderer::new);
+        event.registerEntityRenderer(ModEntities.BLASTER_BOLT.get(), BlasterBoltRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(TestModel.LAYER_LOCATION, TestModel::createBodyLayer);
+        event.registerLayerDefinition(BoltModel.LAYER_LOCATION, BoltModel::createBodyLayer);
     }
 }
