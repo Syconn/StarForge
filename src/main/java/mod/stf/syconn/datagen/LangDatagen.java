@@ -25,6 +25,7 @@ public class LangDatagen extends LanguageProvider {
         add("key.categories.stf", "StarForge");
         add("itemGroup.StarForge", "StarForge");
         add("death.attack.lightsaber.item", "%1$s was cut down by %2$s with %3$s");
+        add("death.attack.blaster.item", "%1$s was gunned down by %2$s with %3$s");
         add("tab." + ModBlocks.LIGHTSABER_CRAFTER.getId().getPath() + "." + LightsaberCrafter.States.COLOR.getSerializedName(), "Colorizer");
         add("tab." + ModBlocks.LIGHTSABER_CRAFTER.getId().getPath() + "." + LightsaberCrafter.States.CONSTRUCTION.getSerializedName(), "Part Crafter");
         add("tab." + ModBlocks.LIGHTSABER_CRAFTER.getId().getPath() + "." + LightsaberCrafter.States.HILT.getSerializedName(), "Hilt Crafter");

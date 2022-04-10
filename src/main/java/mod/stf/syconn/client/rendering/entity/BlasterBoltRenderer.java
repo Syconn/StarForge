@@ -5,15 +5,14 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.client.rendering.model.BoltModel;
-import mod.stf.syconn.client.rendering.model.TestModel;
-import mod.stf.syconn.common.entity.BlasterBoltEntity;
+import mod.stf.syconn.common.entity.BlasterBolt;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-public class BlasterBoltRenderer extends EntityRenderer<BlasterBoltEntity> {
+public class BlasterBoltRenderer extends EntityRenderer<BlasterBolt> {
 
     private BoltModel model;
     private ItemRenderer itemRenderer;
@@ -21,12 +20,12 @@ public class BlasterBoltRenderer extends EntityRenderer<BlasterBoltEntity> {
     public BlasterBoltRenderer(EntityRendererProvider.Context ctx) {
         super(ctx);
         itemRenderer = ctx.getItemRenderer();
-        model = new BoltModel(ctx.bakeLayer(TestModel.LAYER_LOCATION));
+        model = new BoltModel(ctx.bakeLayer(BoltModel.LAYER_LOCATION));
     }
 
-    public void render(BlasterBoltEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
+    public void render(BlasterBolt pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
         pMatrixStack.pushPose();
-        pMatrixStack.translate(0.0D, (double)0.15F, 0.0D);
+        pMatrixStack.translate(0.0D, -1.25D, 0.0D);
         pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(pPartialTicks, pEntity.yRotO, pEntity.getYRot()) - 90.0F));
         pMatrixStack.mulPose(Vector3f.ZP.rotationDegrees(Mth.lerp(pPartialTicks, pEntity.xRotO, pEntity.getXRot())));
         this.model.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
@@ -37,7 +36,7 @@ public class BlasterBoltRenderer extends EntityRenderer<BlasterBoltEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(BlasterBoltEntity pEntity) {
+    public ResourceLocation getTextureLocation(BlasterBolt pEntity) {
         return new ResourceLocation(Reference.MOD_ID, "textures/item/red_lightsaber.png");
     }
 }

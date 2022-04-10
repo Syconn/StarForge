@@ -1,25 +1,66 @@
 package mod.stf.syconn.item;
 
-import mod.stf.syconn.common.entity.BlasterBoltEntity;
+import mod.stf.syconn.common.entity.BlasterBolt;
+import mod.stf.syconn.item.lightsaber.LightsaberHelper;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 
-public class GunItem extends Item {
+import java.awt.*;
+import java.util.Objects;
 
-    public GunItem(Properties pProperties) {
+public abstract class GunItem extends Item {
+
+    protected int maxHeat;
+    protected final String HEAT = "HEAT";
+
+    public GunItem(Properties pProperties, int maxHeat) {
         super(pProperties);
+        this.maxHeat = maxHeat;
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         ItemStack stack = pPlayer.getItemInHand(pUsedHand);
-        BlasterBoltEntity bolt = new BlasterBoltEntity(pPlayer, pLevel);
-        bolt.shootFromRotation(pPlayer, pPlayer.getXRot(), pPlayer.getYRot(), 0.0F, 3.0F, 1.0F);
-        pLevel.addFreshEntity(bolt);
+        if (stack.getOrCreateTag().getInt(HEAT) > 0) {
+            ThrowableProjectile bolt = createBullet(pPlayer);
+            bolt.shootFromRotation(pPlayer, pPlayer.getXRot(), pPlayer.getYRot(), 0.0F, 3.0F, 1.0F);
+            pLevel.addFreshEntity(bolt);
+            stack.getOrCreateTag().putInt(HEAT, stack.getOrCreateTag().getInt(HEAT) - 1);
+        } else {
+            pPlayer.getCooldowns().addCooldown(this, 20);
+            stack.getOrCreateTag().putInt(HEAT, maxHeat);
+        }
         return InteractionResultHolder.pass(stack);
     }
+
+    @Override
+    public int getBarColor(ItemStack pStack) {
+        return Objects.requireNonNull(ChatFormatting.DARK_PURPLE.getColor());
+    }
+
+    @Override
+    public int getBarWidth(ItemStack pStack) {
+        CompoundTag tag = pStack.getOrCreateTag();
+        return 13 * tag.getInt(HEAT) / maxHeat;
+    }
+
+    @Override
+    public boolean isBarVisible(ItemStack pStack) {
+        return true;
+    }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab pCategory, NonNullList<ItemStack> pItems) {
+        pItems.add(createGun());
+    }
+
+    public abstract ThrowableProjectile createBullet(Player player);
+    public abstract ItemStack createGun();
 }

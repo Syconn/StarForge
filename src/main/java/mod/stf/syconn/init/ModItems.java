@@ -4,6 +4,7 @@ import mod.stf.syconn.Reference;
 import mod.stf.syconn.StarForge;
 import mod.stf.syconn.item.GunItem;
 import mod.stf.syconn.item.Lightsaber;
+import mod.stf.syconn.item.guns.EnergyGun;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -13,6 +14,6 @@ public class ModItems {
 
     public static final DeferredRegister<Item> REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, Reference.MOD_ID);
 
-    public static final RegistryObject<Item> F_11D = REGISTER.register("f11", () -> new GunItem(new Item.Properties().tab(StarForge.Tab)));
+    public static final RegistryObject<Item> F_11D = REGISTER.register("f11", () -> new EnergyGun(new Item.Properties().tab(StarForge.Tab)));
     public static final RegistryObject<Item> LIGHTSABER = REGISTER.register("lightsaber", Lightsaber::new);
 }
