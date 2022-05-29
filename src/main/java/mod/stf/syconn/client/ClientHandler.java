@@ -2,7 +2,9 @@ package mod.stf.syconn.client;
 
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.client.rendering.entity.BlasterBoltRenderer;
+import mod.stf.syconn.client.rendering.entity.StormTrooperRender;
 import mod.stf.syconn.client.rendering.model.BoltModel;
+import mod.stf.syconn.client.rendering.model.StormTrooperModel;
 import mod.stf.syconn.client.screen.ColorScreen;
 import mod.stf.syconn.client.screen.HiltScreen;
 import mod.stf.syconn.client.rendering.entity.LightsaberRenderer;
@@ -27,6 +29,7 @@ import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -43,6 +46,7 @@ public class ClientHandler {
     public static final KeyMapping KEY_LIGHTSABER_ACTIVATE = new KeyMapping("key.lightsaber.activate", GLFW.GLFW_KEY_V, "key.categories.stf");
 
     public static void setup(){
+
         ClientRegistry.registerKeyBinding(KEY_LIGHTSABER_ACTIVATE);
 
         MenuScreens.register(ModContainers.COLOR_CONTAINER.get(), ColorScreen::new);
@@ -104,10 +108,12 @@ public class ClientHandler {
     public static void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.LIGHTSABER.get(), LightsaberRenderer::new);
         event.registerEntityRenderer(ModEntities.BLASTER_BOLT.get(), BlasterBoltRenderer::new);
+        event.registerEntityRenderer(ModEntities.STORMTROOPER.get(), StormTrooperRender::new);
     }
 
     @SubscribeEvent
     public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(BoltModel.LAYER_LOCATION, BoltModel::createBodyLayer);
+        event.registerLayerDefinition(StormTrooperModel.STORMTROOPER, StormTrooperModel::createBodyLayer);
     }
 }

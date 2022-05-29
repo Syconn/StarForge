@@ -19,6 +19,7 @@ public class ItemModels extends ItemModelProvider {
     @Override
     protected void registerModels() {
         withExistingParent(ModItems.F_11D.get().getRegistryName().getPath(), modLoc("item/f_11"));
+        withExistingParent(ModItems.STORMTROOPER_EGG.get().getRegistryName().getPath(), mcLoc("item/template_spawn_egg"));
 
         ItemModelBuilder builder = withExistingParent(ModItems.LIGHTSABER.get().getRegistryName().getPath(), modLoc("item/lightsaber_off/yoda"));
 

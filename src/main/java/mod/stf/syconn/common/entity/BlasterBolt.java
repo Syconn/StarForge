@@ -61,11 +61,6 @@ public class BlasterBolt extends ThrowableProjectile {
 
     }
 
-//    @Override
-//    public Packet<?> getAddEntityPacket() {
-//        return NetworkHooks.getEntitySpawningPacket(this);
-//    }
-
     @Override
     public boolean isNoGravity() {
         return true;

@@ -7,6 +7,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.item.*;
@@ -25,12 +26,21 @@ public abstract class GunItem extends Item {
         this.maxHeat = maxHeat;
     }
 
+    public int getUseDuration(ItemStack stack) {
+        return 700;
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack pStack) {
+        return UseAnim.BOW;
+    }
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         ItemStack stack = pPlayer.getItemInHand(pUsedHand);
         if (stack.getOrCreateTag().getInt(HEAT) > 0) {
             ThrowableProjectile bolt = createBullet(pPlayer);
-            bolt.shootFromRotation(pPlayer, pPlayer.getXRot(), pPlayer.getYRot(), 0.0F, 3.0F, 1.0F);
+            bolt.shootFromRotation(pPlayer, pPlayer.getXRot(), pPlayer.getYRot(), 0.0F, 3.0F, 0.0F);
             pLevel.addFreshEntity(bolt);
             stack.getOrCreateTag().putInt(HEAT, stack.getOrCreateTag().getInt(HEAT) - 1);
         } else {
@@ -61,6 +71,6 @@ public abstract class GunItem extends Item {
         pItems.add(createGun());
     }
 
-    public abstract ThrowableProjectile createBullet(Player player);
+    public abstract ThrowableProjectile createBullet(LivingEntity shooter);
     public abstract ItemStack createGun();
 }

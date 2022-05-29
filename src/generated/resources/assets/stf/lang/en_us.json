@@ -1,5 +1,6 @@
 {
   "block.stf.lightsaber_crafter": "Lightsaber Workstation",
+  "death.attack.blaster.item": "%1$s was gunned down by %2$s with %3$s",
   "death.attack.lightsaber.item": "%1$s was cut down by %2$s with %3$s",
   "item.stf.f11": "F-11 Blaster",
   "item.stf.lightsaber": "Lightsaber",
