@@ -58,7 +58,7 @@ public class BlasterBolt extends ThrowableProjectile {
             entity.sendMessage(new TextComponent("BLOCKED"), entity.getUUID());
         }
 
-        else if (!entity.is(getOwner()) && entity.hurt(ModDamage.lightsaber(this, getOwner()), 5.3F)) {
+        else if (!entity.is(getOwner()) && entity.hurt(ModDamage.blaster(this, getOwner()), 5.3F)) {
             if (entity.getType() == EntityType.ENDERMAN)
                 return;
 

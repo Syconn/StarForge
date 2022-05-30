@@ -1,7 +1,8 @@
 {
   "block.stf.lightsaber_crafter": "Lightsaber Workstation",
-  "death.attack.blaster.item": "%1$s was gunned down by %2$s with %3$s",
-  "death.attack.lightsaber.item": "%1$s was cut down by %2$s with %3$s",
+  "death.attack.blaster": "%1$s was gunned down by %2$s",
+  "death.attack.lightsaber": "%1$s was cut down by %2$s",
+  "entity.stf.stormtrooper": "StormTrooper",
   "item.stf.f11": "F-11 Blaster",
   "item.stf.lightsaber": "Lightsaber",
   "itemGroup.StarForge": "StarForge",

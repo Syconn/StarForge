@@ -3,6 +3,7 @@ package mod.stf.syconn.init;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.Arrow;
 
 import javax.annotation.Nullable;
 
