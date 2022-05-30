@@ -55,7 +55,7 @@ public class PatrolGoal<T extends StormTrooper> extends Goal {
     public void tick() {
         boolean flag = this.mob.isLeader();
         PathNavigation pathnavigation = this.mob.getNavigation();
-        if (pathnavigation.isDone()){
+        if (pathnavigation.isDone() && mob.getPatrolTarget() != null){
             Vec3 vec3 = Vec3.atBottomCenterOf(this.mob.getPatrolTarget());
             Vec3 vec31 = this.mob.position();
             Vec3 vec32 = vec31.subtract(vec3);
@@ -71,9 +71,9 @@ public class PatrolGoal<T extends StormTrooper> extends Goal {
                     System.out.println(blockpos);
                 }
                 else if (mob.getPatrolTarget() != null){
-                    if (!pathnavigation.moveTo(blockpos.getX(), blockpos.getY(), blockpos.getZ(), flag ? this.leaderSpeedModifier : this.speedModifier)) {
+                    if (!pathnavigation.moveTo(blockpos.getX(), blockpos.getY(), blockpos.getZ(), 1D)) {
                         this.moveRandomly();
-                        this.cooldownUntil = this.mob.level.getGameTime() + 200L;
+                        this.cooldownUntil = this.mob.level.getGameTime() + 80L;
                     }
 
                     BlockPos finalBlockpos = blockpos;
@@ -84,9 +84,9 @@ public class PatrolGoal<T extends StormTrooper> extends Goal {
             }
 
             else {
-                if (this.mob.getPatrolTarget().closerThan(this.mob.position(), 10.0D) || !pathnavigation.moveTo(blockpos.getX(), blockpos.getY(), blockpos.getZ(), flag ? this.leaderSpeedModifier : this.speedModifier)) {
+                if (this.mob.getPatrolTarget().closerThan(this.mob.position(), 10.0D) || !pathnavigation.moveTo(this.mob.getPatrolTarget().getX(), this.mob.getPatrolTarget().getY(), this.mob.getPatrolTarget().getZ(), 1.2D)) {
                     this.moveRandomly();
-                    this.cooldownUntil = this.mob.level.getGameTime() + 200L;
+                    this.cooldownUntil = this.mob.level.getGameTime() + 80L;
                 }
             }
         }

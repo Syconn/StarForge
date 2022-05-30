@@ -34,11 +34,13 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.entity.raid.Raid;
+import net.minecraft.world.item.BannerPatternItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.PatrolSpawner;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 public class StormTrooper extends AbstractSkeleton {
@@ -58,13 +60,15 @@ public class StormTrooper extends AbstractSkeleton {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.getEntityData().define(DATA_LEADER, false);
+
+
     }
 
     @Override
     protected void registerGoals() {
         //this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.2D));
         this.goalSelector.addGoal(4, new RangedGunAttackGoal<>(this, 1.0D, 10, 15.0F));
-        this.goalSelector.addGoal(2, new PatrolGoal(this, 0.712D, 0.568D));
+        this.goalSelector.addGoal(2, new PatrolGoal(this, 0.712D, 0.868D));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
@@ -181,12 +185,12 @@ public class StormTrooper extends AbstractSkeleton {
     public void performRangedAttack(LivingEntity pTarget, float pDistanceFactor) {
         if (this.getMainHandItem().getItem() instanceof GunItem) {
             ThrowableProjectile bolt = ((GunItem) this.getMainHandItem().getItem()).createBullet(this);
-            double d0 = pTarget.getX() - this.getX();
-            double d1 = pTarget.getY(0.3333333333333333D) - bolt.getY();
-            double d2 = pTarget.getZ() - this.getZ();
-            double d3 = Math.sqrt(d0 * d0 + d2 * d2);
-            bolt.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
             //this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+            Vec3 vec3 = this.getViewVector(1.0F);
+            double d2 = pTarget.getX() - (this.getX() + vec3.x * 4.0D);
+            double d3 = pTarget.getY(0.5D) - (0.5D + this.getY(0.5D));
+            double d4 = pTarget.getZ() - (this.getZ() + vec3.z * 4.0D);
+            bolt.shoot(d2, d3, d4, 3.0F, 0.0F);
             this.level.addFreshEntity(bolt);
         }
     }
