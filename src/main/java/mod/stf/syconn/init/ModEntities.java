@@ -2,6 +2,7 @@ package mod.stf.syconn.init;
 
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.common.entity.BlasterBolt;
+import mod.stf.syconn.common.entity.Jedi;
 import mod.stf.syconn.common.entity.LightsaberEntity;
 import mod.stf.syconn.common.entity.StormTrooper;
 import net.minecraft.world.entity.Entity;
@@ -21,6 +22,7 @@ public class ModEntities {
     public static final RegistryObject<EntityType<BlasterBolt>> BLASTER_BOLT = registerBasic("blaster", BlasterBolt::new);
 
     public static final RegistryObject<EntityType<StormTrooper>> STORMTROOPER = registerMob("stormtrooper", MobCategory.MONSTER, StormTrooper::new);
+    public static final RegistryObject<EntityType<Jedi>> JEDI = registerMob("jedi", MobCategory.CREATURE, Jedi::new);
 
     private static <T extends Entity> RegistryObject<EntityType<T>> registerBasic(String id, BiFunction<EntityType<T>, Level, T> function)
     {

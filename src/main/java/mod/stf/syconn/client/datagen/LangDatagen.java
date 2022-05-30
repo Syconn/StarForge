@@ -1,4 +1,4 @@
-package mod.stf.syconn.datagen;
+package mod.stf.syconn.client.datagen;
 
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.api.util.Tab;
@@ -22,6 +22,8 @@ public class LangDatagen extends LanguageProvider {
         add(ModItems.F_11D.get(), "F-11 Blaster");
         add(ModItems.LIGHTSABER.get(), "Lightsaber");
         add(ModBlocks.LIGHTSABER_CRAFTER.get(), "Lightsaber Workstation");
+        add(ModItems.STORMTROOPER_EGG.get(), "StormTrooper Spawn Egg");
+        add(ModItems.JEDI_EGG.get(), "Jedi Spawn Egg");
 
         add("key.lightsaber.activate", "Key Activate Lightsaber");
         add("key.categories.stf", "StarForge");
@@ -32,6 +34,7 @@ public class LangDatagen extends LanguageProvider {
         add("death.attack.blaster", "%1$s was gunned down by %2$s");
 
         addEntityType(ModEntities.STORMTROOPER, "StormTrooper");
+        addEntityType(ModEntities.JEDI, "Jedi");
 
         add("tab." + ModBlocks.LIGHTSABER_CRAFTER.getId().getPath() + "." + LightsaberCrafter.States.COLOR.getSerializedName(), "Colorizer");
         add("tab." + ModBlocks.LIGHTSABER_CRAFTER.getId().getPath() + "." + LightsaberCrafter.States.CONSTRUCTION.getSerializedName(), "Part Crafter");

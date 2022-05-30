@@ -60,8 +60,6 @@ public class StormTrooper extends AbstractSkeleton {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.getEntityData().define(DATA_LEADER, false);
-
-
     }
 
     @Override

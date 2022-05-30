@@ -17,4 +17,5 @@ public class ModItems {
     public static final RegistryObject<Item> F_11D = REGISTER.register("f11", () -> new EnergyGun(new Item.Properties().tab(StarForge.Tab)));
     public static final RegistryObject<Item> LIGHTSABER = REGISTER.register("lightsaber", Lightsaber::new);
     public static final RegistryObject<Item> STORMTROOPER_EGG = REGISTER.register("stormtrooper", () -> new ForgeSpawnEggItem(ModEntities.STORMTROOPER, 0x000000, 0xFFFFFF, new Item.Properties().tab(StarForge.Tab)));
+    public static final RegistryObject<Item> JEDI_EGG = REGISTER.register("jedi", () -> new ForgeSpawnEggItem(ModEntities.JEDI, 0x6C5732, 0x4391CB, new Item.Properties().tab(StarForge.Tab)));
 }

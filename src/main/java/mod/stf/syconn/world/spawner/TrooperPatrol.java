@@ -32,7 +32,7 @@ public class TrooperPatrol implements CustomSpawner {
                 return 0;
             } else {
                 /** COOLDOWN **/
-                this.nextTick += 200;
+                this.nextTick += 800;
                 if (pLevel.isDay()) {
                     if (random.nextInt(2) != 0) {
                         return 0;

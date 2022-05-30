@@ -1,4 +1,4 @@
-package mod.stf.syconn.datagen;
+package mod.stf.syconn.client.datagen;
 
 import mod.stf.syconn.Reference;
 import net.minecraft.data.DataGenerator;

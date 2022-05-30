@@ -2,9 +2,10 @@ package mod.stf.syconn.client;
 
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.client.rendering.entity.BlasterBoltRenderer;
+import mod.stf.syconn.client.rendering.entity.JediRender;
 import mod.stf.syconn.client.rendering.entity.StormTrooperRender;
 import mod.stf.syconn.client.rendering.model.BoltModel;
-import mod.stf.syconn.client.rendering.model.StormTrooperModel;
+import mod.stf.syconn.client.rendering.model.PlayerLikeModel;
 import mod.stf.syconn.client.screen.ColorScreen;
 import mod.stf.syconn.client.screen.HiltScreen;
 import mod.stf.syconn.client.rendering.entity.LightsaberRenderer;
@@ -29,7 +30,6 @@ import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.GameRules;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -109,11 +109,12 @@ public class ClientHandler {
         event.registerEntityRenderer(ModEntities.LIGHTSABER.get(), LightsaberRenderer::new);
         event.registerEntityRenderer(ModEntities.BLASTER_BOLT.get(), BlasterBoltRenderer::new);
         event.registerEntityRenderer(ModEntities.STORMTROOPER.get(), StormTrooperRender::new);
+        event.registerEntityRenderer(ModEntities.JEDI.get(), JediRender::new);
     }
 
     @SubscribeEvent
     public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(BoltModel.LAYER_LOCATION, BoltModel::createBodyLayer);
-        event.registerLayerDefinition(StormTrooperModel.STORMTROOPER, StormTrooperModel::createBodyLayer);
+        event.registerLayerDefinition(PlayerLikeModel.MODEL, PlayerLikeModel::createBodyLayer);
     }
 }
