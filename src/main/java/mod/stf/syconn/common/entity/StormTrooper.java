@@ -65,13 +65,14 @@ public class StormTrooper extends AbstractSkeleton {
     @Override
     protected void registerGoals() {
         //this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.2D));
-        this.goalSelector.addGoal(4, new RangedGunAttackGoal<>(this, 1.0D, 10, 15.0F));
+        this.goalSelector.addGoal(1, new RangedGunAttackGoal<>(this, 1.0D, 5, 30.0F));
         this.goalSelector.addGoal(2, new PatrolGoal(this, 0.712D, 0.868D));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackablePatrolTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(2, new NearestAttackablePatrolTargetGoal<>(this, Jedi.class, true));
     }
 
     public static AttributeSupplier.Builder prepareAttributes() {
