@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north,face=wall": {
+      "y": 0,
+      "model": "stf:block/holoprojector"
+    },
+    "facing=east,face=wall": {
+      "y": 90,
+      "model": "stf:block/holoprojector"
+    },
+    "facing=south,face=wall": {
+      "y": 180,
+      "model": "stf:block/holoprojector"
+    },
+    "facing=west,face=wall": {
+      "y": 270,
+      "model": "stf:block/holoprojector"
+    },
+    "face=ceiling": {
+      "y": 0,
+      "model": "stf:block/holoprojector"
+    },
+    "face=floor": {
+      "model": "stf:block/holoprojector"
+    }
+  }
+}

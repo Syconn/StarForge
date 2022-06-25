@@ -2,6 +2,7 @@ package mod.stf.syconn.init;
 
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.common.blockEntity.CrafterBE;
+import mod.stf.syconn.common.blockEntity.HoloBE;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -12,4 +13,5 @@ public class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Reference.MOD_ID);
 
     public static final RegistryObject<BlockEntityType<CrafterBE>> CRAFTER_BE = REGISTER.register("crafter", () -> BlockEntityType.Builder.of(CrafterBE::new, ModBlocks.LIGHTSABER_CRAFTER.get()).build(null));
+    public static final RegistryObject<BlockEntityType<HoloBE>> HOLO_BE = REGISTER.register("holo_projector", () -> BlockEntityType.Builder.of(HoloBE::new, ModBlocks.HOLO_PROJECTOR.get()).build(null));
 }

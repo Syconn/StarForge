@@ -1,13 +1,11 @@
 package mod.stf.syconn.client;
 
 import mod.stf.syconn.Reference;
+import mod.stf.syconn.client.rendering.blockentity.HoloRender;
 import mod.stf.syconn.client.screen.ColorScreen;
 import mod.stf.syconn.client.screen.HiltScreen;
-import mod.stf.syconn.client.rendering.LightsaberRenderer;
-import mod.stf.syconn.init.ModBlocks;
-import mod.stf.syconn.init.ModContainers;
-import mod.stf.syconn.init.ModEntities;
-import mod.stf.syconn.init.ModItems;
+import mod.stf.syconn.client.rendering.entity.LightsaberRenderer;
+import mod.stf.syconn.init.*;
 import mod.stf.syconn.item.Lightsaber;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import mod.stf.syconn.network.Network;
@@ -24,7 +22,6 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ClientRegistry;
@@ -102,5 +99,6 @@ public class ClientHandler {
     @SubscribeEvent
     public static void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.LIGHTSABER.get(), LightsaberRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.HOLO_BE.get(), HoloRender::new);
     }
 }

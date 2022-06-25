@@ -21,6 +21,7 @@ public class LangDatagen extends LanguageProvider {
         add(ModItems.F_11D.get(), "F-11 Blaster");
         add(ModItems.LIGHTSABER.get(), "Lightsaber");
         add(ModBlocks.LIGHTSABER_CRAFTER.get(), "Lightsaber Workstation");
+        add(ModBlocks.HOLO_PROJECTOR.get(), "Holo Projector");
         add("key.lightsaber.activate", "Key Activate Lightsaber");
         add("key.categories.stf", "StarForge");
         add("itemGroup.StarForge", "StarForge");

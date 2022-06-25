@@ -2,8 +2,8 @@ package mod.stf.syconn.init;
 
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.StarForge;
+import mod.stf.syconn.block.HoloProjector;
 import mod.stf.syconn.block.LightsaberCrafter;
-import mod.stf.syconn.item.Lightsaber;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -20,6 +20,7 @@ public class ModBlocks {
     public static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Reference.MOD_ID);
 
     public static final RegistryObject<Block> LIGHTSABER_CRAFTER = register("lightsaber_crafter", LightsaberCrafter::new);
+    public static final RegistryObject<HoloProjector> HOLO_PROJECTOR = register("holo_projector", HoloProjector::new);
 
     private static <T extends Block> RegistryObject<T> register(String id, Supplier<T> blockSupplier)
     {
