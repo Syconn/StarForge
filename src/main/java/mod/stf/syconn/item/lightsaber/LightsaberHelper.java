@@ -8,6 +8,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class LightsaberHelper {
 
@@ -46,6 +47,26 @@ public class LightsaberHelper {
         }
 
         return pItems;
+    }
+
+    public static ItemStack randomPreset(boolean jedi){
+        LightsaberData.HandleType[] jeditypes = {LightsaberData.HandleType.AHSOKA, LightsaberData.HandleType.ANAKIN, LightsaberData.HandleType.KAL, LightsaberData.HandleType.LUKE, LightsaberData.HandleType.YODA, LightsaberData.HandleType.OBI};
+        LightsaberData.HandleType[] sithtypes = {LightsaberData.HandleType.DARK_SABER, LightsaberData.HandleType.KYLO, LightsaberData.HandleType.MAUL};
+
+        if (jedi){
+            int i = new Random().nextInt(jeditypes.length);
+            return createPreset(jeditypes[i]);
+        } else {
+            int i = new Random().nextInt(sithtypes.length);
+            return createPreset(sithtypes[i]);
+        }
+    }
+
+    public static ItemStack createPreset(LightsaberData.HandleType type){
+        ItemStack stack = new ItemStack(ModItems.LIGHTSABER.get());
+        LightsaberData data = new LightsaberData(type, true, new LColor(type.getColor()));
+        LightsaberHelper.setData(stack, data);
+        return stack;
     }
 
     public static ItemStack activate(ItemStack stack){

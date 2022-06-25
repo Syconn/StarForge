@@ -1,6 +1,7 @@
 package mod.stf.syconn;
 
 import mod.stf.syconn.client.ClientHandler;
+import mod.stf.syconn.common.CommonHandler;
 import mod.stf.syconn.init.*;
 import mod.stf.syconn.network.Network;
 import net.minecraft.world.item.CreativeModeTab;
@@ -39,6 +40,7 @@ public class StarForge {
     private void onCommonSetup(FMLCommonSetupEvent event)
     {
         Network.init();
+        MinecraftForge.EVENT_BUS.register(new CommonHandler());
     }
 
     private void onClientSetup(FMLClientSetupEvent event)
