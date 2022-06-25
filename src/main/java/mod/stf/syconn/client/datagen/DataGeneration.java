@@ -1,6 +1,7 @@
 package mod.stf.syconn.client.datagen;
 
 import mod.stf.syconn.Reference;
+import mod.stf.syconn.datagen.LangDatagen;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

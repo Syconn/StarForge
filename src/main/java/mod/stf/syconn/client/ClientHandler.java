@@ -1,13 +1,16 @@
 package mod.stf.syconn.client;
 
 import mod.stf.syconn.Reference;
+import mod.stf.syconn.client.rendering.blockentity.HoloRender;
+import mod.stf.syconn.client.rendering.entity.BlasterBoltRenderer;
+import mod.stf.syconn.client.rendering.entity.JediRender;
+import mod.stf.syconn.client.rendering.entity.StormTrooperRender;
+import mod.stf.syconn.client.rendering.model.BoltModel;
+import mod.stf.syconn.client.rendering.model.PlayerLikeModel;
 import mod.stf.syconn.client.screen.ColorScreen;
 import mod.stf.syconn.client.screen.HiltScreen;
-import mod.stf.syconn.client.rendering.LightsaberRenderer;
-import mod.stf.syconn.init.ModBlocks;
-import mod.stf.syconn.init.ModContainers;
-import mod.stf.syconn.init.ModEntities;
-import mod.stf.syconn.init.ModItems;
+import mod.stf.syconn.client.rendering.entity.LightsaberRenderer;
+import mod.stf.syconn.init.*;
 import mod.stf.syconn.item.Lightsaber;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import mod.stf.syconn.network.Network;
@@ -102,5 +105,16 @@ public class ClientHandler {
     @SubscribeEvent
     public static void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.LIGHTSABER.get(), LightsaberRenderer::new);
+        event.registerEntityRenderer(ModEntities.BLASTER_BOLT.get(), BlasterBoltRenderer::new);
+        event.registerEntityRenderer(ModEntities.STORMTROOPER.get(), StormTrooperRender::new);
+        event.registerEntityRenderer(ModEntities.JEDI.get(), JediRender::new);
+
+        event.registerBlockEntityRenderer(ModBlockEntities.HOLO_BE.get(), HoloRender::new);
+    }
+
+    @SubscribeEvent
+    public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(BoltModel.LAYER_LOCATION, BoltModel::createBodyLayer);
+        event.registerLayerDefinition(PlayerLikeModel.MODEL, PlayerLikeModel::createBodyLayer);
     }
 }

@@ -184,12 +184,11 @@ public class StormTrooper extends AbstractSkeleton {
     public void performRangedAttack(LivingEntity pTarget, float pDistanceFactor) {
         if (this.getMainHandItem().getItem() instanceof GunItem) {
             ThrowableProjectile bolt = ((GunItem) this.getMainHandItem().getItem()).createBullet(this);
-            //this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-            Vec3 vec3 = this.getViewVector(1.0F);
-            double d2 = pTarget.getX() - (this.getX() + vec3.x * 4.0D);
-            double d3 = pTarget.getY(0.5D) - (0.5D + this.getY(0.5D));
-            double d4 = pTarget.getZ() - (this.getZ() + vec3.z * 4.0D);
-            bolt.shoot(d2, d3, d4, 3.0F, 0.0F);
+            double d0 = pTarget.getX() - this.getX();
+            double d1 = pTarget.getY(0.3333333333333333D) - bolt.getY();
+            double d2 = pTarget.getZ() - this.getZ();
+            double d3 = Math.sqrt(d0 * d0 + d2 * d2) * (double)0.2F;
+            bolt.shoot(d0, d1 + d3, d2, 1.5F, 10.0F);
             this.level.addFreshEntity(bolt);
         }
     }

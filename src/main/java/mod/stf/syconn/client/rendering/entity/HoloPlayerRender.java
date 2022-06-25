@@ -1,6 +1,7 @@
 package mod.stf.syconn.client.rendering.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import mod.stf.syconn.Reference;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -22,7 +23,7 @@ public class HoloPlayerRender extends PlayerRenderer {
 
     @Override
     public ResourceLocation getTextureLocation(AbstractClientPlayer pEntity) {
-        return super.getTextureLocation(pEntity);
+        return new ResourceLocation(Reference.MOD_ID, "textures/entity/trooper_commander.png");
     }
 
     @Override

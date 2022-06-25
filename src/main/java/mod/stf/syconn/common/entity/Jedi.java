@@ -30,8 +30,6 @@ public class Jedi extends AbstractForceUser implements RangedAttackMob {
         super(p_21683_, p_21684_);
     }
 
-    Skeleton
-
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(1, new RangedAttackGoal(this, 2.0D, 5, 30.0f));
