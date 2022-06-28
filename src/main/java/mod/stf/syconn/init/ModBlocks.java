@@ -18,22 +18,14 @@ import java.util.function.Supplier;
 public class ModBlocks {
 
     public static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Reference.MOD_ID);
+    public static final Item.Properties ITEM_PROPERTIES = new Item.Properties().tab(StarForge.Tab);
 
-    public static final RegistryObject<Block> LIGHTSABER_CRAFTER = register("lightsaber_crafter", LightsaberCrafter::new);
-    public static final RegistryObject<HoloProjector> HOLO_PROJECTOR = register("holo_projector", HoloProjector::new);
+    public static final RegistryObject<Block> LIGHTSABER_CRAFTER = REGISTER.register("lightsaber_crafter", LightsaberCrafter::new);
+    public static final RegistryObject<Item> CRAFTER_ITEM = fromBlock(LIGHTSABER_CRAFTER);
+    public static final RegistryObject<HoloProjector> HOLO_PROJECTOR = REGISTER.register("holo_projector", HoloProjector::new);
+    public static final RegistryObject<Item> HOLO_ITEM = fromBlock(HOLO_PROJECTOR);
 
-    private static <T extends Block> RegistryObject<T> register(String id, Supplier<T> blockSupplier)
-    {
-        return register(id, blockSupplier, block1 -> new BlockItem(block1, new Item.Properties().tab(StarForge.Tab)));
-    }
-
-    private static <T extends Block> RegistryObject<T> register(String id, Supplier<T> blockSupplier, @Nullable Function<T, BlockItem> supplier)
-    {
-        T block = blockSupplier.get();
-        if(supplier != null)
-        {
-            ModItems.REGISTER.register(id, () -> supplier.apply(block));
-        }
-        return ModBlocks.REGISTER.register(id, () -> block);
+    public static <B extends Block> RegistryObject<Item> fromBlock(RegistryObject<B> block) {
+        return ModItems.REGISTER.register(block.getId().getPath(), () -> new BlockItem(block.get(), ITEM_PROPERTIES));
     }
 }

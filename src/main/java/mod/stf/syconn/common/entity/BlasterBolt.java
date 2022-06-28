@@ -3,10 +3,7 @@ package mod.stf.syconn.common.entity;
 import mod.stf.syconn.init.ModDamage;
 import mod.stf.syconn.init.ModEntities;
 import mod.stf.syconn.item.Lightsaber;
-import net.minecraft.client.gui.components.DebugScreenOverlay;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.server.dedicated.ServerWatchdog;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -17,18 +14,16 @@ import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.TargetBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
 
 public class BlasterBolt extends ThrowableProjectile {
 
-    public BlasterBolt(EntityType<? extends ThrowableProjectile> p_37442_, Level p_37443_) {
-        super(p_37442_, p_37443_);
+    public BlasterBolt(EntityType<BlasterBolt> type, Level level) {
+        super(type, level);
     }
 
     public BlasterBolt(LivingEntity entity, Level level) {

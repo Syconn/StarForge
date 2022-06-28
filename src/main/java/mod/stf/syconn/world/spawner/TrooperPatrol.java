@@ -3,6 +3,7 @@ package mod.stf.syconn.world.spawner;
 import mod.stf.syconn.common.entity.StormTrooper;
 import mod.stf.syconn.init.ModEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.PatrolSpawner;
 
 import java.util.Random;
 
@@ -59,8 +61,8 @@ public class TrooperPatrol implements CustomSpawner {
                                 }
 
                                 else {
-                                    Biome biome = pLevel.getBiome(blockpos$mutableblockpos);
-                                    Biome.BiomeCategory biome$biomecategory = biome.getBiomeCategory();
+                                    Holder<Biome> holder = pLevel.getBiome(blockpos$mutableblockpos);
+                                    Biome.BiomeCategory biome$biomecategory = Biome.getBiomeCategory(holder);
                                     if (biome$biomecategory == Biome.BiomeCategory.MUSHROOM) {
                                         return 0;
                                     }

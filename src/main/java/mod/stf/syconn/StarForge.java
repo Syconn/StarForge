@@ -23,8 +23,8 @@ public class StarForge {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
-        ModItems.REGISTER.register(bus);
         ModBlocks.REGISTER.register(bus);
+        ModItems.REGISTER.register(bus);
         ModBlockEntities.REGISTER.register(bus);
         ModEntities.REGISTER.register(bus);
         ModContainers.REGISTER.register(bus);

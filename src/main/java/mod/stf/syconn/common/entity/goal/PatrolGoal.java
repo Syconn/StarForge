@@ -66,7 +66,7 @@ public class PatrolGoal<T extends StormTrooper> extends Goal {
 
             if (flag){
                 List<StormTrooper> list = this.findPatrolCompanions();
-                if (this.mob.getPatrolTarget().closerThan(this.mob.position(), 10.0D)) {
+                if (this.mob.getPatrolTarget().closerThan(this.mob.getOnPos(), 10.0D)) {
                     this.mob.findPatrolTarget();
                     System.out.println(blockpos);
                 }
@@ -84,7 +84,7 @@ public class PatrolGoal<T extends StormTrooper> extends Goal {
             }
 
             else {
-                if (this.mob.getPatrolTarget().closerThan(this.mob.position(), 10.0D) || !pathnavigation.moveTo(this.mob.getPatrolTarget().getX(), this.mob.getPatrolTarget().getY(), this.mob.getPatrolTarget().getZ(), 1.6D)) {
+                if (this.mob.getPatrolTarget().closerThan(this.mob.getOnPos(), 10.0D) || !pathnavigation.moveTo(this.mob.getPatrolTarget().getX(), this.mob.getPatrolTarget().getY(), this.mob.getPatrolTarget().getZ(), 1.6D)) {
                     this.moveRandomly();
                     this.cooldownUntil = this.mob.level.getGameTime() + 80L;
                 }

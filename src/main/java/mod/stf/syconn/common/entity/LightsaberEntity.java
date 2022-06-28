@@ -3,6 +3,7 @@ package mod.stf.syconn.common.entity;
 import mod.stf.syconn.init.ModDamage;
 import mod.stf.syconn.init.ModEntities;
 import mod.stf.syconn.init.ModItems;
+import mod.stf.syconn.item.Lightsaber;
 import mod.stf.syconn.item.lightsaber.LColor;
 import mod.stf.syconn.item.lightsaber.LightsaberData;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
@@ -35,14 +36,14 @@ public class LightsaberEntity extends ThrowableItemProjectile {
     public int spin;
     private boolean returning = false;
 
-    public LightsaberEntity(EntityType<? extends ThrowableItemProjectile> type, Level level) {
-        super(type, level);
-        this.getEntityData().set(DATA_ITEM_STACK, LightsaberHelper.createDefaults().get(1));
-    }
-
     public LightsaberEntity(LivingEntity entity, Level level, ItemStack item) {
         super(ModEntities.LIGHTSABER.get(), entity, level);
         this.getEntityData().set(DATA_ITEM_STACK, item.copy());
+    }
+
+    public LightsaberEntity(EntityType<LightsaberEntity> type, Level level) {
+        super(type, level);
+        this.getEntityData().set(DATA_ITEM_STACK, LightsaberHelper.createDefaults().get(1));
     }
 
     protected void defineSynchedData() {
