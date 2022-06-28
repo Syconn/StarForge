@@ -10,6 +10,7 @@ import mod.stf.syconn.client.rendering.model.PlayerLikeModel;
 import mod.stf.syconn.client.screen.ColorScreen;
 import mod.stf.syconn.client.screen.HiltScreen;
 import mod.stf.syconn.client.rendering.entity.LightsaberRenderer;
+import mod.stf.syconn.client.screen.HoloScreen;
 import mod.stf.syconn.init.*;
 import mod.stf.syconn.item.Lightsaber;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
@@ -49,6 +50,7 @@ public class ClientHandler {
 
         MenuScreens.register(ModContainers.COLOR_CONTAINER.get(), ColorScreen::new);
         MenuScreens.register(ModContainers.HILT_CONTAINER.get(), HiltScreen::new);
+
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.LIGHTSABER_CRAFTER.get(), RenderType.translucent());
 
         registerProperties();

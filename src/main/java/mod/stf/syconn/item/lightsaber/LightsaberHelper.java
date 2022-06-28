@@ -71,8 +71,10 @@ public class LightsaberHelper {
 
     public static ItemStack activate(ItemStack stack){
         LightsaberData data = getData(stack);
-        data.setState(true);
-        setData(stack, data);
+        if (data != null) {
+            data.setState(true);
+            setData(stack, data);
+        }
         return stack;
     }
 

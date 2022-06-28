@@ -1,14 +1,19 @@
 package mod.stf.syconn.block;
 
-import mod.stf.syconn.api.blockEntity.MenuBlockEntity;
 import mod.stf.syconn.api.blocks.RotatableBlock;
+import mod.stf.syconn.client.screen.HoloScreen;
 import mod.stf.syconn.common.blockEntity.HoloBE;
+import mod.stf.syconn.network.Network;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -18,9 +23,10 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 public class HoloProjector extends RotatableBlock implements EntityBlock {
@@ -58,6 +64,15 @@ public class HoloProjector extends RotatableBlock implements EntityBlock {
         return new HoloBE(pPos, pState);
     }
 
+    @Override
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        if (pLevel.isClientSide) {
+            Minecraft.getInstance().setScreen(new HoloScreen((HoloBE) pLevel.getBlockEntity(pPos), pPos));
+        }
+
+        return InteractionResult.PASS;
+    }
+
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
@@ -66,7 +81,7 @@ public class HoloProjector extends RotatableBlock implements EntityBlock {
         }
         return (lvl, pos, blockState, t) -> {
             if (t instanceof HoloBE tile) {
-                tile.tickServer();
+                tile.tickServer(level);
             }
         };
     }

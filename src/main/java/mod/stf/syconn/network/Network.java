@@ -28,6 +28,9 @@ public class Network {
         register(MessageChangeColor.class, new MessageChangeColor(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageClickTab.class, new MessageClickTab(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageCraftHilt.class, new MessageCraftHilt(), NetworkDirection.PLAY_TO_SERVER);
+        register(MessageHoloMode.class, new MessageHoloMode(), NetworkDirection.PLAY_TO_SERVER);
+        register(MessageSetupSkin.class, new MessageSetupSkin(), NetworkDirection.PLAY_TO_SERVER);
+        register(MessageSlimSkin.class, new MessageSlimSkin(), NetworkDirection.PLAY_TO_SERVER);
     }
 
     private static <T> void register(Class<T> clazz, IMessage<T> message, NetworkDirection direction)

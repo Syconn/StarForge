@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "stf:item/kestis",
-		"1": "stf:item/blades/white",
+		"1": "stf:item/white",
 		"particle": "stf:item/kestis"
 	},
 	"elements": [

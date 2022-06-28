@@ -14,10 +14,18 @@ public class LColor {
     private int cycle = 0;
     private int timer = 0;
 
+    public static LColor of(DyeColor color){
+        return new LColor(color);
+    }
+
     public LColor(int r, int g, int b) {
         this.r = r;
         this.g = g;
         this.b = b;
+    }
+
+    public LColor(DyeColor color){
+        this(color.getFireworkColor());
     }
 
     public LColor(int color) {
