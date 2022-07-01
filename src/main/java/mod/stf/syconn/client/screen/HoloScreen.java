@@ -3,17 +3,17 @@ package mod.stf.syconn.client.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mod.stf.syconn.Reference;
+import mod.stf.syconn.api.screens.componet.ToggleButton;
 import mod.stf.syconn.api.util.SkinGrabber;
 import mod.stf.syconn.common.blockEntity.HoloBE;
 import mod.stf.syconn.network.Network;
-import mod.stf.syconn.network.messages.MessageHoloMode;
-import mod.stf.syconn.network.messages.MessageSetupSkin;
-import mod.stf.syconn.network.messages.MessageSlimSkin;
+import mod.stf.syconn.network.messages.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
@@ -42,18 +42,10 @@ public class HoloScreen extends Screen {
         super.init();
         relX = (this.width - this.imageWidth) / 2 + imageWidth / 2 - 30;
         relY = (this.height - this.imageHeight) / 2 + 20;
-        addRenderableWidget(new ExtendedButton(relX - 18, relY, 100, 20, new TextComponent("Mode: " + be.getMode()), pButton -> {
-            if (pButton.getMessage().getContents().matches("Mode: Username")) {
-                pButton.setMessage(new TextComponent("Mode: URL"));
-                text.setValue("URL");
-                Network.getPlayChannel().sendToServer(new MessageHoloMode("URL", pos));
-                slim.visible = true;
-            } else {
-                pButton.setMessage(new TextComponent("Mode: Username"));
-                text.setValue("Username");
-                Network.getPlayChannel().sendToServer(new MessageHoloMode("Username", pos));
-                slim.visible = false;
-            }
+        addRenderableWidget(new ToggleButton(relX - 18, relY, 100, 20, "Mode: ", "Username", "URL", be.getMode(), pButton -> {
+            text.setValue(((ToggleButton) pButton).current);
+            Network.getPlayChannel().sendToServer(new MessageHoloMode(((ToggleButton) pButton).current, pos));
+            slim.visible = ((ToggleButton) pButton).current.matches("URL");
         }));
         addRenderableWidget(new ExtendedButton(relX, relY + 60, 60, 20, new TextComponent("Set Skin"), pButton -> {
             if (!text.getValue().contains(" ") && !text.getValue().matches("Username") && !text.getValue().matches("URL")) {
@@ -62,14 +54,25 @@ public class HoloScreen extends Screen {
             }
         }));
         addRenderableWidget(text = new EditBox(font, relX - 30, relY + 30, 120, 20, new TextComponent(be.getUrlOrName())));
-        addRenderableWidget(slim = new ExtendedButton(relX, relY + 85, 60, 20, new TextComponent(be.isSlim() ? "Slim" : "Standard"), pButton -> {
+        addRenderableWidget(slim = new ToggleButton(relX, relY + 85, 60, 20, "", "Standard", "Slim", be.isSlim() ? "Slim" : "Standard", pButton -> {
             Network.getPlayChannel().sendToServer(new MessageSlimSkin(pButton.getMessage().equals("Slim"), pos));
-            if (pButton.getMessage().getContents().matches("Standard")){
-                pButton.setMessage(new TextComponent("Slim"));
-            } else {
-                pButton.setMessage(new TextComponent("Standard"));
-            }
         }));
+        if (Reference.DEV_MODE) addRenderableWidget(new ExtendedButton(0, 0, 60, 20, new TextComponent("RESET"), pButton -> {
+            Network.getPlayChannel().sendToServer(new MessageResetHolo(pos));
+        }));
+
+        relX = (this.width - this.imageWidth) / 2;
+        relY = (this.height - this.imageHeight) / 2;
+        addRenderableWidget(new ExtendedButton(relX - 59, relY + 20, 20, 20, new TextComponent("M"), pButton -> {
+            Network.getPlayChannel().sendToServer(new MessageHoloGear("M", pos));
+        }));
+        addRenderableWidget(new ExtendedButton(relX - 31, relY + 20, 20, 20, new TextComponent("O"), pButton -> {
+            Network.getPlayChannel().sendToServer(new MessageHoloGear("O", pos));
+        }));
+        addRenderableWidget(new ExtendedButton(relX - 45, relY + 42, 20, 20, new TextComponent("A"), pButton -> {
+            Network.getPlayChannel().sendToServer(new MessageHoloGear("A", pos));
+        }));
+
         text.setValue(be.getUrlOrName());
         text.setMaxLength(1000000);
 
@@ -80,8 +83,11 @@ public class HoloScreen extends Screen {
 
     @Override
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+        relX = (this.width - this.imageWidth) / 2;
+        relY = (this.height - this.imageHeight) / 2;
         renderBackground(pPoseStack);
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        drawString(pPoseStack, font, "Inventory", relX - 60, relY + 10, 16777215);
     }
 
     @Override

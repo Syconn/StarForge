@@ -1,6 +1,7 @@
 package mod.stf.syconn.api.util;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import mod.stf.syconn.api.util.data.ServerPixelImage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -35,5 +36,30 @@ public class NbtUtil {
         }
 
         return image;
+    }
+
+    public static ServerPixelImage readServerImage(CompoundTag tag){
+        int pixels[][] = new int[tag.getInt("width")][tag.getInt("height")];
+        for (int x = 0; x < tag.getInt("width"); x++) {
+            for (int y = 0; y < tag.getInt("height"); y++) {
+                pixels[x][y] = tag.getInt(x + "_" + y);
+            }
+        }
+
+        return new ServerPixelImage(tag.getInt("width"), tag.getInt("height"), pixels);
+    }
+
+    public static CompoundTag writeServerImage(ServerPixelImage image){
+        CompoundTag tag = new CompoundTag();
+        tag.putInt("width", image.getWidth());
+        tag.putInt("height", image.getHeight());
+
+        for (int x = 0; x < image.getWidth(); x++) {
+            for (int y = 0; y < image.getHeight(); y++) {
+                tag.putInt(x + "_" + y, image.getPixels()[x][y]);
+            }
+        }
+
+        return tag;
     }
 }

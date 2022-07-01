@@ -78,7 +78,7 @@ public class SkinGrabber {
             CloseableHttpClient client = HttpClients.createDefault();
             CloseableHttpResponse response = client.execute(request);
             HttpEntity entity = response.getEntity();
-            return NativeImage.read((entity.getContent()));
+            return NativeImage.read(entity.getContent());
         } catch (IOException e) {
             e.printStackTrace();
             return null;

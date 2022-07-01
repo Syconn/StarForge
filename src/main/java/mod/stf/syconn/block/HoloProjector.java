@@ -26,6 +26,9 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,9 +67,11 @@ public class HoloProjector extends RotatableBlock implements EntityBlock {
         return new HoloBE(pPos, pState);
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (pLevel.isClientSide) {
+            //DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> Minecraft.getInstance().setScreen(new HoloScreen((HoloBE) pLevel.getBlockEntity(pPos), pPos));)
             Minecraft.getInstance().setScreen(new HoloScreen((HoloBE) pLevel.getBlockEntity(pPos), pPos));
         }
 

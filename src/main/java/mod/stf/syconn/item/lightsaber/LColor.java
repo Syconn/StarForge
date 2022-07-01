@@ -17,6 +17,9 @@ public class LColor {
     public static LColor of(DyeColor color){
         return new LColor(color);
     }
+    public static LColor of(Color color){
+        return new LColor(color.getRed(), color.getGreen(), color.getBlue());
+    }
 
     public LColor(int r, int g, int b) {
         this.r = r;

@@ -31,6 +31,8 @@ public class Network {
         register(MessageHoloMode.class, new MessageHoloMode(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageSetupSkin.class, new MessageSetupSkin(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageSlimSkin.class, new MessageSlimSkin(), NetworkDirection.PLAY_TO_SERVER);
+        register(MessageResetHolo.class, new MessageResetHolo(), NetworkDirection.PLAY_TO_SERVER);
+        register(MessageHoloGear.class, new MessageHoloGear(), NetworkDirection.PLAY_TO_SERVER);
     }
 
     private static <T> void register(Class<T> clazz, IMessage<T> message, NetworkDirection direction)

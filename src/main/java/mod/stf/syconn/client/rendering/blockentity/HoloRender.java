@@ -14,8 +14,12 @@ import mod.stf.syconn.common.blockEntity.HoloBE;
 import mod.stf.syconn.init.ModBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.MapRenderer;
+import net.minecraft.client.gui.components.spectator.SpectatorGui;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.gui.spectator.categories.SpectatorPage;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.RemotePlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -31,11 +35,16 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.gui.MinecraftServerGui;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
@@ -47,6 +56,8 @@ import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeConfig;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.json.JsonObject;
@@ -64,11 +75,17 @@ public class HoloRender implements BlockEntityRenderer<HoloBE> {
 
     @Override
     public void render(HoloBE pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
-
-
         if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.HOLO_PROJECTOR.get() && pBlockEntity.getSkin() != null) {
             HoloPlayerRender playerRenderer = new HoloPlayerRender(new EntityRendererProvider.Context(mc.getEntityRenderDispatcher(), mc.getItemRenderer(), mc.getResourceManager(), mc.getEntityModels(), mc.font), pBlockEntity);
-            AbstractClientPlayer player = GameTestUtil.makeMockPlayer(mc.level);
+            Player player = null;
+
+            if (pBlockEntity.getMode().equals("Username")){
+                for (PlayerInfo playerInfo : mc.getConnection().getOnlinePlayers()){
+                    if (playerInfo.getProfile().getName().equals(pBlockEntity.getUrlOrName())){
+                        player = mc.level.getPlayerByUUID(playerInfo.getProfile().getId());
+                    }
+                }
+            }
 
             pPoseStack.pushPose();
             Direction direction = mc.level.getBlockState(pBlockEntity.getBlockPos()).getValue(BlockStateProperties.HORIZONTAL_FACING);
@@ -94,8 +111,22 @@ public class HoloRender implements BlockEntityRenderer<HoloBE> {
                 pPoseStack.mulPose(Vector3f.YP.rotationDegrees(180));
             }
 
+            if (player == null) {
+                player = GameTestUtil.makeMockPlayer(mc.level);
+                player.setYHeadRot(0);
+            }
+
+            if (pBlockEntity.getMainHand() != null)
+                player.setItemSlot(EquipmentSlot.MAINHAND, pBlockEntity.getMainHand());
+            if (pBlockEntity.getOffHand() != null)
+                player.setItemSlot(EquipmentSlot.OFFHAND, pBlockEntity.getOffHand());
+            for (int i = 0; i < 4; i++) {
+                if (pBlockEntity.getArmour()[i] != null)
+                    player.setItemSlot(EquipmentSlot.byTypeAndIndex(EquipmentSlot.Type.ARMOR, i), pBlockEntity.getArmour()[i]);
+            }
+
             pPoseStack.scale(0.5f, 0.5f, 0.5f);
-            playerRenderer.render(mc.player, 0, pPartialTick, pPoseStack, pBufferSource, pPackedLight);
+            playerRenderer.render(player, 0, pPartialTick, pPoseStack, pBufferSource, pPackedLight);
             pPoseStack.popPose();
         }
     }
