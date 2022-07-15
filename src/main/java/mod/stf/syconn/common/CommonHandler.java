@@ -3,6 +3,7 @@ package mod.stf.syconn.common;
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.common.entity.Jedi;
 import mod.stf.syconn.common.entity.StormTrooper;
+import mod.stf.syconn.common.entity.TieFighter;
 import mod.stf.syconn.init.ModEntities;
 import mod.stf.syconn.world.data.SkinData;
 import mod.stf.syconn.world.data.SkinManager;
@@ -15,6 +16,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -30,6 +33,7 @@ public class CommonHandler {
     @SubscribeEvent
     public static void onAttributeCreate(EntityAttributeCreationEvent event) {
         event.put(ModEntities.STORMTROOPER.get(), StormTrooper.prepareAttributes().build());
+        event.put(ModEntities.TIE_FIGHTER.get(), TieFighter.prepareAttributes().build());
         event.put(ModEntities.JEDI.get(), Jedi.createAttributes().build());
     }
 

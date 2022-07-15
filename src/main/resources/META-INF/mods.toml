@@ -26,6 +26,6 @@ Travel To a world Far Away. Meet your favorite Star Wars Characters and adventur
    modId="minecraft"
    mandatory=true
    # This version range declares a minimum of the current minecraft version up to but not including the next major version
-   versionRange="[1.18.0,1.18.2)"
+   versionRange="[1.18,1.19)"
    ordering="NONE"
    side="BOTH"

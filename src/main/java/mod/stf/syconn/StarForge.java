@@ -4,6 +4,7 @@ import mod.stf.syconn.client.ClientHandler;
 import mod.stf.syconn.common.CommonHandler;
 import mod.stf.syconn.init.*;
 import mod.stf.syconn.network.Network;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
