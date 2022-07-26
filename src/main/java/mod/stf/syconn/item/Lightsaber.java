@@ -3,11 +3,14 @@ package mod.stf.syconn.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import mod.stf.syconn.StarForge;
+import mod.stf.syconn.api.util.MovableLightBlock;
 import mod.stf.syconn.init.ModItems;
 import mod.stf.syconn.item.lightsaber.LightsaberData;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import mod.stf.syconn.util.ColorConverter;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -22,14 +25,45 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LightBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class Lightsaber extends Item {
 
+    private int ticks = 4;
+
     public Lightsaber() {
         super(new Item.Properties().stacksTo(1).tab(StarForge.Tab).rarity(Rarity.RARE));
+    }
+
+    @Override
+    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
+        LightsaberData data = LightsaberHelper.getData(pStack);
+        if (pLevel.isClientSide()) {
+            ticks--;
+            if (data != null && pIsSelected && data.isActive() && ticks <= 0) {
+                if (!MovableLightBlock.hasLightSource(pStack)){
+                    MovableLightBlock.createLightSource(pEntity.getOnPos().above(), pLevel, pStack, 13);
+                }
+                else if (MovableLightBlock.stillExists(pLevel, pStack)){
+                    if (MovableLightBlock.playerMoved(pStack, pEntity.getOnPos().above())) {
+                        MovableLightBlock.moveLightSource(pEntity.getOnPos().above(), pLevel, pStack, 13);
+                    }
+                }
+                ticks = 4;
+            }
+            else if ((!pIsSelected || !data.isActive()) && MovableLightBlock.hasLightSource(pStack)){
+                MovableLightBlock.removeLightSource(pStack, pLevel);
+            }
+        }
+    }
+
+    public boolean canAttackBlock(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer) {
+        return !pPlayer.isCreative();
     }
 
     @Override

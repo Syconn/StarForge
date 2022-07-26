@@ -104,15 +104,14 @@ public class ClientHandler {
         }
     }
 
-    @SubscribeEvent
-    public void onMousePress(InputEvent.MouseInputEvent event) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        //TODO GENERIFY WITH VEHICLE CLASS
-        if (Minecraft.getInstance().options.keyAttack.isDown() && player.isPassenger() && player.getVehicle() instanceof TieFighter){
-            Network.getPlayChannel().sendToServer(new MessageShootGuns());
-            //Minecraft.getInstance().options.keyDrop.consumeClick();
-        }
-    }
+//    @SubscribeEvent
+//    public void onMousePress(InputEvent.MouseInputEvent event) {
+//        LocalPlayer player = Minecraft.getInstance().player;
+//        //TODO GENERIFY WITH VEHICLE CLASS
+//        if (Minecraft.getInstance().options.keyAttack.isDown() && player.isPassenger() && player.getVehicle() instanceof TieFighter){
+//            //Network.getPlayChannel().sendToServer(new MessageShootGuns());
+//        }
+//    }
 
     @SubscribeEvent
     public static void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {

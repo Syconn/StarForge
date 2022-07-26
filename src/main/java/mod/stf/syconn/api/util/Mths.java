@@ -16,18 +16,24 @@ public class Mths {
         float f = Mth.cos(entity.yBodyRot * ((float)Math.PI / 180F));
         float f3 = Mth.sin(entity.getXRot() * ((float)Math.PI / 180F));
 
-        System.out.println(f2);
+        float f2w = Mth.wrapDegrees(f2) * 100;
+        float fw = Mth.wrapDegrees(f) * 100;
+        float f3w = Mth.wrapDegrees(f3) * 100;
+
+        System.out.println(f2w);
 
         if (f2 < 0){
-            return new Vec3(entity.getX() + (f2 + 0.3f), entity.getY() + f3, entity.getZ() - f);
+            return new Vec3(entity.getX() + (f2 + increment), entity.getY() + f3, entity.getZ() - f);
         } else {
-            return new Vec3(entity.getX() + f2, entity.getY() + f3, entity.getZ() - (f + 0.3f));
+            return new Vec3(entity.getX() + f2, entity.getY() + f3, entity.getZ() - (f + increment));
         }
     }
 
-    public static double flipValue(double value, double check){
-        if (check != 0){
-            return -value;
-        } else return value;
+    public static int flip(double value){
+        if (value > 0)
+            return -1;
+        else if (value < 0)
+            return 1;
+        else return 0;
     }
 }
