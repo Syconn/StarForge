@@ -3,6 +3,7 @@ package mod.stf.syconn.client;
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.client.rendering.blockentity.HoloRender;
 import mod.stf.syconn.client.rendering.entity.*;
+import mod.stf.syconn.client.rendering.model.BlockModel;
 import mod.stf.syconn.client.rendering.model.BoltModel;
 import mod.stf.syconn.client.rendering.model.PlayerLikeModel;
 import mod.stf.syconn.client.rendering.model.TieModel;
@@ -107,7 +108,6 @@ public class ClientHandler {
 //    @SubscribeEvent
 //    public void onMousePress(InputEvent.MouseInputEvent event) {
 //        LocalPlayer player = Minecraft.getInstance().player;
-//        //TODO GENERIFY WITH VEHICLE CLASS
 //        if (Minecraft.getInstance().options.keyAttack.isDown() && player.isPassenger() && player.getVehicle() instanceof TieFighter){
 //            //Network.getPlayChannel().sendToServer(new MessageShootGuns());
 //        }
@@ -130,5 +130,6 @@ public class ClientHandler {
         event.registerLayerDefinition(BoltModel.LAYER_LOCATION, BoltModel::createBodyLayer);
         event.registerLayerDefinition(PlayerLikeModel.MODEL, PlayerLikeModel::createBodyLayer);
         event.registerLayerDefinition(TieModel.LAYER_LOCATION, TieModel::createBodyLayer);
+        event.registerLayerDefinition(BlockModel.LAYER_LOCATION, BlockModel::createBodyLayer);
     }
 }

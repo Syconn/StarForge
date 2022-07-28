@@ -5,6 +5,7 @@ package mod.stf.syconn.client.rendering.model;// Made with Blockbench 4.2.5
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import mod.stf.syconn.Reference;
 import mod.stf.syconn.common.entity.TieFighter;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -16,7 +17,7 @@ import net.minecraft.world.entity.Entity;
 
 public class TieModel extends EntityModel<TieFighter> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "custom_model"), "main");
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "custom_model"), "main");
 	private final ModelPart Wing;
 	private final ModelPart Wing2;
 	private final ModelPart MiddleCenter;

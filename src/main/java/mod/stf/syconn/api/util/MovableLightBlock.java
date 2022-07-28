@@ -1,5 +1,6 @@
 package mod.stf.syconn.api.util;
 
+import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.item.ItemStack;

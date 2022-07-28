@@ -37,8 +37,6 @@ public class HoloScreen extends Screen {
 
     @Override
     protected void init() {
-        //TODO ACTUALLY LINK SERVER AND CLIENT
-
         super.init();
         relX = (this.width - this.imageWidth) / 2 + imageWidth / 2 - 30;
         relY = (this.height - this.imageHeight) / 2 + 20;
