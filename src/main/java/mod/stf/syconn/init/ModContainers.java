@@ -3,6 +3,7 @@ package mod.stf.syconn.init;
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.common.containers.ColorContainer;
 import mod.stf.syconn.common.containers.HiltContainer;
+import mod.stf.syconn.common.containers.SchematicContainer;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -16,4 +17,6 @@ public class ModContainers {
             () -> IForgeMenuType.create((windowId, inv, data) -> new ColorContainer(windowId, data.readBlockPos(), inv, inv.player)));
     public static final RegistryObject<MenuType<HiltContainer>> HILT_CONTAINER = REGISTER.register("hilt",
             () -> IForgeMenuType.create((windowId, inv, data) -> new HiltContainer(windowId, data.readBlockPos(), inv, inv.player)));
+    public static final RegistryObject<MenuType<SchematicContainer>> SCHEM_CONTAINER = REGISTER.register("schem",
+            () -> IForgeMenuType.create((windowId, inv, data) -> new SchematicContainer(windowId, data.readBlockPos(), inv, inv.player)));
 }

@@ -1,4 +1,4 @@
-package mod.stf.syconn.datagen;
+package mod.stf.syconn.client.datagen;
 
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.api.util.Tab;
@@ -20,7 +20,12 @@ public class LangDatagen extends LanguageProvider {
     protected void addTranslations() {
         add(ModItems.F_11D.get(), "F-11 Blaster");
         add(ModItems.LIGHTSABER.get(), "Lightsaber");
+        add(ModItems.STORMTROOPER_EGG.get(), "StormTrooper Spawn Egg");
+        add(ModItems.JEDI_EGG.get(), "Jedi Spawn Egg");
+        add(ModItems.TIE_ITEM.get(), "Tie Fighter Spawn Egg");
+        add(ModItems.SCHEMATIC_ITEM.get(), "Schematic Item");
         add(ModBlocks.LIGHTSABER_CRAFTER.get(), "Lightsaber Workstation");
+        add(ModBlocks.SCHEMATIC_PROJECTOR.get(), "Schematic Projector");
         add("key.lightsaber.activate", "Key Activate Lightsaber");
         add("key.categories.stf", "StarForge");
         add("itemGroup.StarForge", "StarForge");
