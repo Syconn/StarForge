@@ -25,6 +25,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LightBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,6 +36,7 @@ import java.util.List;
 public class Lightsaber extends Item {
 
     private int ticks = 4;
+    private BlockPos pos = null;
 
     public Lightsaber() {
         super(new Item.Properties().stacksTo(1).tab(StarForge.Tab).rarity(Rarity.RARE));
@@ -48,16 +50,24 @@ public class Lightsaber extends Item {
             if (data != null && pIsSelected && data.isActive() && ticks <= 0) {
                 if (!MovableLightBlock.hasLightSource(pStack)){
                     MovableLightBlock.createLightSource(pEntity.getOnPos().above(), pLevel, pStack, 13);
+                    pos=pEntity.getOnPos().above();
                 }
                 else if (MovableLightBlock.stillExists(pLevel, pStack)){
                     if (MovableLightBlock.playerMoved(pStack, pEntity.getOnPos().above())) {
                         MovableLightBlock.moveLightSource(pEntity.getOnPos().above(), pLevel, pStack, 13);
+                        pos=pEntity.getOnPos().above();
                     }
                 }
                 ticks = 4;
             }
-            else if ((!pIsSelected || !data.isActive()) && MovableLightBlock.hasLightSource(pStack)){
+            else if (!pIsSelected && MovableLightBlock.stillExists(pLevel, pStack)){
                 MovableLightBlock.removeLightSource(pStack, pLevel);
+                pos=null;
+            }
+            // TODO SOLVE BETTER
+            else if (data != null && !data.isActive() && pos != null){
+                pLevel.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+                pos=null;
             }
         }
     }

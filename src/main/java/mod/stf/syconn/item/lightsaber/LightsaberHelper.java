@@ -1,5 +1,6 @@
 package mod.stf.syconn.item.lightsaber;
 
+import mod.stf.syconn.api.util.MovableLightBlock;
 import mod.stf.syconn.init.ModItems;
 import mod.stf.syconn.util.ColorConverter;
 import net.minecraft.core.NonNullList;
