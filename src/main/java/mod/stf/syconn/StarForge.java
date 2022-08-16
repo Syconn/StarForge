@@ -1,5 +1,6 @@
 package mod.stf.syconn;
 
+import mod.stf.syconn.api.SyCore;
 import mod.stf.syconn.client.ClientHandler;
 import mod.stf.syconn.common.CommonHandler;
 import mod.stf.syconn.init.*;
@@ -42,11 +43,13 @@ public class StarForge {
     {
         Network.init();
         MinecraftForge.EVENT_BUS.register(new CommonHandler());
+        SyCore.onCommonSetup(event);
     }
 
     private void onClientSetup(FMLClientSetupEvent event)
     {
         event.enqueueWork(ClientHandler::setup);
         MinecraftForge.EVENT_BUS.register(new ClientHandler());
+        SyCore.onClientSetup(event);
     }
 }

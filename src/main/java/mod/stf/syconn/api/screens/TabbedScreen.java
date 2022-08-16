@@ -1,19 +1,13 @@
 package mod.stf.syconn.api.screens;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import mod.stf.syconn.Reference;
 import mod.stf.syconn.api.containers.ContainerMenu;
+import mod.stf.syconn.api.network.Network;
+import mod.stf.syconn.api.network.messages.MessageClickTab;
 import mod.stf.syconn.api.screens.componet.TabButton;
 import mod.stf.syconn.api.util.Tab;
-import mod.stf.syconn.api.util.TabEnum;
-import mod.stf.syconn.network.Network;
-import mod.stf.syconn.network.messages.MessageClickTab;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import java.util.List;
 
