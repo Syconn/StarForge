@@ -2,6 +2,7 @@ package mod.stf.syconn.api.blockEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -41,5 +42,17 @@ public abstract class MenuBlockEntity extends BlockEntity implements MenuProvide
             return handler.cast();
         }
         return super.getCapability(cap, side);
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag pTag) {
+        super.saveAdditional(pTag);
+        pTag.put("items", itemHandler.serializeNBT());
+    }
+
+    @Override
+    public void load(CompoundTag pTag) {
+        super.load(pTag);
+        itemHandler.deserializeNBT(pTag.getCompound("items"));
     }
 }

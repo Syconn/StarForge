@@ -1,0 +1,31 @@
+{
+  "variants": {
+    "facing=north,face=wall": {
+      "y": 0,
+      "x": 90,
+      "model": "stf:block/holo"
+    },
+    "facing=east,face=wall": {
+      "y": 90,
+      "x": 90,
+      "model": "stf:block/holo"
+    },
+    "facing=south,face=wall": {
+      "y": 180,
+      "x": 90,
+      "model": "stf:block/holo"
+    },
+    "facing=west,face=wall": {
+      "y": 270,
+      "x": 90,
+      "model": "stf:block/holo"
+    },
+    "face=ceiling": {
+      "x": 180,
+      "model": "stf:block/holo"
+    },
+    "face=floor": {
+      "model": "stf:block/holo"
+    }
+  }
+}

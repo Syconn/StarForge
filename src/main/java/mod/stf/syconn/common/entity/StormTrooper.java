@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -60,6 +61,11 @@ public class StormTrooper extends AbstractSkeleton {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.getEntityData().define(DATA_LEADER, false);
+    }
+
+    @Override
+    public Packet<?> getAddEntityPacket() {
+        return super.getAddEntityPacket();
     }
 
     @Override

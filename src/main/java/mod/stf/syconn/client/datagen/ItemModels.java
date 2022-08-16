@@ -21,7 +21,7 @@ public class ItemModels extends ItemModelProvider {
         withExistingParent(ModItems.F_11D.get().getRegistryName().getPath(), modLoc("item/f_11"));
         withExistingParent(ModItems.STORMTROOPER_EGG.get().getRegistryName().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModItems.JEDI_EGG.get().getRegistryName().getPath(), mcLoc("item/template_spawn_egg"));
-
+        singleTexture(ModItems.SCHEMATIC_ITEM.get().getRegistryName().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/schematic_item"));
 
         ItemModelBuilder builder = withExistingParent(ModItems.LIGHTSABER.get().getRegistryName().getPath(), modLoc("item/lightsaber_off/yoda"));
 

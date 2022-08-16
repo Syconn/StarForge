@@ -1,0 +1,76 @@
+{
+	"meta": {
+		"format_version": "4.0",
+		"model_format": "modded_entity",
+		"box_uv": true
+	},
+	"name": "Block",
+	"model_identifier": "",
+	"modded_entity_version": "1.17",
+	"modded_entity_flip_y": true,
+	"visible_box": [1, 1, 0],
+	"variable_placeholders": "",
+	"variable_placeholder_buttons": [],
+	"resolution": {
+		"width": 64,
+		"height": 64
+	},
+	"elements": [
+		{
+			"name": "cube",
+			"rescale": false,
+			"locked": false,
+			"from": [-8, 0, -8],
+			"to": [8, 16, 8],
+			"autouv": 0,
+			"color": 1,
+			"origin": [0, 0, 0],
+			"faces": {
+				"north": {
+					"uv": [16, 16, 32, 32],
+					"texture": 0
+				},
+				"east": {
+					"uv": [0, 16, 16, 32],
+					"texture": 0
+				},
+				"south": {
+					"uv": [48, 16, 64, 32],
+					"texture": 0
+				},
+				"west": {
+					"uv": [32, 16, 48, 32],
+					"texture": 0
+				},
+				"up": {
+					"uv": [32, 16, 16, 0],
+					"texture": 0
+				},
+				"down": {
+					"uv": [48, 0, 32, 16],
+					"texture": 0
+				}
+			},
+			"type": "cube",
+			"uuid": "0d35fb23-9533-d7c2-b56e-5416765d256c"
+		}
+	],
+	"outliner": ["0d35fb23-9533-d7c2-b56e-5416765d256c"],
+	"textures": [
+		{
+			"path": "C:\\Users\\Aidan\\IdeaProjects\\StarForge\\dev models\\Blocks\\block.png",
+			"name": "block.png",
+			"folder": "block",
+			"namespace": "",
+			"id": "0",
+			"particle": false,
+			"render_mode": "default",
+			"visible": true,
+			"mode": "bitmap",
+			"saved": true,
+			"uuid": "37cdeadc-dab9-0436-ba4e-d9db37905715",
+			"relative_path": "../block.png",
+			"source": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAU9JREFUeF7tmTFqAlEURf9AIIW9DhhCBCFbmN5FuIRsJtOYysoV2LkIsbYRBBNRmAlpLVJFvriCd4tw9difP2/uu/P+fVgk8bdYf/0pR8zqDwVP89l7oRwgwfnBWYBq+BSqYbk9pCxAv1eG+GPbIAAO4BNgBkhzTIIZgtwCXIPkAIIQSZAozC5w98tQaJW7Qv++Do+aWtrny/Wb8v5puppI/MP4R+KLLEDV64YOWbbfKQvwUnZC/GdzugjQGTyH+NNun7IAj/3XEP973CQEwAF8AswAhiC3ANcgOSAUJAhCJEGiMLvATSxDoQl4hezXYeXlb4GV/xpzFwEB3Duo1o8DVAXdeRzg3kG1fhygKujO4wD3Dqr14wBVQXceB7h3UK0fB6gKuvM4wL2Dav04QFXQnccB7h1U68cBqoLuPA5w76BaPw5QFXTncYB7B9X6z13Z4LBLm8u4AAAAAElFTkSuQmCC"
+		}
+	]
+}

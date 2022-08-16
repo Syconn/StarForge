@@ -40,7 +40,6 @@ public class ColorScreen extends TabbedScreen<ColorContainer> {
 
     private final ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/lightsaber_forge.png");
     private ColorContainer inv;
-    private BlockPos pos;
     private Inventory playerInv;
 
     private ColorSlider[] sliderColor = new ColorSlider[3];
@@ -55,7 +54,6 @@ public class ColorScreen extends TabbedScreen<ColorContainer> {
         super(container, inv, name);
         this.playerInv = inv;
         this.inv = container;
-        this.pos = container.getBlockEntity().getBlockPos();
         imageHeight = 182;
         imageWidth = 176;
     }

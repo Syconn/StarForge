@@ -3,6 +3,7 @@ package mod.stf.syconn.client.rendering.model;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import mod.stf.syconn.Reference;
+import mod.stf.syconn.client.rendering.entity.AbstractBolt;
 import mod.stf.syconn.common.entity.BlasterBolt;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -11,7 +12,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 
-public class BoltModel extends EntityModel<BlasterBolt> {
+public class BoltModel<T extends AbstractBolt> extends EntityModel<T> {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "bolt"), "main");
 	private final ModelPart body;
 
@@ -38,7 +39,7 @@ public class BoltModel extends EntityModel<BlasterBolt> {
 	}
 
 	@Override
-	public void setupAnim(BlasterBolt entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
 	}
 

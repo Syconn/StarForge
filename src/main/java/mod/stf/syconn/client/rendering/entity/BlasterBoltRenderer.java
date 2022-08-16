@@ -14,12 +14,10 @@ import net.minecraft.util.Mth;
 
 public class BlasterBoltRenderer extends EntityRenderer<BlasterBolt> {
 
-    private BoltModel model;
-    private ItemRenderer itemRenderer;
+    private BoltModel<BlasterBolt> model;
 
     public BlasterBoltRenderer(EntityRendererProvider.Context ctx) {
         super(ctx);
-        itemRenderer = ctx.getItemRenderer();
         model = new BoltModel(ctx.bakeLayer(BoltModel.LAYER_LOCATION));
     }
 

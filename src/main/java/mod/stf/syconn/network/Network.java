@@ -33,6 +33,8 @@ public class Network {
         register(MessageSlimSkin.class, new MessageSlimSkin(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageResetHolo.class, new MessageResetHolo(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageHoloGear.class, new MessageHoloGear(), NetworkDirection.PLAY_TO_SERVER);
+        register(MessageShootGuns.class, new MessageShootGuns(), NetworkDirection.PLAY_TO_SERVER);
+        register(MessageLoadBlock.class, new MessageLoadBlock(), NetworkDirection.PLAY_TO_SERVER);
     }
 
     private static <T> void register(Class<T> clazz, IMessage<T> message, NetworkDirection direction)

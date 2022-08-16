@@ -3,6 +3,7 @@ package mod.stf.syconn.client.rendering.entity;
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.client.rendering.model.PlayerLikeModel;
 import mod.stf.syconn.common.entity.StormTrooper;
+import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
