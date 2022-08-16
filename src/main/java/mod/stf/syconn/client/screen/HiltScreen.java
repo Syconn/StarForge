@@ -49,7 +49,6 @@ import java.util.List;
 public class HiltScreen extends TabbedScreen<HiltContainer> {
 
     private final ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/containers/workstation_hilt.png");
-    private HiltContainer inv;
     private ExtendedButton craftButton;
     private BlockPos pos;
     private Inventory playerInv;
@@ -80,7 +79,6 @@ public class HiltScreen extends TabbedScreen<HiltContainer> {
     @Override
     public void tabbedClicked(Button button) {
         super.tabbedClicked(button);
-        Network.getPlayChannel().sendToServer(new MessageClickTab(((TabButton)button).getId(), inv.getBlockEntity().getBlockPos()));
     }
 
     @Override

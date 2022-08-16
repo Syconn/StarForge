@@ -39,7 +39,6 @@ import java.util.List;
 public class ColorScreen extends TabbedScreen<ColorContainer> {
 
     private final ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/lightsaber_forge.png");
-    private ColorContainer inv;
     private Inventory playerInv;
 
     private ColorSlider[] sliderColor = new ColorSlider[3];
