@@ -10,6 +10,7 @@ import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import mod.stf.syconn.util.ColorConverter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.DebugScreenOverlay;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -25,6 +26,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LightBlock;
@@ -47,15 +49,15 @@ public class Lightsaber extends Item {
         LightsaberData data = LightsaberHelper.getData(pStack);
         if (pLevel.isClientSide()) {
             ticks--;
-            if (data != null && pIsSelected && data.isActive() && ticks <= 0) {
+            if (data != null && pIsSelected && data.isActive() && ticks <= 0 && pLevel.getBrightness(LightLayer.SKY, pEntity.blockPosition()) < 8 && pLevel.getBrightness(LightLayer.BLOCK, pEntity.blockPosition()) < 10 && !pEntity.isSpectator()) {
                 if (!MovableLightBlock.hasLightSource(pStack)){
-                    MovableLightBlock.createLightSource(pEntity.getOnPos().above(), pLevel, pStack, 13);
-                    pos=pEntity.getOnPos().above();
+                    MovableLightBlock.createLightSource(pEntity.blockPosition().above(), pLevel, pStack, 13);
+                    pos=pEntity.blockPosition().above();
                 }
-                else if (MovableLightBlock.stillExists(pLevel, pStack)){
-                    if (MovableLightBlock.playerMoved(pStack, pEntity.getOnPos().above())) {
-                        MovableLightBlock.moveLightSource(pEntity.getOnPos().above(), pLevel, pStack, 13);
-                        pos=pEntity.getOnPos().above();
+                else if (MovableLightBlock.stillExists(pLevel, pStack) && pLevel.getBrightness(LightLayer.SKY, pEntity.blockPosition()) < 8 && pLevel.getBrightness(LightLayer.BLOCK, pEntity.blockPosition()) < 10 && !pEntity.isSpectator()){
+                    if (MovableLightBlock.playerMoved(pStack, pEntity.blockPosition().above())) {
+                        MovableLightBlock.moveLightSource(pEntity.blockPosition().above(), pLevel, pStack, 13);
+                        pos=pEntity.blockPosition().above();
                     }
                 }
                 ticks = 4;
