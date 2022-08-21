@@ -49,7 +49,7 @@ public class Lightsaber extends Item {
         LightsaberData data = LightsaberHelper.getData(pStack);
         if (pLevel.isClientSide()) {
             ticks--;
-            if (data != null && pIsSelected && data.isActive() && ticks <= 0 && pLevel.getBrightness(LightLayer.SKY, pEntity.blockPosition()) < 8 && pLevel.getBrightness(LightLayer.BLOCK, pEntity.blockPosition()) < 10 && !pEntity.isSpectator()) {
+            if (data != null && pIsSelected && data.isActive() && ticks <= 0 && Math.max(pLevel.getBrightness(LightLayer.SKY, pEntity.blockPosition()), pLevel.getBrightness(LightLayer.BLOCK, pEntity.blockPosition())) < 8 && !pEntity.isSpectator()) {
                 if (!MovableLightBlock.hasLightSource(pStack)){
                     MovableLightBlock.createLightSource(pEntity.blockPosition().above(), pLevel, pStack, 13);
                     pos=pEntity.blockPosition().above();

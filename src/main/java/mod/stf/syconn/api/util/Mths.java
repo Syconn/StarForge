@@ -36,4 +36,29 @@ public class Mths {
             return 1;
         else return 0;
     }
+
+    public static boolean isNumeric(String string) {
+        int intValue;
+
+        if(string == null || string.equals("")) {
+            return false;
+        }
+
+        try {
+            intValue = Integer.parseInt(string);
+            return true;
+        } catch (NumberFormatException e) {
+            System.out.println("Input String cannot be parsed to Integer.");
+        }
+        return false;
+    }
+
+    public static int largestSum(int... values){
+        int biggest = 0;
+        for (int value : values){
+            if (biggest < value)
+                biggest = value;
+        }
+        return biggest;
+    }
 }
