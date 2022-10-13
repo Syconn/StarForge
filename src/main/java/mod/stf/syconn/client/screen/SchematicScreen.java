@@ -24,8 +24,8 @@ public class SchematicScreen extends BasicContainerScreen<SchematicContainer> {
     private final ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/schem.png");
     private int relX, relY;
     private final BlockPos pos;
-    private int imageWidth = 176;
-    private int imageHeight = 172;
+    private final int imageWidth = 176;
+    private final int imageHeight = 172;
 
     public SchematicScreen(SchematicContainer container, Inventory inv, Component name) {
         super(container, inv, name);

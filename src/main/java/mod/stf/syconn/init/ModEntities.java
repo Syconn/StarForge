@@ -19,4 +19,5 @@ public class ModEntities {
     public static final RegistryObject<EntityType<StormTrooper>> STORMTROOPER = REGISTER.register("stormtrooper", () -> EntityType.Builder.of(StormTrooper::new, MobCategory.MONSTER).sized(0.6f, 1.95f).clientTrackingRange(8).setShouldReceiveVelocityUpdates(false).build("stormtrooper"));
     public static final RegistryObject<EntityType<Jedi>> JEDI = REGISTER.register("jedi", () -> EntityType.Builder.of(Jedi::new, MobCategory.AMBIENT).sized(0.6f, 1.95f).clientTrackingRange(8).setShouldReceiveVelocityUpdates(false).build("jedi"));
     public static final RegistryObject<EntityType<TieFighter>> TIE_FIGHTER = REGISTER.register("tie_fighter", () -> EntityType.Builder.<TieFighter>of(TieFighter::new, MobCategory.MISC).sized(2.5F, 2.5F).setTrackingRange(10).build("tie_fighter"));
+    public static final RegistryObject<EntityType<MovingBlock>> MOVING_BLOCK = REGISTER.register("moving_block", () -> EntityType.Builder.<MovingBlock>of(MovingBlock::new, MobCategory.MISC).sized(1F, 1F).setTrackingRange(100).setUpdateInterval(1).fireImmune().setShouldReceiveVelocityUpdates(true).build("moving_block"));
 }

@@ -1,6 +1,5 @@
 package mod.stf.syconn.api.containers;
 
-import mod.stf.syconn.api.containers.ContainerMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

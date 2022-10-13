@@ -26,6 +26,11 @@ public abstract class BasicContainerScreen<T extends AbstractContainerMenu> exte
         super(pMenu, pPlayerInventory, pTitle);
     }
 
+    @Override
+    public void blit(PoseStack pPoseStack, int pX, int pY, int pUOffset, int pVOffset, int pUWidth, int pVHeight) {
+        super.blit(pPoseStack, pX, pY, pUOffset, pVOffset, pUWidth, pVHeight);
+    }
+
     protected void renderGuiItem(ItemStack pStack, int pX, int pY, float xScale, float yScale, float zScale, boolean rotate, BakedModel pBakedmodel) {
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
         RenderSystem.enableBlend();

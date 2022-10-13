@@ -1,6 +1,7 @@
 package mod.stf.syconn.client;
 
 import mod.stf.syconn.Reference;
+import mod.stf.syconn.api.screens.ApplicationScreen;
 import mod.stf.syconn.client.rendering.blockentity.HoloRender;
 import mod.stf.syconn.client.rendering.blockentity.SchematicRender;
 import mod.stf.syconn.client.rendering.entity.*;
@@ -54,6 +55,7 @@ public class ClientHandler {
         MenuScreens.register(ModContainers.COLOR_CONTAINER.get(), ColorScreen::new);
         MenuScreens.register(ModContainers.HILT_CONTAINER.get(), HiltScreen::new);
         MenuScreens.register(ModContainers.SCHEM_CONTAINER.get(), SchematicScreen::new);
+        MenuScreens.register(ModContainers.NAV_CONTAINER.get(), ApplicationScreen::new);
 
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.LIGHTSABER_CRAFTER.get(), RenderType.translucent());
 
@@ -124,6 +126,7 @@ public class ClientHandler {
         event.registerEntityRenderer(ModEntities.JEDI.get(), JediRender::new);
         event.registerEntityRenderer(ModEntities.TIE_FIGHTER.get(), TieFighterRenderer::new);
         event.registerEntityRenderer(ModEntities.TIE_BOLT.get(), TieBoltRender::new);
+        event.registerEntityRenderer(ModEntities.MOVING_BLOCK.get(), BlockRender::new);
 
         event.registerBlockEntityRenderer(ModBlockEntities.HOLO_BE.get(), HoloRender::new);
         event.registerBlockEntityRenderer(ModBlockEntities.SCHEMATIC_BE.get(), SchematicRender::new);

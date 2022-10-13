@@ -7,6 +7,7 @@ import mod.stf.syconn.Reference;
 import mod.stf.syconn.client.rendering.model.BlockModel;
 import mod.stf.syconn.client.rendering.model.TieModel;
 import mod.stf.syconn.common.blockEntity.SchematicBe;
+import mod.stf.syconn.common.entity.MovingBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -21,12 +22,17 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class BlockRender extends EntityRenderer<Entity> {
+import java.io.IOException;
 
-    private final BlockModel model;
-    private final SchematicBe be;
-    private final BlockPos pos;
-    private final Minecraft mc = Minecraft.getInstance();
+public class BlockRender extends EntityRenderer<MovingBlock> {
+
+    private BlockModel model;
+    private SchematicBe be;
+    private BlockPos pos;
+
+    public BlockRender(EntityRendererProvider.Context ctx) {
+        super(ctx);
+    }
 
     public BlockRender(EntityRendererProvider.Context pContext, SchematicBe be, BlockPos pos) {
         super(pContext);
@@ -36,7 +42,7 @@ public class BlockRender extends EntityRenderer<Entity> {
     }
 
     @Override
-    public void render(Entity pEntity, float pEntityYaw, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
+    public void render(MovingBlock pEntity, float pEntityYaw, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
         pPoseStack.pushPose();
         model.setupAnim(pEntity, pPartialTick, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer vertexconsumer = pBuffer.getBuffer(this.model.renderType(getTextureLocation(pEntity)));
@@ -57,7 +63,11 @@ public class BlockRender extends EntityRenderer<Entity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(Entity pEntity) {
-        return new ResourceLocation(Reference.MOD_ID, "textures/entity/block.png");
+    public ResourceLocation getTextureLocation(MovingBlock pEntity) {
+        try {
+            return Minecraft.getInstance().getTextureManager().register("moving_block", new DynamicTexture(pEntity.getTexture().getImageFromPixels()));
+        } catch (IOException e) {
+            return new ResourceLocation(Reference.MOD_ID, "textures/entity/block.png");
+        }
     }
 }

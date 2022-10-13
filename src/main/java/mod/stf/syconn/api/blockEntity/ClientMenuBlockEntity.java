@@ -21,7 +21,11 @@ public abstract class ClientMenuBlockEntity extends MenuBlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    protected abstract CompoundTag saveData();
+    protected CompoundTag saveData(){
+        CompoundTag tag = new CompoundTag();
+        tag.put("items", itemHandler.serializeNBT());
+        return tag;
+    }
 
     @Override
     public CompoundTag getUpdateTag() {
