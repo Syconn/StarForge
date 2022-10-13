@@ -8,8 +8,18 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
 import javax.swing.text.html.parser.Entity;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Mths {
+
+    public static String[] splitArray(String[] array, int start, int length){
+        String[] list = new String[length];
+        list[0] = array[start];
+        list[1] = array[start + 1];
+        list[2] = array[start + 2];
+        return list;
+    }
 
     public static Vec3 frontPos(LivingEntity entity, double increment){
         float f2 = Mth.sin(entity.yBodyRot * ((float)Math.PI / 180F));

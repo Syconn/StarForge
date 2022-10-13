@@ -89,7 +89,7 @@ public class SchematicProjector extends RotatableBlock implements EntityBlock {
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (!pState.is(pNewState.getBlock())) {
             BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-            if (blockentity instanceof CrafterBE) {
+            if (blockentity instanceof MenuBlockEntity) {
                 blockentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
                     for (int i = 0; i < handler.getSlots(); i++){
                         if (handler.getStackInSlot(i) != ItemStack.EMPTY){
@@ -111,7 +111,7 @@ public class SchematicProjector extends RotatableBlock implements EntityBlock {
             return null;
         }
         return (lvl, pos, blockState, t) -> {
-            if (t instanceof SchematicBe tile) {
+            if (t instanceof MenuBlockEntity tile) {
                 tile.tickServer();
             }
         };

@@ -74,7 +74,6 @@ public class TrooperPatrol implements CustomSpawner {
                                             ++j1;
                                             blockpos$mutableblockpos.setY(pLevel.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, blockpos$mutableblockpos).getY());
                                             if (l1 == 0) {
-                                                System.out.println("Spawning");
                                                 if (!this.spawnPatrolMember(pLevel, blockpos$mutableblockpos, random, true)) {
                                                     break;
                                                 }

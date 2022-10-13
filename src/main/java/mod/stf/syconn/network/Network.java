@@ -35,6 +35,7 @@ public class Network {
         register(MessageHoloGear.class, new MessageHoloGear(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageShootGuns.class, new MessageShootGuns(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageLoadBlock.class, new MessageLoadBlock(), NetworkDirection.PLAY_TO_SERVER);
+        register(MessageHyperdrive.class, new MessageHyperdrive(), NetworkDirection.PLAY_TO_SERVER);
     }
 
     private static <T> void register(Class<T> clazz, IMessage<T> message, NetworkDirection direction)
