@@ -7,6 +7,9 @@ public class ColorFormattedString {
 
     private List<ColoredString> strings = new ArrayList<>();
 
+    public ColorFormattedString() {
+    }
+
     public ColorFormattedString(List<ColoredString> string) {
         this.strings = string;
     }
@@ -25,6 +28,14 @@ public class ColorFormattedString {
             }
             if (!found) strings.add(new ColoredString(str, string.getColor()));
         }
+    }
+
+    public void addString(ColoredString string){
+        strings.add(string);
+    }
+
+    public void addString(String string){
+        strings.add(new ColoredString(string));
     }
 
     public List<ColoredString> getString() {

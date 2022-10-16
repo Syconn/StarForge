@@ -7,7 +7,7 @@ import net.minecraft.world.item.DyeColor;
 public record CommandStatus(String msg, Status status) {
 
     public ColoredString getStatus(){
-        return new new ColoredString(status.type + " - " + msg, status.color);
+        return new ColoredString(status.type + " - " + msg, status.color);
     }
 
     public enum Status {

@@ -11,11 +11,15 @@ public class ColorFormattedLine {
 
     public static final int letterPixels = 10;
 
-    public static void renderLine(List<ColoredString> strings, PoseStack pStack, Font font, int x, int y, int topLine){
-        int i = 0;
-        for (ColoredString string : strings) {
-            GuiComponent.drawString(pStack, font, string.getString(), x, y + ((i - topLine) * letterPixels), string.getColor());
-            i++;
+    public static void renderLine(List<ColoredString> strings, int y, PoseStack pStack, Font font, int x, int yPos, int topLine){
+        int l = 0;
+        for (ColoredString str : strings) {
+            //TODO NEED TO ADD PIXEL FOR EVERY LETTER AND SYMBOL
+
+            for (int i = 0; i < str.getString().length(); i++) {
+                GuiComponent.drawString(pStack, font, str.getString().charAt(i) + "", x + (l * 7), yPos + ((y - topLine) * letterPixels), str.getColor());
+                l++;
+            }
         }
     }
 }
