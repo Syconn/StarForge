@@ -8,6 +8,8 @@ import net.minecraft.client.gui.GuiComponent;
 import java.util.ArrayList;
 import java.util.List;
 
+import static mod.stf.syconn.api.util.ColorFormattedLine.letterPixels;
+
 public class MultiLineTyper {
 
     private List<ColorFormattedString> lines = new ArrayList<>();
@@ -23,7 +25,6 @@ public class MultiLineTyper {
 
     public void render(PoseStack pStack, Font font, int x, int y, int topLine){
         int window = lineBottom - lineTop;
-        int letterPixels = 10;
         int totLines = window / letterPixels;
         for (int i = topLine; i < topLine + totLines; i++) {
             if (size() > i) {

@@ -9,9 +9,13 @@ import java.util.List;
 
 public class ColorFormattedLine {
 
+    public static final int letterPixels = 10;
+
     public static void renderLine(List<ColoredString> strings, PoseStack pStack, Font font, int x, int y, int topLine){
+        int i = 0;
         for (ColoredString string : strings) {
-            GuiComponent.drawString(pStack, font, lines.get(i).getString(), x, y + ((i - topLine) * letterPixels), lines.get(i).getColor());
+            GuiComponent.drawString(pStack, font, string.getString(), x, y + ((i - topLine) * letterPixels), string.getColor());
+            i++;
         }
     }
 }
