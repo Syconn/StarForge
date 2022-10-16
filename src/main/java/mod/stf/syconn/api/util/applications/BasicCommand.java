@@ -9,6 +9,7 @@ public abstract class BasicCommand<T extends BasicApplication> {
 
     private final String symbol;
     private final String name;
+    private final String start;
     private CommandStatus status;
     protected Level level = Minecraft.getInstance().level;
     protected T application;
@@ -16,6 +17,7 @@ public abstract class BasicCommand<T extends BasicApplication> {
     public BasicCommand(String symbol, String name, T application) {
         this.symbol = symbol;
         this.name = name;
+        this.start = symbol + name;
         this.application = application;
     }
 
@@ -35,11 +37,11 @@ public abstract class BasicCommand<T extends BasicApplication> {
     }
 
     private boolean validCMD(String cmd){
-        if (cmd.length() >= symbol.length()+name.length()) {
-            String start = cmd.substring(0, symbol.length()+name.length());
-            if (start.matches(symbol + name)){
-                status = hasParameters(cmd.substring(symbol.length()+name.length()));
-                return hasParameters(cmd.substring(symbol.length()+name.length())).status().isSuccessful();
+        if (cmd.length() >= start.length()) {
+            String begin = cmd.substring(0, start.length());
+            if (begin.toLowerCase().matches(start.toLowerCase())){
+                status = hasParameters(cmd.substring(start.length()));
+                return hasParameters(cmd.substring(start.length())).status().isSuccessful();
             }
         }
         return false;

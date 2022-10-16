@@ -40,7 +40,7 @@ public abstract class ApplicationComponent<T extends ApplicationContainer> exten
                 }
             }
         }
-        handleCMDStatus(new CommandStatus("COMMAND UNRECOGNIZED Use /Help", CommandStatus.Status.UNKNOWN));
+        handleCMDStatus(new CommandStatus("COMMAND UNRECOGNIZED USE /Help", CommandStatus.Status.UNKNOWN));
     }
 
     public abstract void handleCMDStatus(CommandStatus error);

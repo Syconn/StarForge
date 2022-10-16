@@ -14,12 +14,20 @@ public class ColorFormattedLine {
     public static void renderLine(List<ColoredString> strings, int y, PoseStack pStack, Font font, int x, int yPos, int topLine){
         int l = 0;
         for (ColoredString str : strings) {
-            //TODO NEED TO ADD PIXEL FOR EVERY LETTER AND SYMBOL
-
             for (int i = 0; i < str.getString().length(); i++) {
-                GuiComponent.drawString(pStack, font, str.getString().charAt(i) + "", x + (l * 7), yPos + ((y - topLine) * letterPixels), str.getColor());
-                l++;
+                GuiComponent.drawString(pStack, font, str.getString().charAt(i) + "", x + l, yPos + ((y - topLine) * letterPixels), str.getColor());
+                l+=getCharacterLength(str.getString().charAt(i) + "") + 1;
             }
+            l+=2;
         }
+    }
+
+    public static int getCharacterLength(String s){
+        if (s.matches("I") || s.matches("]") || s.matches("}") || s.matches("t")){
+            return 3;
+        } else if (s.matches(":") || s.matches("!") || s.matches("i")) {
+            return 1;
+        }
+        return 5;
     }
 }
