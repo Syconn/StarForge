@@ -1,5 +1,6 @@
 package mod.stf.syconn.util.applications;
 
+import mod.stf.syconn.api.util.ColorCodes;
 import mod.stf.syconn.api.util.Mths;
 import mod.stf.syconn.api.util.applications.BasicCommand;
 import mod.stf.syconn.api.util.applications.CommandStatus;
@@ -30,7 +31,8 @@ public class MoveCMD extends BasicCommand<NavigationApplication> {
                 for (Direction direction : Direction.values()) {
                     if (direction.getName().matches(parameters[1].toLowerCase())) {
                         p2 = direction;
-                        return new CommandStatus("3. 2. 1. GO!", CommandStatus.Status.SUCCESS);
+                        if (meetsFlightRequirements()) return new CommandStatus("3. 2. 1. GO!", CommandStatus.Status.SUCCESS);
+                        return new CommandStatus("Navigator Not In Side of Ship", CommandStatus.Status.ERROR);
                     }
                 }
                 return new CommandStatus("Parameter not Valid Direction", CommandStatus.Status.ERROR);
@@ -43,13 +45,17 @@ public class MoveCMD extends BasicCommand<NavigationApplication> {
 
     @Override
     public void execute() {
-        if (p2 == Direction.NORTH){
+        if (meetsFlightRequirements()){
             Network.getPlayChannel().sendToServer(new MessageHyperdrive(p2, p1, application.getShip()));
         }
     }
 
     @Override
     public CommandStatus info() {
-        return new CommandStatus("/move <distance> <direction> EX - /move 10 north", CommandStatus.Status.HELP);
+        return new CommandStatus("/move " + ColorCodes.WHITE + "<distance> " + ColorCodes.WHITE + "<direction> EX - /move " + ColorCodes.AQUA + "10 " + ColorCodes.RED + "north", CommandStatus.Status.HELP);
+    }
+
+    public boolean meetsFlightRequirements(){
+        return application.getShip() != null && application.getShip().containsBlockPos(application.getPos(), level);
     }
 }

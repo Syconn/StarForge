@@ -11,7 +11,7 @@ public record CommandStatus(String msg, Status status) {
     }
 
     public enum Status {
-        SUCCESS("SUCCESS", DyeColor.GREEN.getFireworkColor()),
+        SUCCESS("SUCCESS", DyeColor.LIME.getFireworkColor()),
         HELP("USAGE", DyeColor.YELLOW.getFireworkColor()),
         UNKNOWN("INVALID", DyeColor.PURPLE.getFireworkColor()),
         ERROR("ERROR", DyeColor.RED.getFireworkColor());

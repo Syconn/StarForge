@@ -13,6 +13,7 @@ import mod.stf.syconn.api.util.applications.BasicCommand;
 import mod.stf.syconn.api.util.applications.CommandStatus;
 import mod.stf.syconn.api.util.data.Schematic;
 import mod.stf.syconn.client.screen.componets.SubmittableTextBox;
+import mod.stf.syconn.common.blockEntity.NavBE;
 import mod.stf.syconn.common.containers.NavContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -27,7 +28,6 @@ public class NavigationApplication extends ApplicationComponent<NavContainer> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/navigation.png");
     private final Font font = Minecraft.getInstance().font;
-    private Schematic ship;
 
     private SubmittableTextBox typer;
     private TextScreen textScreen;
@@ -98,9 +98,7 @@ public class NavigationApplication extends ApplicationComponent<NavContainer> {
     }
 
     @Override
-    public void read(CompoundTag tag) {
-
-    }
+    public void read(CompoundTag tag) {}
 
     @Override
     public CompoundTag save() {
@@ -109,10 +107,6 @@ public class NavigationApplication extends ApplicationComponent<NavContainer> {
     }
 
     public Schematic getShip() {
-        return ship;
-    }
-
-    public void setShip(Schematic ship) {
-        this.ship = ship;
+        return ((NavBE) Minecraft.getInstance().level.getBlockEntity(pos)).getShip();
     }
 }

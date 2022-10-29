@@ -48,6 +48,24 @@ public record Schematic(List<BlockPos> blocks) {
         return new Schematic(blocks2);
     }
 
+    public boolean containsBlock(Block block, Level level){
+        for (BlockPos pos : getBlocks()){
+            if (level.getBlockState(pos).getBlock() == block){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean containsBlockPos(BlockPos blockPos, Level level){
+        for (BlockPos pos : getBlocks()){
+            if (pos == blockPos){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static Schematic fromSchematic(Level level, CompoundTag tag) {
         BlockPos pos1 = NbtUtils.readBlockPos(tag.getCompound("pos1"));
         BlockPos pos2 = NbtUtils.readBlockPos(tag.getCompound("pos2"));

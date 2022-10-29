@@ -33,8 +33,6 @@ import java.io.IOException;
 import java.util.*;
 
 public class SchematicBe extends ClientMenuBlockEntity {
-
-    private HashMap<BlockPos, ServerPixelImage> blockImage = new HashMap<>();
     private List<BlockPos> schematic = null;
 
     public SchematicBe(BlockPos pWorldPosition, BlockState pBlockState) {
@@ -65,12 +63,6 @@ public class SchematicBe extends ClientMenuBlockEntity {
 
     public void setSchematic(List<BlockPos> schematic) {
         this.schematic = schematic;
-    }
-
-    public NativeImage getBlockImage(BlockPos pos) {
-        if (blockImage != null)
-            return blockImage.get(pos).getImageFromPixels();
-        return null;
     }
 
     @Nullable

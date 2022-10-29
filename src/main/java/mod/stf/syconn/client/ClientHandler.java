@@ -3,6 +3,7 @@ package mod.stf.syconn.client;
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.api.screens.ApplicationScreen;
 import mod.stf.syconn.client.rendering.blockentity.HoloRender;
+import mod.stf.syconn.client.rendering.blockentity.NavRender;
 import mod.stf.syconn.client.rendering.blockentity.SchematicRender;
 import mod.stf.syconn.client.rendering.entity.*;
 import mod.stf.syconn.client.rendering.model.BlockModel;
@@ -130,6 +131,7 @@ public class ClientHandler {
 
         event.registerBlockEntityRenderer(ModBlockEntities.HOLO_BE.get(), HoloRender::new);
         event.registerBlockEntityRenderer(ModBlockEntities.SCHEMATIC_BE.get(), SchematicRender::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.NAV_BE.get(), NavRender::new);
     }
 
     @SubscribeEvent

@@ -56,4 +56,8 @@ public abstract class ApplicationComponent<T extends ApplicationContainer> exten
         screen.createWidget(widget);
         widgets.add(widget);
     }
+
+    public BlockPos getPos() {
+        return pos;
+    }
 }

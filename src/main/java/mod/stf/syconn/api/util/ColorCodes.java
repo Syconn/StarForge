@@ -59,4 +59,9 @@ public enum ColorCodes {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return code;
+    }
 }

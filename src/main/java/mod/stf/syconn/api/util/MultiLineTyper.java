@@ -65,12 +65,15 @@ public class MultiLineTyper {
             l += str.getString().length();
             if (l < lineLng) {
                 string.addString(str);
+                l++;
             } else {
                 lines.add(string);
                 string = new ColorFormattedString();
                 string.addString(str);
+                l = 0;
             }
         }
+        if (!string.getString().isEmpty()) lines.add(string);
         return lines;
     }
 }

@@ -20,8 +20,8 @@ public class ColorFormattedString {
             boolean found = false;
             if (str.length() > 2){
                 for (ColorCodes c : ColorCodes.values()){
-                    if (str.substring(0, 2).matches(c.getCode())) {
-                        strings.add(new ColoredString(str, c.getColor()));
+                    if (str.substring(0, 3).matches(c.getCode())) {
+                        strings.add(new ColoredString(str.substring(3), c.getColor()));
                         found = true;
                     }
                 }

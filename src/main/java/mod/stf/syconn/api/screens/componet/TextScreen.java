@@ -20,7 +20,7 @@ public class TextScreen extends AbstractWidget implements Widget, GuiEventListen
 
     private final Font font = Minecraft.getInstance().font;
     private final int linesMax;
-    public MultiLineTyper multiLineTyper = new MultiLineTyper(32, y, y + 148);
+    public MultiLineTyper multiLineTyper = new MultiLineTyper(35, y, y + 148);
 
     private final int scrollBarBottom;
     private final int scrollBarX, scrollBarY;
@@ -81,7 +81,6 @@ public class TextScreen extends AbstractWidget implements Widget, GuiEventListen
 
     @Override
     public void mouseMoved(double pMouseX, double pMouseY) {
-
     }
 
     protected boolean insideScrollbar(double pMouseX, double pMouseY) {

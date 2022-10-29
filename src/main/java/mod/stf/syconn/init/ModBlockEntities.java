@@ -5,6 +5,7 @@ import mod.stf.syconn.common.blockEntity.CrafterBE;
 import mod.stf.syconn.common.blockEntity.HoloBE;
 import mod.stf.syconn.common.blockEntity.NavBE;
 import mod.stf.syconn.common.blockEntity.SchematicBe;
+import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

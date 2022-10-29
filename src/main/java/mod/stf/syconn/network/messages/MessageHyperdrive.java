@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.io.IOException;
 import java.util.function.Supplier;
 
 public class MessageHyperdrive implements IMessage<MessageHyperdrive> {
@@ -50,8 +51,13 @@ public class MessageHyperdrive implements IMessage<MessageHyperdrive> {
                 ServerLevel world = player.getLevel();
                 for (BlockPos pos : message.schem.getBlocks()){
                     BlockState state = world.getBlockState(pos);
+                    try {
+                        MovingBlock block = new MovingBlock(world, state, pos, message.distance, message.direction, 10.0);
+                        world.addFreshEntity(block);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     world.removeBlock(pos, true);
-                    world.addFreshEntity(new MovingBlock(world, state, pos, pos, 0));
                 }
             }
         });

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import mod.stf.syconn.Reference;
+import mod.stf.syconn.api.blockEntity.MenuBlockEntity;
 import mod.stf.syconn.client.rendering.model.BlockModel;
 import mod.stf.syconn.client.rendering.model.TieModel;
 import mod.stf.syconn.common.blockEntity.SchematicBe;
@@ -27,14 +28,15 @@ import java.io.IOException;
 public class BlockRender extends EntityRenderer<MovingBlock> {
 
     private BlockModel model;
-    private SchematicBe be;
+    private MenuBlockEntity be;
     private BlockPos pos;
 
     public BlockRender(EntityRendererProvider.Context ctx) {
         super(ctx);
+        this.model = new BlockModel(ctx.bakeLayer(BlockModel.LAYER_LOCATION));
     }
 
-    public BlockRender(EntityRendererProvider.Context pContext, SchematicBe be, BlockPos pos) {
+    public BlockRender(EntityRendererProvider.Context pContext, MenuBlockEntity be, BlockPos pos) {
         super(pContext);
         this.be = be;
         this.pos = pos;
@@ -44,14 +46,16 @@ public class BlockRender extends EntityRenderer<MovingBlock> {
     @Override
     public void render(MovingBlock pEntity, float pEntityYaw, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
         pPoseStack.pushPose();
-        model.setupAnim(pEntity, pPartialTick, 0.0F, -0.1F, 0.0F, 0.0F);
-        VertexConsumer vertexconsumer = pBuffer.getBuffer(this.model.renderType(getTextureLocation(pEntity)));
-        model.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        pPoseStack.translate(-0.5, 0, -0.5);
+        if (pEntity.getBlockState() != null) {
+            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(pEntity.getBlockState(), pPoseStack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        }
         pPoseStack.popPose();
         super.render(pEntity, pEntityYaw, pPartialTick, pPoseStack, pBuffer, pPackedLight);
     }
 
     public void render(PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
+        //TODO TRANSFER OVER FROM TOP MODE
         pPoseStack.pushPose();
         VertexConsumer vertexconsumer = pBuffer.getBuffer(this.model.renderType(getTexture()));
         model.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);

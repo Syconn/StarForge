@@ -1,5 +1,7 @@
 package mod.stf.syconn.api.blockEntity;
 
+import com.mojang.blaze3d.platform.NativeImage;
+import mod.stf.syconn.api.util.data.ServerPixelImage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -15,10 +17,12 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
 
 public abstract class MenuBlockEntity extends BlockEntity implements MenuProvider {
 
     protected final ItemStackHandler itemHandler = createHandler();
+    protected HashMap<BlockPos, ServerPixelImage> blockImage = new HashMap<>();
     protected final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
 
     public MenuBlockEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
@@ -26,6 +30,12 @@ public abstract class MenuBlockEntity extends BlockEntity implements MenuProvide
     }
 
     public abstract void tickServer();
+
+    public NativeImage getBlockImage(BlockPos pos) {
+        if (blockImage != null)
+            return blockImage.get(pos).getImageFromPixels();
+        return null;
+    }
 
     @Override
     public void setRemoved() {

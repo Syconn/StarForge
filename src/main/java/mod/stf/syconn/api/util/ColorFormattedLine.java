@@ -27,6 +27,10 @@ public class ColorFormattedLine {
             return 3;
         } else if (s.matches(":") || s.matches("!") || s.matches("i")) {
             return 1;
+        } else if (s.matches("l")) {
+            return 2;
+        } else if (s.matches("<") || s.matches(">")) {
+            return 4;
         }
         return 5;
     }
