@@ -29,7 +29,7 @@ public class HoloBE extends ClientBlockEntity {
     private String mode = "Username";
     private ItemStack mainHand = null;
     private ItemStack offHand = null;
-    private ItemStack[] armour = {null, null, null, null}; //Head - 3, ..., ..., ...
+    private ItemStack[] armour = {null, null, null, null};
 
     public HoloBE(BlockPos pWorldPosition, BlockState pBlockState) {
         super(ModBlockEntities.HOLO_BE.get(), pWorldPosition, pBlockState);

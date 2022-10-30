@@ -90,7 +90,6 @@ public class ClientHandler {
 
     @SubscribeEvent
     public static void registerColors(final ColorHandlerEvent.Item event) {
-        // LightsaberHelper.getData(pStack) != null ? LightsaberHelper.getData(pStack).getColor().getDecimal() : -1
         event.getItemColors().register(((pStack, pTintIndex) -> pStack.getHoverName().getContents().equals("rainbow") ? LightsaberHelper.getData(pStack).getColor().rainbow(pStack) : LightsaberHelper.getData(pStack).getColor().getDecimal()), ModItems.LIGHTSABER.get());
     }
 
@@ -111,14 +110,6 @@ public class ClientHandler {
         }
     }
 
-//    @SubscribeEvent
-//    public void onMousePress(InputEvent.MouseInputEvent event) {
-//        LocalPlayer player = Minecraft.getInstance().player;
-//        if (Minecraft.getInstance().options.keyAttack.isDown() && player.isPassenger() && player.getVehicle() instanceof TieFighter){
-//            //Network.getPlayChannel().sendToServer(new MessageShootGuns());
-//        }
-//    }
-
     @SubscribeEvent
     public static void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.LIGHTSABER.get(), LightsaberRenderer::new);
@@ -129,9 +120,9 @@ public class ClientHandler {
         event.registerEntityRenderer(ModEntities.TIE_BOLT.get(), TieBoltRender::new);
         event.registerEntityRenderer(ModEntities.MOVING_BLOCK.get(), BlockRender::new);
 
+        event.registerBlockEntityRenderer(ModBlockEntities.NAV_BE.get(), NavRender::new);
         event.registerBlockEntityRenderer(ModBlockEntities.HOLO_BE.get(), HoloRender::new);
         event.registerBlockEntityRenderer(ModBlockEntities.SCHEMATIC_BE.get(), SchematicRender::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.NAV_BE.get(), NavRender::new);
     }
 
     @SubscribeEvent

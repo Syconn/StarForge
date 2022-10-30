@@ -25,11 +25,14 @@ public class NavRender implements BlockEntityRenderer<NavBE> {
 
     Minecraft mc = Minecraft.getInstance();
 
-    public NavRender(BlockEntityRendererProvider.Context pContext) {}
+    public NavRender(BlockEntityRendererProvider.Context pContext) {
+
+    }
 
     @Override
     public void render(NavBE pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
-        if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.SCHEMATIC_PROJECTOR.get() && !pBlockEntity.getImages().isEmpty()) {
+        System.out.println("RENDERING");
+        if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.NAV_COMPUTER.get() && !pBlockEntity.getImages().isEmpty()) {
             BlockPos anchorPos = pBlockEntity.getImages().entrySet().iterator().next().getKey();
             for (Map.Entry<BlockPos, ServerPixelImage> map : pBlockEntity.getImages().entrySet()){
                 BlockPos pos = map.getKey();
@@ -49,7 +52,8 @@ public class NavRender implements BlockEntityRenderer<NavBE> {
                 }
 
                 pPoseStack.mulPose(Vector3f.XP.rotationDegrees(180));
-                pPoseStack.translate(0, -2, 0);
+                pPoseStack.scale(0.2f, 0.2f, 0.2f);
+                pPoseStack.translate(0, -4, 0);
 
                 if (anchorPos != pos){
                     double xDif = anchorPos.getX() - pos.getX();

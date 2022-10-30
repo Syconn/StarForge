@@ -33,7 +33,6 @@ import java.util.Random;
 public class NavBE extends ApplicationBE<NavContainer> {
 
     private Schematic ship;
-    private List<BlockPos> schematic = null;
 
     public NavBE(BlockPos pWorldPosition, BlockState pBlockState) {
         super(ModBlockEntities.NAV_BE.get(), pWorldPosition, pBlockState, null);
@@ -56,7 +55,8 @@ public class NavBE extends ApplicationBE<NavContainer> {
     @Override
     protected CompoundTag saveData() {
         CompoundTag tag = super.saveData();
-        tag.put("ship", ship.saveSchematic());
+        if (ship != null)
+            tag.put("ship", ship.saveSchematic());
         if (blockImage != null)
             tag.put("blockimage", NbtUtil.writeServerImageList(blockImage));
         return tag;
@@ -64,15 +64,23 @@ public class NavBE extends ApplicationBE<NavContainer> {
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
-        tag.put("ship", ship.saveSchematic());
+        if (ship != null)
+            tag.put("ship", ship.saveSchematic());
         if (!blockImage.isEmpty())
             tag.put("blockimage", NbtUtil.writeServerImageList(blockImage));
         super.saveAdditional(tag);
     }
 
     @Override
+    public void handleUpdateTag(CompoundTag tag) {
+        super.handleUpdateTag(tag);
+        load(tag);
+    }
+
+    @Override
     public void load(CompoundTag tag) {
-        ship = Schematic.readSchematic(tag.getCompound("ship"));
+        if (tag.contains("ship"))
+            ship = Schematic.readSchematic(tag.getCompound("ship"));
         if (tag.contains("blockimage"))
             blockImage = NbtUtil.readServerImageList(tag.getCompound("blockimage"));
         super.load(tag);
@@ -80,9 +88,9 @@ public class NavBE extends ApplicationBE<NavContainer> {
 
     public void createBlockImage(){
         blockImage = new HashMap<>();
-        if (schematic != null) {
+        if (ship != null) {
             try {
-                for (BlockPos pos : schematic){
+                for (BlockPos pos : ship.getBlocks()){
                     BlockState state = level.getBlockState(pos);
                     DirectionalTexture[] sprites = new DirectionalTexture[Direction.values().length];
                     for (int i = 0; i < Direction.values().length; i++){
@@ -112,7 +120,7 @@ public class NavBE extends ApplicationBE<NavContainer> {
 
     @Override
     protected ItemStackHandler createHandler() {
-        return new ItemStackHandler(1) {
+        return new ItemStackHandler(0) {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();

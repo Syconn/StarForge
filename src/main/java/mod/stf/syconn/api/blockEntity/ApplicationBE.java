@@ -19,23 +19,4 @@ public abstract class ApplicationBE<T extends ApplicationContainer> extends Clie
     public BasicApplication<T> getApplication() {
         return application;
     }
-
-    @Override
-    protected CompoundTag saveData() {
-        CompoundTag tag = super.saveData();
-        tag.put("application", application.save());
-        return tag;
-    }
-
-    @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.put("application", application.save());
-    }
-
-    @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-        application.read(tag);
-    }
 }

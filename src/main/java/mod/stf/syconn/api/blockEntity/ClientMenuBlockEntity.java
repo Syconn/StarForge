@@ -27,6 +27,13 @@ public abstract class ClientMenuBlockEntity extends MenuBlockEntity {
         return tag;
     }
 
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag) {
+        super.handleUpdateTag(tag);
+        load(tag);
+    }
+
     @Override
     public CompoundTag getUpdateTag() {
         return saveData();
