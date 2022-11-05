@@ -41,7 +41,7 @@ public class MessageLoadBlock implements IMessage<MessageLoadBlock> {
             if (player != null){
                 SchematicBe be = (SchematicBe) player.level.getBlockEntity(message.pos);
                 be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                    be.setSchematic(Schematic.readSchematic(player.getLevel(), h.getStackInSlot(0).getOrCreateTag().getCompound("schematic")));
+                    be.setSchematic(Schematic.readSchematic(h.getStackInSlot(0).getOrCreateTag().getCompound("schematic")));
                     be.createBlockImage();
                 });
             }

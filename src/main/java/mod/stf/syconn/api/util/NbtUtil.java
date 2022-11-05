@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,8 +69,8 @@ public class NbtUtil {
         return tag;
     }
 
-    public static HashMap<BlockPos, ServerPixelImage> readServerImageList(CompoundTag tag){
-        HashMap<BlockPos, ServerPixelImage> map = new HashMap<>();
+    public static HashMap<BlockID, ServerPixelImage> readServerImageList(CompoundTag tag){
+        HashMap<BlockID, ServerPixelImage> map = new HashMap<>();
         if(tag.contains("map", Tag.TAG_LIST))
         {
             ListTag list = tag.getList("map", Tag.TAG_COMPOUND);
@@ -84,22 +85,22 @@ public class NbtUtil {
                         pixels[x][y] = nbt.getInt(x + "_" + y);
                     }
                 }
-                map.put(NbtUtils.readBlockPos(nbt.getCompound("blockpos")), new ServerPixelImage(width, height, pixels));
+                map.put(BlockID.read(nbt.getCompound("id")), new ServerPixelImage(width, height, pixels));
             });
         }
 
         return map;
     }
 
-    public static CompoundTag writeServerImageList(HashMap<BlockPos, ServerPixelImage> images){
+    public static CompoundTag writeServerImageList(HashMap<BlockID, ServerPixelImage> images){
         CompoundTag tag = new CompoundTag();
         ListTag listTag = new ListTag();
 
-        images.forEach((pos, image) -> {
+        images.forEach((id, image) -> {
             CompoundTag data = new CompoundTag();
             data.putInt("width", image.getWidth());
             data.putInt("height", image.getHeight());
-            data.put("blockpos", NbtUtils.writeBlockPos(pos));
+            data.put("id", id.write());
             for (int x = 0; x < image.getWidth(); x++) {
                 for (int y = 0; y < image.getHeight(); y++) {
                     data.putInt(x + "_" + y, image.getPixels()[x][y]);
@@ -109,5 +110,38 @@ public class NbtUtil {
         });
         tag.put("map", listTag);
         return tag;
+    }
+
+    public static CompoundTag writePositions(Map<BlockID, double[]> position) {
+        CompoundTag tag = new CompoundTag();
+        ListTag listTag = new ListTag();
+        position.forEach(((id, doubles) -> {
+            CompoundTag data = new CompoundTag();
+            data.put("id", id.write());
+            data.putInt("len", doubles.length);
+            for (int i = 0; i < doubles.length; i++){
+                data.putDouble(String.valueOf(i), doubles[i]);
+            }
+            listTag.add(data);
+        }));
+        tag.put("map", listTag);
+        return tag;
+    }
+
+    public static Map<BlockID, double[]> readPositions(CompoundTag tag){
+        Map<BlockID, double[]> map = new HashMap<>();
+        if(tag.contains("map", Tag.TAG_LIST))
+        {
+            ListTag list = tag.getList("map", Tag.TAG_COMPOUND);
+            list.forEach(data -> {
+                CompoundTag nbt = (CompoundTag) data;
+                double[] doubles = new double[nbt.getInt("len")];
+                for (int i = 0; i < doubles.length; i++){
+                    doubles[i] = nbt.getInt(String.valueOf(i));
+                }
+                map.put(BlockID.read(nbt.getCompound("id")), doubles);
+            });
+        }
+        return map;
     }
 }

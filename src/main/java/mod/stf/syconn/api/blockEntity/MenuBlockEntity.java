@@ -22,7 +22,6 @@ import java.util.HashMap;
 public abstract class MenuBlockEntity extends BlockEntity implements MenuProvider {
 
     protected final ItemStackHandler itemHandler = createHandler();
-    protected HashMap<BlockPos, ServerPixelImage> blockImage = new HashMap<>();
     protected final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
 
     public MenuBlockEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
@@ -30,12 +29,6 @@ public abstract class MenuBlockEntity extends BlockEntity implements MenuProvide
     }
 
     public abstract void tickServer();
-
-    public NativeImage getBlockImage(BlockPos pos) {
-        if (blockImage != null)
-            return blockImage.get(pos).getImageFromPixels();
-        return null;
-    }
 
     @Override
     public void setRemoved() {

@@ -1,5 +1,6 @@
 package mod.stf.syconn.api.util.data;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -8,15 +9,36 @@ import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public record Schematic(List<BlockPos> blocks) {
+public class Schematic {
+
+    private final List<BlockState> states;
+    private final List<BlockPos> blocks;
+
+    public Schematic(List<BlockPos> blocks) {
+        this.blocks = blocks;
+        this.states = genStates();
+    }
 
     public List<BlockPos> getBlocks() {
         return blocks;
+    }
+
+    public List<BlockState> getStates() {
+        return states;
+    }
+
+    public List<BlockState> genStates(){
+        List<BlockState> bs = new ArrayList<>();
+        for (BlockPos pos : getBlocks()) {
+            bs.add(Minecraft.getInstance().level.getBlockState(pos));
+        }
+        return bs;
     }
 
     public CompoundTag saveSchematic() {

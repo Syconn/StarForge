@@ -2,6 +2,7 @@ package mod.stf.syconn.client.rendering.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+import mod.stf.syconn.api.util.BlockID;
 import mod.stf.syconn.api.util.data.ServerPixelImage;
 import mod.stf.syconn.client.rendering.entity.BlockRender;
 import mod.stf.syconn.common.blockEntity.HoloBE;
@@ -14,6 +15,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,35 +34,19 @@ public class SchematicRender implements BlockEntityRenderer<SchematicBe> {
     @Override
     public void render(SchematicBe pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
         if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.SCHEMATIC_PROJECTOR.get() && !pBlockEntity.getImages().isEmpty()) {
-            BlockPos anchorPos = pBlockEntity.getImages().entrySet().iterator().next().getKey();
-            for (Map.Entry<BlockPos, ServerPixelImage> map : pBlockEntity.getImages().entrySet()){
-                BlockPos pos = map.getKey();
+            for (Map.Entry<BlockID, ServerPixelImage> map : pBlockEntity.getImages().entrySet()) {
+                BlockState state = map.getKey().state();
+                double[] position = pBlockEntity.getPosition(state);
                 pPoseStack.pushPose();
-                BlockRender br = new BlockRender(new EntityRendererProvider.Context(mc.getEntityRenderDispatcher(), mc.getItemRenderer(), mc.getResourceManager(), mc.getEntityModels(), mc.font), pBlockEntity, pos);
+                BlockRender br = new BlockRender(new EntityRendererProvider.Context(mc.getEntityRenderDispatcher(), mc.getItemRenderer(), mc.getResourceManager(), mc.getEntityModels(), mc.font));
 
-                AttachFace face = mc.level.getBlockState(pBlockEntity.getBlockPos()).getValue(BlockStateProperties.ATTACH_FACE);
                 pPoseStack.translate(0, 0.2, 0);
-
-                if (face == AttachFace.FLOOR) {
-                    pPoseStack.translate(0.5, 0.3, 0.5);
-                } else if (face == AttachFace.CEILING) {
-                    pPoseStack.translate(0.5, -0.3, 0.5);
-                } else if (face == AttachFace.WALL) {
-                    pPoseStack.translate(0.5, 0.3, 0.5);
-                    pPoseStack.mulPose(Vector3f.YP.rotationDegrees(180));
-                }
-
+                pPoseStack.translate(position[0], position[1], position[2]);
                 pPoseStack.mulPose(Vector3f.XP.rotationDegrees(180));
                 pPoseStack.translate(0, -2, 0);
+                pPoseStack.translate(position[0], position[1], position[2]);
 
-                if (anchorPos != pos){
-                    double xDif = anchorPos.getX() - pos.getX();
-                    double yDif = anchorPos.getY() - pos.getY();
-                    double zDif = anchorPos.getZ() - pos.getZ();
-                    pPoseStack.translate(xDif, yDif, zDif);
-                }
-
-                br.render(pPoseStack, pBufferSource, pPackedLight);
+                br.render(state, pPoseStack, pBufferSource, pPackedLight);
                 pPoseStack.popPose();
             }
         }

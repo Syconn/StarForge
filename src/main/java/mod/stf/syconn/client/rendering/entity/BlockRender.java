@@ -27,20 +27,8 @@ import java.io.IOException;
 
 public class BlockRender extends EntityRenderer<MovingBlock> {
 
-    private BlockModel model;
-    private MenuBlockEntity be;
-    private BlockPos pos;
-
     public BlockRender(EntityRendererProvider.Context ctx) {
         super(ctx);
-        this.model = new BlockModel(ctx.bakeLayer(BlockModel.LAYER_LOCATION));
-    }
-
-    public BlockRender(EntityRendererProvider.Context pContext, MenuBlockEntity be, BlockPos pos) {
-        super(pContext);
-        this.be = be;
-        this.pos = pos;
-        this.model = new BlockModel(pContext.bakeLayer(BlockModel.LAYER_LOCATION));
     }
 
     @Override
@@ -54,24 +42,22 @@ public class BlockRender extends EntityRenderer<MovingBlock> {
         super.render(pEntity, pEntityYaw, pPartialTick, pPoseStack, pBuffer, pPackedLight);
     }
 
-    public void render(PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
-        //TODO TRANSFER OVER FROM TOP MODE
+    public void render(BlockState state, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
         pPoseStack.pushPose();
-        VertexConsumer vertexconsumer = pBuffer.getBuffer(this.model.renderType(getTexture()));
-        model.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        //pPoseStack.translate(-0.5, 0, -0.5);
+        if (state != null) {
+            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(state, pPoseStack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        }
         pPoseStack.popPose();
-    }
-
-    public ResourceLocation getTexture(){
-        return Minecraft.getInstance().getTextureManager().register("holo", new DynamicTexture(this.be.getBlockImage(pos)));
     }
 
     @Override
     public ResourceLocation getTextureLocation(MovingBlock pEntity) {
-        try {
-            return Minecraft.getInstance().getTextureManager().register("moving_block", new DynamicTexture(pEntity.getTexture().getImageFromPixels()));
-        } catch (IOException e) {
-            return new ResourceLocation(Reference.MOD_ID, "textures/entity/block.png");
-        }
+//        try {
+//            return Minecraft.getInstance().getTextureManager().register("moving_block", new DynamicTexture(pEntity.getTexture().getImageFromPixels()));
+//        } catch (IOException e) {
+//            return new ResourceLocation(Reference.MOD_ID, "textures/entity/block.png");
+//        }
+        return new ResourceLocation(Reference.MOD_ID, "textures/entity/block.png");
     }
 }
