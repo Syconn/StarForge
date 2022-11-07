@@ -1,8 +1,11 @@
 package mod.stf.syconn.item;
 
 import mod.stf.syconn.StarForge;
+import mod.stf.syconn.api.util.BlockID;
 import mod.stf.syconn.api.util.data.Schematic;
 import mod.stf.syconn.common.blockEntity.SchematicBe;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -34,13 +37,14 @@ public class SchematicItem extends Item {
         if (!level.isClientSide()) {
             if (pos1 == null){
                 pos1 = pos;
+                pContext.getPlayer().sendMessage(new TextComponent("Pos1 Selected").withStyle(ChatFormatting.YELLOW), Util.NIL_UUID);
             } else {
-                stack.getOrCreateTag().put("schematic", Schematic.createSchematic(pos1, pos));
+                stack.getOrCreateTag().put("schematic", Schematic.genSchematic(pos1, pos).cleanSchematic().saveSchematic());
                 pos1 = null;
+                pContext.getPlayer().sendMessage(new TextComponent("Schematic Created").withStyle(ChatFormatting.YELLOW), Util.NIL_UUID);
+                return InteractionResult.SUCCESS;
             }
         }
-
-        //pContext.
         return InteractionResult.PASS;
     }
 
@@ -48,8 +52,15 @@ public class SchematicItem extends Item {
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
         if (pIsAdvanced.isAdvanced()){
-            for (BlockPos pos : Schematic.readSchematic(pLevel, pStack.getOrCreateTag().getCompound("schematic"))){
-                pTooltipComponents.add(new TextComponent(pos.toShortString() + ": " + pLevel.getBlockState(pos).getBlock().getName().getString()));
+            int i = 0;
+            List<BlockID> sc = Schematic.readSchematic(pStack.getOrCreateTag().getCompound("schematic")).getBlockIDs();
+            for (BlockID id : sc){
+                if (i < 15) {
+                    pTooltipComponents.add(new TextComponent(id.pos().toShortString() + ": " + id.state().getBlock().getName().getString()));
+                } else if (i == 15) {
+                    pTooltipComponents.add(new TextComponent("+" + (sc.size() - i) + " More"));
+                }
+                i++;
             }
         }
     }

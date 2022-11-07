@@ -56,6 +56,6 @@ public class MoveCMD extends BasicCommand<NavigationApplication> {
     }
 
     public boolean meetsFlightRequirements(){
-        return application.getShip() != null && application.getShip().containsBlockPos(application.getPos(), level);
+        return application.getShip() != null && application.getShip().containsBlockPos(application.getPos());
     }
 }

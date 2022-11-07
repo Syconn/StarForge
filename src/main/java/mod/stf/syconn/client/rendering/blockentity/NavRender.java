@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -23,6 +24,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Map;
+import java.util.Objects;
 
 @OnlyIn(Dist.CLIENT)
 public class NavRender implements BlockEntityRenderer<NavBE> {
@@ -35,14 +37,12 @@ public class NavRender implements BlockEntityRenderer<NavBE> {
 
     @Override
     public void render(NavBE pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
-        if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.NAV_COMPUTER.get() && !pBlockEntity.getImages().isEmpty() && pBlockEntity.getAnchor() != null) {
-            //TODO MAKE EFFICIENT
-            for (Map.Entry<BlockID, ServerPixelImage> map : pBlockEntity.getImages().entrySet()){
-                BlockState bs = map.getKey().state();
-                double[] position = pBlockEntity.getPosition(map.getKey());
+        if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.NAV_COMPUTER.get() && pBlockEntity.shouldRender()) {
+            for (BlockID id : pBlockEntity.getShip().getBlockIDs()){
                 pPoseStack.pushPose();
+                BlockState bs = id.state();
+                double[] position = pBlockEntity.getPosition(id.pos());
                 BlockRender br = new BlockRender(new EntityRendererProvider.Context(mc.getEntityRenderDispatcher(), mc.getItemRenderer(), mc.getResourceManager(), mc.getEntityModels(), mc.font));
-
                 pPoseStack.translate(0, 0.2, 0);
                 pPoseStack.translate(0.5, 0.3, 0.5);
                 pPoseStack.mulPose(Vector3f.XP.rotationDegrees(180));

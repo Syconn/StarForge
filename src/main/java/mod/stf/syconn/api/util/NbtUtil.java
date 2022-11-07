@@ -112,12 +112,12 @@ public class NbtUtil {
         return tag;
     }
 
-    public static CompoundTag writePositions(Map<BlockID, double[]> position) {
+    public static CompoundTag writePositions(Map<BlockPos, double[]> position) {
         CompoundTag tag = new CompoundTag();
         ListTag listTag = new ListTag();
         position.forEach(((id, doubles) -> {
             CompoundTag data = new CompoundTag();
-            data.put("id", id.write());
+            data.put("id", NbtUtils.writeBlockPos(id));
             data.putInt("len", doubles.length);
             for (int i = 0; i < doubles.length; i++){
                 data.putDouble(String.valueOf(i), doubles[i]);
@@ -128,8 +128,8 @@ public class NbtUtil {
         return tag;
     }
 
-    public static Map<BlockID, double[]> readPositions(CompoundTag tag){
-        Map<BlockID, double[]> map = new HashMap<>();
+    public static Map<BlockPos, double[]> readPositions(CompoundTag tag){
+        Map<BlockPos, double[]> map = new HashMap<>();
         if(tag.contains("map", Tag.TAG_LIST))
         {
             ListTag list = tag.getList("map", Tag.TAG_COMPOUND);
@@ -139,7 +139,7 @@ public class NbtUtil {
                 for (int i = 0; i < doubles.length; i++){
                     doubles[i] = nbt.getInt(String.valueOf(i));
                 }
-                map.put(BlockID.read(nbt.getCompound("id")), doubles);
+                map.put(NbtUtils.readBlockPos(nbt.getCompound("id")), doubles);
             });
         }
         return map;

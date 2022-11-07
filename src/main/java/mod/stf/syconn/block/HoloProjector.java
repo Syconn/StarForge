@@ -1,13 +1,11 @@
 package mod.stf.syconn.block;
 
-import mod.stf.syconn.api.blocks.RotatableBlock;
+import mod.stf.syconn.api.blocks.RotatableWallBlock;
 import mod.stf.syconn.client.screen.HoloScreen;
 import mod.stf.syconn.common.blockEntity.HoloBE;
-import mod.stf.syconn.network.Network;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -28,11 +26,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
-public class HoloProjector extends RotatableBlock implements EntityBlock {
+public class HoloProjector extends RotatableWallBlock implements EntityBlock {
 
     public HoloProjector() {
         super(BlockBehaviour.Properties.of(Material.METAL).noCollission().noOcclusion());

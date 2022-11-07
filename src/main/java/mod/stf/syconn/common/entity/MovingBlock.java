@@ -47,7 +47,7 @@ public class MovingBlock extends Entity {
         super(pEntityType, pLevel);
     }
 
-    public MovingBlock(Level pLevel, BlockState state, BlockPos start, double distance, Direction direction, double speed) throws IOException {
+    public MovingBlock(Level pLevel, BlockState state, BlockPos start, double distance, Direction direction, double speed) {
         super(ModEntities.MOVING_BLOCK.get(), pLevel);
         setPos(start.getX() + 0.5, start.getY(), start.getZ() + 0.5);
         this.getEntityData().set(DATA_BLOCK_STATE, Optional.ofNullable(state));

@@ -33,19 +33,15 @@ public class SchematicRender implements BlockEntityRenderer<SchematicBe> {
 
     @Override
     public void render(SchematicBe pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
-        if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.SCHEMATIC_PROJECTOR.get() && !pBlockEntity.getImages().isEmpty()) {
-            for (Map.Entry<BlockID, ServerPixelImage> map : pBlockEntity.getImages().entrySet()) {
-                BlockState state = map.getKey().state();
-                double[] position = pBlockEntity.getPosition(state);
+        if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.SCHEMATIC_PROJECTOR.get() && pBlockEntity.getSchematic() != null) {
+            for (BlockID id : pBlockEntity.getSchematic().getBlockIDs()) {
+                BlockState state = id.state();
+                double[] position = pBlockEntity.getPosition(id.pos());
                 pPoseStack.pushPose();
                 BlockRender br = new BlockRender(new EntityRendererProvider.Context(mc.getEntityRenderDispatcher(), mc.getItemRenderer(), mc.getResourceManager(), mc.getEntityModels(), mc.font));
-
-                pPoseStack.translate(0, 0.2, 0);
                 pPoseStack.translate(position[0], position[1], position[2]);
                 pPoseStack.mulPose(Vector3f.XP.rotationDegrees(180));
-                pPoseStack.translate(0, -2, 0);
-                pPoseStack.translate(position[0], position[1], position[2]);
-
+                pPoseStack.translate(0, -2, -1);
                 br.render(state, pPoseStack, pBufferSource, pPackedLight);
                 pPoseStack.popPose();
             }

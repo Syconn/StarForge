@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LightBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -83,13 +84,7 @@ public class Lightsaber extends Item {
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
         LightsaberData data = LightsaberHelper.getData(pStack);
 
-        pTooltipComponents.add(new TextComponent(data.getColor().getClosetColor().getName()).withStyle(ColorConverter.convert(data.getColor().getClosetColor())));
-        if (data.isActive() && !pStack.getHoverName().getContents().equals("rainbow")) {
-            //pStack.setHoverName(new TextComponent(data.getHandle().getName()).append(new TextComponent(" Lightsaber").withStyle(ColorConverter.convert(data.getColor().getClosetColor()))));
-        } else {
-            //pStack.setHoverName(new TextComponent(data.getHandle().getName()).append(new TextComponent(" Handle").withStyle(ColorConverter.convert(data.getColor().getClosetColor()))));
-        }
-
+        pTooltipComponents.add(new TextComponent(StringUtils.capitalize(data.getColor().getClosetColor().getName())).withStyle(ColorConverter.convert(data.getColor().getClosetColor())));
         if (pIsAdvanced.isAdvanced()){
             pTooltipComponents.add(new TextComponent("").withStyle(ChatFormatting.GREEN));
             pTooltipComponents.add(new TextComponent("Properties").withStyle(ChatFormatting.GREEN));

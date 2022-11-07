@@ -39,8 +39,8 @@ public abstract class ClientMenuBlockEntity extends MenuBlockEntity {
         return saveData();
     }
 
-    public void update(BlockPos pos, BlockState state){
-        level.sendBlockUpdated(pos, state, state, 2);
+    public void update(){
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
         setChanged();
     }
 }

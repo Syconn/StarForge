@@ -1,5 +1,6 @@
 package mod.stf.syconn.network.messages;
 
+import mod.stf.syconn.api.util.BlockID;
 import mod.stf.syconn.api.util.data.Schematic;
 import mod.stf.syconn.common.entity.MovingBlock;
 import net.minecraft.core.BlockPos;
@@ -49,15 +50,10 @@ public class MessageHyperdrive implements IMessage<MessageHyperdrive> {
             ServerPlayer player = supplier.get().getSender();
             if (player != null) {
                 ServerLevel world = player.getLevel();
-                for (BlockPos pos : message.schem.getBlocks()){
-                    BlockState state = world.getBlockState(pos);
-                    try {
-                        MovingBlock block = new MovingBlock(world, state, pos, message.distance, message.direction, 10.0);
-                        world.addFreshEntity(block);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    world.removeBlock(pos, true);
+                for (BlockID id : message.schem.getBlockIDs()){
+                    MovingBlock block = new MovingBlock(world, id.state(), id.pos(), message.distance, message.direction, 10.0);
+                    world.addFreshEntity(block);
+                    world.removeBlock(id.pos(), true);
                 }
             }
         });
