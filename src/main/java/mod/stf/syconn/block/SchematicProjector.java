@@ -1,14 +1,8 @@
 package mod.stf.syconn.block;
 
 import mod.stf.syconn.api.blockEntity.MenuBlockEntity;
-import mod.stf.syconn.api.blocks.InventoryBlock;
-import mod.stf.syconn.api.blocks.RotatableBlock;
-import mod.stf.syconn.client.screen.HoloScreen;
-import mod.stf.syconn.client.screen.SchematicScreen;
-import mod.stf.syconn.common.blockEntity.CrafterBE;
-import mod.stf.syconn.common.blockEntity.HoloBE;
+import mod.stf.syconn.api.blocks.RotatableWallBlock;
 import mod.stf.syconn.common.blockEntity.SchematicBe;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,13 +27,11 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
-public class SchematicProjector extends RotatableBlock implements EntityBlock {
+public class SchematicProjector extends RotatableWallBlock implements EntityBlock {
 
     public SchematicProjector() {
         super(BlockBehaviour.Properties.of(Material.METAL).noCollission().noOcclusion());

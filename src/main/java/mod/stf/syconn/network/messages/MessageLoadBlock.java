@@ -43,6 +43,7 @@ public class MessageLoadBlock implements IMessage<MessageLoadBlock> {
                 be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
                     be.setSchematic(Schematic.readSchematic(h.getStackInSlot(0).getOrCreateTag().getCompound("schematic")));
                     be.createBlockImage();
+                    be.getAnchor();
                 });
             }
         });

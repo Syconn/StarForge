@@ -65,7 +65,7 @@ public class LoadShipCMD extends BasicCommand<NavigationApplication> {
     @Override
     public void execute() {
         if (player != null){
-            Network.getPlayChannel().sendToServer(new MessageSetShip(Schematic.fromSchematic(player.getLevel(), player.getMainHandItem().getOrCreateTag().getCompound("schematic")).cleanSchematic(level), application.getPos()));
+            Network.getPlayChannel().sendToServer(new MessageSetShip(Schematic.readSchematic(player.getMainHandItem().getOrCreateTag().getCompound("schematic")).cleanSchematic(), application.getPos()));
         } else if (pos1 != null && pos2 != null){
             Network.getPlayChannel().sendToServer(new MessageSetShip(Schematic.genSchematic(pos1, pos2), application.getPos()));
         }

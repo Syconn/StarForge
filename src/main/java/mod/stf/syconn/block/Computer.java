@@ -2,8 +2,7 @@ package mod.stf.syconn.block;
 
 import mod.stf.syconn.api.blockEntity.MenuBlockEntity;
 import mod.stf.syconn.api.blocks.RotatableBlock;
-import mod.stf.syconn.common.blockEntity.CrafterBE;
-import mod.stf.syconn.common.blockEntity.SchematicBe;
+import mod.stf.syconn.api.blocks.RotatableWallBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
