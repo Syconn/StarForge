@@ -9,7 +9,10 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -23,6 +26,7 @@ import java.util.List;
 public class SchematicItem extends Item {
 
     private BlockPos pos1 = null;
+    private boolean confirm = false;
 
     public SchematicItem() {
         super(new Item.Properties().tab(StarForge.Tab).rarity(Rarity.EPIC).stacksTo(1));
@@ -49,6 +53,29 @@ public class SchematicItem extends Item {
     }
 
     @Override
+    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
+        ItemStack stack = pPlayer.getItemInHand(pUsedHand);
+        if (!pLevel.isClientSide && pPlayer.isShiftKeyDown() && pPlayer.isCreative() && stack.getOrCreateTag().contains("schematic")){
+            Schematic sc = Schematic.readSchematic(stack.getOrCreateTag().getCompound("schematic"));
+            if (confirm){
+                confirm = false;
+                pPlayer.sendMessage(new TextComponent("Spawned Structure").withStyle(ChatFormatting.GREEN), Util.NIL_UUID);
+                for (BlockID id : sc.getBlockIDs()){
+                    //TODO NEED FIXING
+                    BlockPos p = pPlayer.getOnPos();
+                    BlockPos b = id.pos();
+                    BlockPos relPos = new BlockPos(p.getX() + (p.getX()-b.getX()), p.getY() + (p.getY()-b.getY()), p.getZ() + (p.getZ()-b.getZ()));
+                    pLevel.setBlock(relPos, id.state(), 2);
+                }
+            } else {
+                confirm = true;
+                pPlayer.sendMessage(new TextComponent("Confirm Spawn Structure").withStyle(ChatFormatting.RED), Util.NIL_UUID);
+            }
+        }
+        return InteractionResultHolder.pass(stack);
+    }
+
+    @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
         if (pIsAdvanced.isAdvanced()){
@@ -62,6 +89,7 @@ public class SchematicItem extends Item {
                 }
                 i++;
             }
+            pTooltipComponents.add(new TextComponent("Shift Right Click to Spawn Structure if in Creative").withStyle(ChatFormatting.BLUE));
         }
     }
 }
