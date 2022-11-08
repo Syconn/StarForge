@@ -25,9 +25,11 @@ import java.util.Map;
 
 public class NavBE extends ApplicationBE<NavContainer> {
 
+    private boolean enabled = false;
     private Schematic ship;
     private AnchorPos pos;
     private Map<BlockPos, double[]> position;
+
     public NavBE(BlockPos pWorldPosition, BlockState pBlockState) {
         super(ModBlockEntities.NAV_BE.get(), pWorldPosition, pBlockState, null);
     }
@@ -42,11 +44,19 @@ public class NavBE extends ApplicationBE<NavContainer> {
         createBlockImage();
     }
 
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        update();
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
     public Schematic getShip() {
         return ship;
     }
 
-    @Nullable
     public double[] getPosition(BlockPos state) {
         return position.get(state);
     }
@@ -64,6 +74,7 @@ public class NavBE extends ApplicationBE<NavContainer> {
             tag.put("pos", pos.save());
         if (position != null)
             tag.put("positions", NbtUtil.writePositions(position));
+        tag.putBoolean("enabled", enabled);
         return tag;
     }
 
@@ -75,6 +86,7 @@ public class NavBE extends ApplicationBE<NavContainer> {
             tag.put("pos", pos.save());
         if (position != null)
             tag.put("positions", NbtUtil.writePositions(position));
+        tag.putBoolean("enabled", enabled);
         super.saveAdditional(tag);
     }
 
@@ -92,11 +104,12 @@ public class NavBE extends ApplicationBE<NavContainer> {
             pos = AnchorPos.read(tag.getCompound("pos"));
         if (tag.contains("positions"))
             position = NbtUtil.readPositions(tag.getCompound("positions"));
+        enabled = tag.getBoolean("enabled");
         super.load(tag);
     }
 
     public boolean shouldRender(){
-        return ship != null && !position.isEmpty();
+        return ship != null && !position.isEmpty() && enabled;
     }
 
     public void createBlockImage(){

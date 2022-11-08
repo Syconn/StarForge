@@ -37,6 +37,7 @@ public class Network {
         register(MessageLoadBlock.class, new MessageLoadBlock(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageHyperdrive.class, new MessageHyperdrive(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageSetShip.class, new MessageSetShip(), NetworkDirection.PLAY_TO_SERVER);
+        register(MessageNavEnabled.class, new MessageNavEnabled(), NetworkDirection.PLAY_TO_SERVER);
     }
 
     private static <T> void register(Class<T> clazz, IMessage<T> message, NetworkDirection direction)

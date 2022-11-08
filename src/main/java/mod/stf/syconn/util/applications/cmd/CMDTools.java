@@ -1,4 +1,4 @@
-package mod.stf.syconn.util.applications;
+package mod.stf.syconn.util.applications.cmd;
 
 import mod.stf.syconn.api.util.Mths;
 import net.minecraft.core.BlockPos;

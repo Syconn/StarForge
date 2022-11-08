@@ -1,25 +1,17 @@
-package mod.stf.syconn.util.applications;
+package mod.stf.syconn.util.applications.cmd;
 
 import mod.stf.syconn.api.util.ColorCodes;
 import mod.stf.syconn.api.util.Mths;
-import mod.stf.syconn.api.util.applications.BasicApplication;
 import mod.stf.syconn.api.util.applications.BasicCommand;
 import mod.stf.syconn.api.util.applications.CommandStatus;
 import mod.stf.syconn.api.util.data.Schematic;
 import mod.stf.syconn.network.Network;
 import mod.stf.syconn.network.messages.MessageSetShip;
+import mod.stf.syconn.util.applications.NavigationApplication;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
-import net.minecraft.commands.CommandFunction;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.commands.GiveCommand;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class LoadShipCMD extends BasicCommand<NavigationApplication> {
 

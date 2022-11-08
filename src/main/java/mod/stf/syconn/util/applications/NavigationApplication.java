@@ -6,15 +6,16 @@ import mod.stf.syconn.Reference;
 import mod.stf.syconn.api.screens.ApplicationComponent;
 import mod.stf.syconn.api.screens.ApplicationScreen;
 import mod.stf.syconn.api.screens.componet.TextScreen;
-import mod.stf.syconn.api.util.ColorFormattedLine;
 import mod.stf.syconn.api.util.ColorFormattedString;
-import mod.stf.syconn.api.util.ColoredString;
 import mod.stf.syconn.api.util.applications.BasicCommand;
 import mod.stf.syconn.api.util.applications.CommandStatus;
 import mod.stf.syconn.api.util.data.Schematic;
 import mod.stf.syconn.client.screen.componets.SubmittableTextBox;
 import mod.stf.syconn.common.blockEntity.NavBE;
 import mod.stf.syconn.common.containers.NavContainer;
+import mod.stf.syconn.util.applications.cmd.DisplayCMD;
+import mod.stf.syconn.util.applications.cmd.LoadShipCMD;
+import mod.stf.syconn.util.applications.cmd.MoveCMD;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.core.BlockPos;
@@ -89,6 +90,7 @@ public class NavigationApplication extends ApplicationComponent<NavContainer> {
         List<BasicCommand> cmd = new ArrayList<>();
         cmd.add(new MoveCMD(this));
         cmd.add(new LoadShipCMD(this));
+        cmd.add(new DisplayCMD(this));
         return cmd;
     }
 

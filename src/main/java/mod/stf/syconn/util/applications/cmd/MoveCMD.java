@@ -1,4 +1,4 @@
-package mod.stf.syconn.util.applications;
+package mod.stf.syconn.util.applications.cmd;
 
 import mod.stf.syconn.api.util.ColorCodes;
 import mod.stf.syconn.api.util.Mths;
@@ -6,6 +6,7 @@ import mod.stf.syconn.api.util.applications.BasicCommand;
 import mod.stf.syconn.api.util.applications.CommandStatus;
 import mod.stf.syconn.network.Network;
 import mod.stf.syconn.network.messages.MessageHyperdrive;
+import mod.stf.syconn.util.applications.NavigationApplication;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 
