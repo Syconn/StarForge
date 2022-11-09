@@ -1,5 +1,6 @@
 package mod.stf.syconn.api.util.data;
 
+import mod.stf.syconn.api.util.AnchorPos;
 import mod.stf.syconn.api.util.BlockID;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -35,6 +36,21 @@ public class Schematic {
 
     public List<BlockID> getBlockIDs() {
         return blockIDs;
+    }
+
+    public AnchorPos getAnchor(){
+        BlockPos pos = blockIDs.get(0).pos();
+        double bX = pos.getX(), bY = pos.getY(), bZ = pos.getZ(), sX = pos.getX(), sY = pos.getY(), sZ = pos.getZ();
+        for (BlockID id : blockIDs) {
+            BlockPos pos2 = id.pos();
+            if (pos2.getX() > bX) bX = pos2.getX();
+            if (pos2.getY() > bY) bY = pos2.getY();
+            if (pos2.getZ() > bZ) bZ = pos2.getZ();
+            if (pos2.getX() < sX) sX = pos2.getX();
+            if (pos2.getY() < sY) sY = pos2.getY();
+            if (pos2.getZ() < sZ) sZ = pos2.getZ();
+        }
+        return new AnchorPos((int) ((bX + sX) / 2), (int) sY, (int) ((bZ + sZ) / 2));
     }
 
     public List<BlockID> genStates(List<BlockPos> positions){

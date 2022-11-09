@@ -1,6 +1,7 @@
 package mod.stf.syconn.item;
 
 import mod.stf.syconn.StarForge;
+import mod.stf.syconn.api.util.AnchorPos;
 import mod.stf.syconn.api.util.BlockID;
 import mod.stf.syconn.api.util.data.Schematic;
 import mod.stf.syconn.common.blockEntity.SchematicBe;
@@ -63,8 +64,8 @@ public class SchematicItem extends Item {
                 for (BlockID id : sc.getBlockIDs()){
                     //TODO NEED FIXING
                     BlockPos p = pPlayer.getOnPos();
-                    BlockPos b = id.pos();
-                    BlockPos relPos = new BlockPos(p.getX() + (p.getX()-b.getX()), p.getY() + (p.getY()-b.getY()), p.getZ() + (p.getZ()-b.getZ()));
+                    AnchorPos ap = id.anchorBlock(sc.getAnchor());
+                    BlockPos relPos = new BlockPos(p.getX() + ap.x(), p.getY() + ap.y(), p.getZ() + ap.z());
                     pLevel.setBlock(relPos, id.state(), 2);
                 }
             } else {

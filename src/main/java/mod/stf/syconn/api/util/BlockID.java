@@ -11,6 +11,10 @@ import java.util.List;
 
 public record BlockID(BlockState state, BlockPos pos) {
 
+    public AnchorPos anchorBlock(AnchorPos ap){
+        return new AnchorPos(pos.getX() - ap.x(), pos.getY() - ap.y(), pos.getZ() - ap.z());
+    }
+
     public static BlockID read(CompoundTag tag) {
         return new BlockID(NbtUtils.readBlockState(tag.getCompound("state")), NbtUtils.readBlockPos(tag.getCompound("pos")));
     }
