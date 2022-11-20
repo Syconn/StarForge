@@ -14,7 +14,8 @@ public class DisplayCMD extends BasicCommand<NavigationApplication> {
     private int gof;
     public DisplayCMD(NavigationApplication application) {
         super("/", "display", application);
-        enabled = ((NavBE) level.getBlockEntity(application.getPos())).isEnabled();
+        if (level.getBlockEntity(application.getPos()) instanceof NavBE)
+            enabled = ((NavBE) level.getBlockEntity(application.getPos())).isEnabled();
         gof = 0;
     }
 

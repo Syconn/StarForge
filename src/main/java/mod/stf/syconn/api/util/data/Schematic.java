@@ -38,7 +38,7 @@ public class Schematic {
         return blockIDs;
     }
 
-    public AnchorPos getAnchor(){
+    public AnchorPos getAnchor() {
         BlockPos pos = blockIDs.get(0).pos();
         double bX = pos.getX(), bY = pos.getY(), bZ = pos.getZ(), sX = pos.getX(), sY = pos.getY(), sZ = pos.getZ();
         for (BlockID id : blockIDs) {
@@ -91,6 +91,15 @@ public class Schematic {
         return this;
     }
 
+    public Schematic reloadSchematic(){
+        List<BlockID> ids = new ArrayList<>();
+        for (BlockID id : blockIDs){
+            ids.add(new BlockID(Minecraft.getInstance().level.getBlockState(id.pos()), id.pos()));
+        }
+        blockIDs = ids;
+        return cleanSchematic();
+    }
+
     public boolean containsBlock(Block block){
         for (BlockID id : getBlockIDs()){
             if (id.state().getBlock() == block){
@@ -102,7 +111,7 @@ public class Schematic {
 
     public boolean containsBlockPos(BlockPos blockPos){
         for (BlockID id : getBlockIDs()){
-            if (id.pos() == blockPos){
+            if (id.pos().equals(blockPos)){
                 return true;
             }
         }

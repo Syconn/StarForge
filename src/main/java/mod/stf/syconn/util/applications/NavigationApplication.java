@@ -16,6 +16,7 @@ import mod.stf.syconn.common.containers.NavContainer;
 import mod.stf.syconn.util.applications.cmd.DisplayCMD;
 import mod.stf.syconn.util.applications.cmd.LoadShipCMD;
 import mod.stf.syconn.util.applications.cmd.MoveCMD;
+import mod.stf.syconn.util.applications.cmd.RotateCMD;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.core.BlockPos;
@@ -91,6 +92,7 @@ public class NavigationApplication extends ApplicationComponent<NavContainer> {
         cmd.add(new MoveCMD(this));
         cmd.add(new LoadShipCMD(this));
         cmd.add(new DisplayCMD(this));
+        cmd.add(new RotateCMD(this));
         return cmd;
     }
 

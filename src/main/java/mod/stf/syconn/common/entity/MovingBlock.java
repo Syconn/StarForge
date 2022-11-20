@@ -6,6 +6,7 @@ import mod.stf.syconn.api.util.NbtUtil;
 import mod.stf.syconn.api.util.VectorTools;
 import mod.stf.syconn.api.util.data.DirectionalTexture;
 import mod.stf.syconn.api.util.data.ServerPixelImage;
+import mod.stf.syconn.common.blockEntity.NavBE;
 import mod.stf.syconn.init.ModEntities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -21,14 +22,18 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.commands.TeleportCommand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrownEnderpearl;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SlimeBlock;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.minecraft.world.level.block.piston.PistonHeadBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.entity.EntityTeleportEvent;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,11 +42,13 @@ import java.util.Random;
 
 public class MovingBlock extends Entity {
 
-    private static final EntityDataAccessor<Optional<BlockState>> DATA_BLOCK_STATE = SynchedEntityData.defineId(MovingBlock.class, EntityDataSerializers.BLOCK_STATE);
-    private double distance;
-    private BlockPos start;
-    private Direction direction;
-    private double speed = 0;
+    protected static final EntityDataAccessor<Optional<BlockState>> DATA_BLOCK_STATE = SynchedEntityData.defineId(MovingBlock.class, EntityDataSerializers.BLOCK_STATE);
+    protected double distance;
+    protected BlockPos start;
+    protected Direction direction;
+    protected boolean update = false;
+    protected double speed = 0;
+    protected int endX, endY, endZ;
 
     public MovingBlock(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -55,6 +62,9 @@ public class MovingBlock extends Entity {
         this.start = start;
         this.direction = direction;
         this.speed = speed / 100;
+        endX = (int) (getX() + (direction.getStepX() * distance));
+        endY = (int) (getY() + (direction.getStepY() * distance));
+        endZ = (int) (getZ() + (direction.getStepZ() * distance));
     }
 
     //TODO NOT SAVING BLOCK STATE
@@ -67,19 +77,26 @@ public class MovingBlock extends Entity {
     @Override
     public void tick() {
         super.tick();
-        if (start != null) {
-            if (position().distanceTo(VectorTools.getVec3(start)) < distance){
+        if (update && !level.isClientSide){
+            arrived();
+        } else if (start != null && !level.isClientSide) {
+            if (endX != (int) getX() || endY != (int) getY() || endZ != (int) getZ()){
                 double x = getX() + (direction.getStepX() * speed);
                 double y = getY() + (direction.getStepY() * speed);
                 double z = getZ() + (direction.getStepZ() * speed);
 
                 List<Entity> entity = level.getEntities(this, this.getBoundingBox().inflate(0, 1, 0));
                 entity.forEach((e) -> {
-                    if (e.isAlive()){
-                        double x2 = getX() + (direction.getStepX() * speed);
-                        double y2 = getY() + 1 + (direction.getStepY() * speed);
-                        double z2 = getZ() + (direction.getStepZ() * speed);
-                        e.moveTo(x2, y2, z2);
+                    if (e.isAlive() && !(e instanceof MovingBlock)){
+                        if (e instanceof Player) {
+                            e.setDeltaMovement((speed * 1.85) * direction.getStepX(), (speed * 1.85) * direction.getStepY(), (speed * 1.85) * direction.getStepZ());
+                            e.hurtMarked = true;
+                        } else {
+                            double x2 = getX() + (direction.getStepX() * speed);
+                            double y2 = getY() + 1 + (direction.getStepY() * speed);
+                            double z2 = getZ() + (direction.getStepZ() * speed);
+                            e.moveTo(x2, y2, z2);
+                        }
                     }
                 });
 
@@ -87,7 +104,7 @@ public class MovingBlock extends Entity {
             } else {
                 if (this.entityData.get(DATA_BLOCK_STATE).isPresent()) {
                     level.setBlock(getOnPos().above(), this.entityData.get(DATA_BLOCK_STATE).get(), 2);
-                    discard();
+                    update=true;
                 }
             }
         }
@@ -98,12 +115,17 @@ public class MovingBlock extends Entity {
         return true;
     }
 
+    protected void arrived(){
+        discard();
+    }
+
     @Override
     protected void readAdditionalSaveData(CompoundTag pCompound) {
         this.speed = pCompound.getDouble("speed");
         this.distance = pCompound.getDouble("distance");
         this.start = NbtUtils.readBlockPos(pCompound.getCompound("start"));
         this.direction = Direction.from3DDataValue(pCompound.getInt("direction"));
+        this.update = pCompound.getBoolean("update");
     }
 
     @Override
@@ -112,6 +134,7 @@ public class MovingBlock extends Entity {
         pCompound.putDouble("distance", this.distance);
         pCompound.putInt("direction", this.direction.get3DDataValue());
         pCompound.put("start", NbtUtils.writeBlockPos(this.start));
+        pCompound.putBoolean("update", this.update);
     }
 
     @Override
@@ -119,23 +142,7 @@ public class MovingBlock extends Entity {
         return new ClientboundAddEntityPacket(this);
     }
 
-    //TODO UNDER BLOCK RENDER DISPATCHER THERE IS RENDER SINGLE BLOCK
-
     public BlockState getBlockState(){
         return this.getEntityData().get(DATA_BLOCK_STATE).orElse(null);
-    }
-
-    public ServerPixelImage getTexture() throws IOException {
-        BlockState state = this.getEntityData().get(DATA_BLOCK_STATE).orElse(null);
-        NativeImage background = NativeImage.read(Minecraft.getInstance().getResourceManager().getResource(new ResourceLocation(Reference.MOD_ID, "textures/entity/block.png")).getInputStream());
-        if (state != null) {
-            DirectionalTexture[] sprites = new DirectionalTexture[Direction.values().length];
-            for (int i = 0; i < Direction.values().length; i++) {
-                if (!Minecraft.getInstance().getBlockRenderer().getBlockModel(state).getQuads(state, Direction.from3DDataValue(i), new Random()).isEmpty())
-                    sprites[i] = new DirectionalTexture(Minecraft.getInstance().getBlockRenderer().getBlockModel(state).getQuads(state, Direction.from3DDataValue(i), new Random()).get(0).getSprite(), Direction.from3DDataValue(i));
-            }
-            return new ServerPixelImage(background, sprites);
-        }
-        return new ServerPixelImage(background);
     }
 }

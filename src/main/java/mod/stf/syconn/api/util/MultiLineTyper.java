@@ -13,6 +13,7 @@ import static mod.stf.syconn.api.util.ColorFormattedLine.letterPixels;
 public class MultiLineTyper {
 
     private List<ColorFormattedString> lines = new ArrayList<>();
+    private List<String> inputLines = new ArrayList<>();
     private final int lineLng;
     private final int lineTop;
     private final int lineBottom;
@@ -43,10 +44,15 @@ public class MultiLineTyper {
 
     public void addLine(String msg){
         lines.addAll(addParagraph(new ColorFormattedString(new ColoredString(msg))));
+        inputLines.add(msg);
     }
 
     public int size(){
         return lines.size();
+    }
+
+    public List<String> getInputLines() {
+        return inputLines;
     }
 
     public List<ColorFormattedString> getLines(){

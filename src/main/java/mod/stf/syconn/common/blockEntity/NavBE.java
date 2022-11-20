@@ -9,6 +9,7 @@ import mod.stf.syconn.api.util.data.Schematic;
 import mod.stf.syconn.common.containers.NavContainer;
 import mod.stf.syconn.init.ModBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,7 @@ public class NavBE extends ApplicationBE<NavContainer> {
     private Schematic ship;
     private AnchorPos pos;
     private Map<BlockPos, double[]> position;
+    private Direction dir;
 
     public NavBE(BlockPos pWorldPosition, BlockState pBlockState) {
         super(ModBlockEntities.NAV_BE.get(), pWorldPosition, pBlockState, null);
@@ -38,8 +41,9 @@ public class NavBE extends ApplicationBE<NavContainer> {
         super(ModBlockEntities.NAV_BE.get(), pWorldPosition, pBlockState, application);
     }
 
-    public void setShip(Schematic ship) {
+    public void setShip(Schematic ship, Direction dir) {
         this.ship = ship;
+        this.dir = dir;
         update();
         createBlockImage();
     }
@@ -51,6 +55,15 @@ public class NavBE extends ApplicationBE<NavContainer> {
 
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public void setDir(Direction dir) {
+        this.dir = dir;
+        update();
+    }
+
+    public Direction getDir() {
+        return dir;
     }
 
     public Schematic getShip() {
@@ -65,6 +78,10 @@ public class NavBE extends ApplicationBE<NavContainer> {
         return pos;
     }
 
+    public Map<BlockPos, double[]> getPosition() {
+        return position;
+    }
+
     @Override
     protected CompoundTag saveData() {
         CompoundTag tag = super.saveData();
@@ -74,6 +91,8 @@ public class NavBE extends ApplicationBE<NavContainer> {
             tag.put("pos", pos.save());
         if (position != null)
             tag.put("positions", NbtUtil.writePositions(position));
+        if (dir != null)
+            tag.putInt("direction", dir.get3DDataValue());
         tag.putBoolean("enabled", enabled);
         return tag;
     }
@@ -86,6 +105,8 @@ public class NavBE extends ApplicationBE<NavContainer> {
             tag.put("pos", pos.save());
         if (position != null)
             tag.put("positions", NbtUtil.writePositions(position));
+        if (dir != null)
+            tag.putInt("direction", dir.get3DDataValue());
         tag.putBoolean("enabled", enabled);
         super.saveAdditional(tag);
     }
@@ -104,7 +125,10 @@ public class NavBE extends ApplicationBE<NavContainer> {
             pos = AnchorPos.read(tag.getCompound("pos"));
         if (tag.contains("positions"))
             position = NbtUtil.readPositions(tag.getCompound("positions"));
-        enabled = tag.getBoolean("enabled");
+        if (tag.contains("enabled"))
+            enabled = tag.getBoolean("enabled");
+        if (tag.contains("direction"))
+            dir = Direction.from3DDataValue(tag.getInt("direction"));
         super.load(tag);
     }
 
@@ -165,6 +189,8 @@ public class NavBE extends ApplicationBE<NavContainer> {
         return new AnchorPos((int) ((bX + sX) / 2), (int) sY, (int) ((bZ + sZ) / 2));
     }
 
+
+
     @Override
     public void tickServer() {
 
@@ -189,5 +215,47 @@ public class NavBE extends ApplicationBE<NavContainer> {
     @Override
     public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
         return new NavContainer(pContainerId, worldPosition, pPlayerInventory, pPlayer);
+    }
+
+    public void moveSchem(Schematic sc, Direction dir, double distance){
+        List<BlockID> ids = new ArrayList<>();
+        position = new HashMap<>();
+        for (BlockID id : sc.getBlockIDs()){
+            double x = id.pos().getX() + (dir.getStepX() * distance);
+            double y = id.pos().getY() + (dir.getStepY() * distance);
+            double z = id.pos().getZ() + (dir.getStepZ() * distance);
+            ids.add(new BlockID(id.state(), new BlockPos(x, y, z)));
+            position.put(new BlockPos(x, y, z), genPosition(new BlockPos(x, y, z), pos));
+        }
+        this.ship = new Schematic(ids);
+    }
+
+    public void flip(Schematic sc, Direction d){
+
+    }
+
+    public void setUp(NavBE be, Direction dir, double distance) {
+        this.pos = be.getPos();
+        this.enabled = be.isEnabled();
+        this.dir = be.getDir();
+        moveSchem(be.getShip(), dir, distance);
+        createBlockImage();
+        update();
+    }
+
+    public void rotate(NavBE be, Direction nDir){
+        this.pos = be.getPos();
+        List<BlockID> ids = new ArrayList<>();
+        position = new HashMap<>();
+        for (BlockID id : be.getShip().getBlockIDs()){
+            int x = id.pos().getX() - pos.x();
+            BlockPos pos = new BlockPos(x, id.pos().getY(), id.pos().getZ());
+            ids.add(new BlockID(id.state(), pos));
+            level.setBlock(pos, id.state(), 2);
+        }
+        this.ship = new Schematic(ids);
+
+        createBlockImage();
+        update();
     }
 }

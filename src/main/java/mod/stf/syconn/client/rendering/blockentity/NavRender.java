@@ -39,19 +39,20 @@ public class NavRender implements BlockEntityRenderer<NavBE> {
     public void render(NavBE pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
         if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.NAV_COMPUTER.get() && pBlockEntity.shouldRender()) {
             for (BlockID id : pBlockEntity.getShip().getBlockIDs()){
-                pPoseStack.pushPose();
-                BlockState bs = id.state();
-                double[] position = pBlockEntity.getPosition(id.pos());
-                BlockRender br = new BlockRender(new EntityRendererProvider.Context(mc.getEntityRenderDispatcher(), mc.getItemRenderer(), mc.getResourceManager(), mc.getEntityModels(), mc.font));
-                pPoseStack.translate(0, 0.2, 0);
-                pPoseStack.translate(0.5, 0.3, 0.5);
-                pPoseStack.mulPose(Vector3f.XP.rotationDegrees(180));
-                pPoseStack.translate(position[0], position[1], position[2]);
-                pPoseStack.scale(0.2f, 0.2f, 0.2f);
-                pPoseStack.translate(position[3] - 0.5, position[4] - 3.5, position[5] - 0.5);
-
-                br.render(bs, pPoseStack, pBufferSource, pPackedLight);
-                pPoseStack.popPose();
+                if (pBlockEntity.getPosition(id.pos()) != null) {
+                    pPoseStack.pushPose();
+                    BlockState bs = id.state();
+                    double[] position = pBlockEntity.getPosition(id.pos());
+                    BlockRender br = new BlockRender(new EntityRendererProvider.Context(mc.getEntityRenderDispatcher(), mc.getItemRenderer(), mc.getResourceManager(), mc.getEntityModels(), mc.font));
+                    pPoseStack.translate(0, 0.2, 0);
+                    pPoseStack.translate(0.5, 0.3, 0.5);
+                    pPoseStack.mulPose(Vector3f.XP.rotationDegrees(180));
+                    pPoseStack.translate(position[0], position[1], position[2]);
+                    pPoseStack.scale(0.2f, 0.2f, 0.2f);
+                    pPoseStack.translate(position[3] - 0.5, position[4] - 3.5, position[5] - 0.5);
+                    br.render(bs, pPoseStack, pBufferSource, pPackedLight);
+                    pPoseStack.popPose();
+                }
             }
         }
     }

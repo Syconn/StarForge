@@ -13,6 +13,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.lwjgl.glfw.GLFW;
 
 public class TextScreen extends AbstractWidget implements Widget, GuiEventListener {
 
@@ -20,8 +21,8 @@ public class TextScreen extends AbstractWidget implements Widget, GuiEventListen
 
     private final Font font = Minecraft.getInstance().font;
     private final int linesMax;
+    private SubmittableTextBox textBox;
     public MultiLineTyper multiLineTyper = new MultiLineTyper(35, y, y + 148);
-
     private final int scrollBarBottom;
     private final int scrollBarX, scrollBarY;
     private float scrollOffs;
@@ -34,6 +35,7 @@ public class TextScreen extends AbstractWidget implements Widget, GuiEventListen
         this.scrollBarBottom = scrollBarBottom;
         this.scrollBarX = scrollBarX;
         this.scrollBarY = scrollBarY;
+        this.textBox = textBox;
     }
 
     @Override
@@ -77,6 +79,14 @@ public class TextScreen extends AbstractWidget implements Widget, GuiEventListen
             scrollOffs = (float) startingLine / multiLineTyper.size();
             return true;
         }
+    }
+
+    @Override
+    public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+        if (pKeyCode == GLFW.GLFW_KEY_UP && textBox.getValue().matches("") && multiLineTyper.getInputLines().size() > 0){
+            textBox.setValue(multiLineTyper.getInputLines().get(multiLineTyper.getInputLines().size() - 1));
+        }
+        return super.keyPressed(pKeyCode, pScanCode, pModifiers);
     }
 
     @Override

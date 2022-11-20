@@ -1,1 +1,12 @@
-Begin Hyperdrive simple - movement by use of schematic, either save to hard memory on block or update schematic, screen to control distance moved
+HyperDrive
+-Model
+-Increase Speed
+- PATHING
+    - Ship Rotating
+    - Path Item that generates Paths
+    - Calculation System that will create Path depending on BlockPos that will move in Directions
+
+
+Flying Ship
+-Engine
+-Moving Block Base

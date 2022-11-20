@@ -56,7 +56,7 @@ public class SchematicItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         ItemStack stack = pPlayer.getItemInHand(pUsedHand);
-        if (!pLevel.isClientSide && pPlayer.isShiftKeyDown() && pPlayer.isCreative() && stack.getOrCreateTag().contains("schematic")){
+        if (!pLevel.isClientSide && pPlayer.isShiftKeyDown() && pUsedHand == InteractionHand.MAIN_HAND && pPlayer.isCreative() && stack.getOrCreateTag().contains("schematic")){
             Schematic sc = Schematic.readSchematic(stack.getOrCreateTag().getCompound("schematic"));
             if (confirm){
                 confirm = false;
@@ -72,6 +72,13 @@ public class SchematicItem extends Item {
                 confirm = true;
                 pPlayer.sendMessage(new TextComponent("Confirm Spawn Structure").withStyle(ChatFormatting.RED), Util.NIL_UUID);
             }
+            return InteractionResultHolder.success(stack);
+        } else if (!pLevel.isClientSide && pUsedHand == InteractionHand.OFF_HAND && pPlayer.isShiftKeyDown() && stack.getOrCreateTag().contains("schematic")) {
+            Schematic sc = Schematic.readSchematic(stack.getOrCreateTag().getCompound("schematic"));
+            stack.getOrCreateTag().put("schematic", sc.reloadSchematic().saveSchematic());
+            pPlayer.setItemInHand(pUsedHand, stack);
+            pPlayer.sendMessage(new TextComponent("Reloaded Structure").withStyle(ChatFormatting.GREEN), Util.NIL_UUID);
+            return InteractionResultHolder.success(stack);
         }
         return InteractionResultHolder.pass(stack);
     }
@@ -91,6 +98,7 @@ public class SchematicItem extends Item {
                 i++;
             }
             pTooltipComponents.add(new TextComponent("Shift Right Click to Spawn Structure if in Creative").withStyle(ChatFormatting.BLUE));
+            pTooltipComponents.add(new TextComponent("Shift Right Click in OffHand to Refresh Structure").withStyle(ChatFormatting.BLUE));
         }
     }
 }

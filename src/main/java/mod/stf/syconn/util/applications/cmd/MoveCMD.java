@@ -17,6 +17,8 @@ public class MoveCMD extends BasicCommand<NavigationApplication> {
     private int p1;
     private Direction p2;
 
+    private double p3 = 10.0;
+
     public MoveCMD(NavigationApplication application) {
         super("/", "move", application);
     }
@@ -30,8 +32,12 @@ public class MoveCMD extends BasicCommand<NavigationApplication> {
                 p1 = Integer.parseInt(parameters[0]);
 
                 for (Direction direction : Direction.values()) {
-                    if (direction.getName().matches(parameters[1].toLowerCase())) {
+                    if (direction.getName().equals(parameters[1].toLowerCase())) {
                         p2 = direction;
+
+                        if (parameters.length > 2 && Mths.isNumeric(parameters[2])){
+                            p3 = Integer.parseInt(parameters[2]);
+                        }
                         if (meetsFlightRequirements()) return new CommandStatus("3. 2. 1. GO!", CommandStatus.Status.SUCCESS);
                         return new CommandStatus("Navigator Not In Side of Ship", CommandStatus.Status.ERROR);
                     }
@@ -47,7 +53,7 @@ public class MoveCMD extends BasicCommand<NavigationApplication> {
     @Override
     public void execute() {
         if (meetsFlightRequirements()){
-            Network.getPlayChannel().sendToServer(new MessageHyperdrive(p2, p1, application.getShip()));
+            Network.getPlayChannel().sendToServer(new MessageHyperdrive(p2, p1, p3, application.getShip()));
         }
     }
 

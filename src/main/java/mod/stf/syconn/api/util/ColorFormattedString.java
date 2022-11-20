@@ -41,4 +41,12 @@ public class ColorFormattedString {
     public List<ColoredString> getString() {
         return strings;
     }
+
+    public String combinedString(){
+        String s = "";
+        for (ColoredString string : strings){
+            s += " " + string.getString();
+        }
+        return s;
+    }
 }
