@@ -2,6 +2,7 @@ package mod.stf.syconn.util.applications.cmd;
 
 import mod.stf.syconn.api.util.applications.BasicCommand;
 import mod.stf.syconn.api.util.applications.CommandStatus;
+import mod.stf.syconn.common.blockEntity.NavBE;
 import mod.stf.syconn.network.Network;
 import mod.stf.syconn.network.messages.MessageRotate;
 import mod.stf.syconn.util.applications.NavigationApplication;
@@ -20,10 +21,12 @@ public class RotateCMD extends BasicCommand<NavigationApplication> {
         String[] parameters = cmd.trim().split("\\s+");
 
         if (parameters.length > 0){
-            for (Direction direction : Direction.values()) {
-                if (direction.getName().equals(parameters[0].toLowerCase())) {
-                    dir = direction;
-                    return new CommandStatus("Rotating", CommandStatus.Status.SUCCESS);
+            if (getDir(parameters[0]) != null){
+                dir = getDir(parameters[0]);
+                if (level.getBlockEntity(application.getPos()) instanceof NavBE be) {
+                    if (be.getDir() != dir)
+                        return new CommandStatus("Rotating", CommandStatus.Status.SUCCESS);
+                    return new CommandStatus("Already Rotated That Direction", CommandStatus.Status.WARN);
                 }
             }
         }

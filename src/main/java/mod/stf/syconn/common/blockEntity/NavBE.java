@@ -217,10 +217,10 @@ public class NavBE extends ApplicationBE<NavContainer> {
         return new NavContainer(pContainerId, worldPosition, pPlayerInventory, pPlayer);
     }
 
-    public void moveSchem(Schematic sc, Direction dir, double distance){
+    public void moveSchem(Schematic sc, Direction dir, double distance) {
         List<BlockID> ids = new ArrayList<>();
         position = new HashMap<>();
-        for (BlockID id : sc.getBlockIDs()){
+        for (BlockID id : sc.getBlockIDs()) {
             double x = id.pos().getX() + (dir.getStepX() * distance);
             double y = id.pos().getY() + (dir.getStepY() * distance);
             double z = id.pos().getZ() + (dir.getStepZ() * distance);
@@ -230,31 +230,19 @@ public class NavBE extends ApplicationBE<NavContainer> {
         this.ship = new Schematic(ids);
     }
 
-    public void flip(Schematic sc, Direction d){
-
-    }
-
-    public void setUp(NavBE be, Direction dir, double distance) {
-        this.pos = be.getPos();
+    public void reset(NavBE be, Direction dir, List<BlockID> ids) {
         this.enabled = be.isEnabled();
-        this.dir = be.getDir();
-        moveSchem(be.getShip(), dir, distance);
+        this.dir = dir;
+        this.ship = new Schematic(ids);
         createBlockImage();
         update();
     }
 
-    public void rotate(NavBE be, Direction nDir){
+    public void move(NavBE be, Direction dir, double distance) {
         this.pos = be.getPos();
-        List<BlockID> ids = new ArrayList<>();
-        position = new HashMap<>();
-        for (BlockID id : be.getShip().getBlockIDs()){
-            int x = id.pos().getX() - pos.x();
-            BlockPos pos = new BlockPos(x, id.pos().getY(), id.pos().getZ());
-            ids.add(new BlockID(id.state(), pos));
-            level.setBlock(pos, id.state(), 2);
-        }
-        this.ship = new Schematic(ids);
-
+        this.enabled = be.isEnabled();
+        this.dir = be.getDir();
+        moveSchem(be.getShip(), dir, distance);
         createBlockImage();
         update();
     }

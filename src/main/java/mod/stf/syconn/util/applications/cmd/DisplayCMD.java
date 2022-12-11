@@ -24,7 +24,7 @@ public class DisplayCMD extends BasicCommand<NavigationApplication> {
         String[] parameters = cmd.trim().toLowerCase().split("\\s+");
         if (parameters[0].matches("ship")){
             if (parameters.length > 1){
-                if (parameters[1].matches("true") || parameters[1].matches("0")) {
+                if (isTrue(parameters[1])) {
                     enabled = true;
                 } else {
                     enabled = false;

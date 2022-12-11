@@ -13,10 +13,7 @@ import mod.stf.syconn.api.util.data.Schematic;
 import mod.stf.syconn.client.screen.componets.SubmittableTextBox;
 import mod.stf.syconn.common.blockEntity.NavBE;
 import mod.stf.syconn.common.containers.NavContainer;
-import mod.stf.syconn.util.applications.cmd.DisplayCMD;
-import mod.stf.syconn.util.applications.cmd.LoadShipCMD;
-import mod.stf.syconn.util.applications.cmd.MoveCMD;
-import mod.stf.syconn.util.applications.cmd.RotateCMD;
+import mod.stf.syconn.util.applications.cmd.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.core.BlockPos;
@@ -93,6 +90,7 @@ public class NavigationApplication extends ApplicationComponent<NavContainer> {
         cmd.add(new LoadShipCMD(this));
         cmd.add(new DisplayCMD(this));
         cmd.add(new RotateCMD(this));
+        cmd.add(new DisassembleCMD(this));
         return cmd;
     }
 

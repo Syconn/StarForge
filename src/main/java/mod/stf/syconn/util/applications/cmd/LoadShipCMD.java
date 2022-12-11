@@ -34,11 +34,9 @@ public class LoadShipCMD extends BasicCommand<NavigationApplication> {
             if (pos1 != null) {
                 pos2 = CMDTools.getBlockPos(Mths.splitArray(parameters, 3, 3));
                 if (pos2 != null) {
-                    for (Direction direction : Direction.values()) {
-                        if (direction.getName().equals(parameters[1].toLowerCase())) {
-                            dir = direction;
-                            return new CommandStatus("Successful BlockPos's", CommandStatus.Status.SUCCESS);
-                        }
+                    if (getDir(parameters[6]) != null) {
+                        dir = getDir(parameters[6]);
+                        return new CommandStatus("Successful BlockPos's", CommandStatus.Status.SUCCESS);
                     }
                     return new CommandStatus("Not Valid Direction", CommandStatus.Status.ERROR);
                 }
@@ -47,22 +45,22 @@ public class LoadShipCMD extends BasicCommand<NavigationApplication> {
         }
 
         if (parameters.length > 1){
-            for (PlayerInfo playerInfo : Minecraft.getInstance().getConnection().getOnlinePlayers()){
-                if (playerInfo.getProfile().getName().equalsIgnoreCase(parameters[0])){
-                    player = Minecraft.getInstance().level.getPlayerByUUID(playerInfo.getProfile().getId());
-                }
-            }
-
+            player = getPlayer(parameters[0]);
             if (player != null){
-                for (Direction direction : Direction.values()) {
-                    if (direction.getName().equals(parameters[1].toLowerCase())) {
-                        dir = direction;
-                        return new CommandStatus("Grabbed Player Schematic", CommandStatus.Status.SUCCESS);
-                    }
+                if (getDir(parameters[1]) != null) {
+                    dir = getDir(parameters[1]);
+                    return new CommandStatus("Grabbed Player Schematic", CommandStatus.Status.SUCCESS);
                 }
                 return new CommandStatus("Not Valid Direction", CommandStatus.Status.ERROR);
             } else {
                 return new CommandStatus("No Player Found", CommandStatus.Status.ERROR);
+            }
+        }
+
+        if (parameters.length > 0){
+            if (getDir(parameters[0]) != null) {
+                dir = getDir(parameters[0]);
+                return new CommandStatus("Grabbed Player Schematic", CommandStatus.Status.SUCCESS);
             }
         }
         return new CommandStatus("need more parameters", CommandStatus.Status.ERROR);
@@ -73,7 +71,9 @@ public class LoadShipCMD extends BasicCommand<NavigationApplication> {
         if (player != null){
             Network.getPlayChannel().sendToServer(new MessageSetShip(Schematic.readSchematic(player.getMainHandItem().getOrCreateTag().getCompound("schematic")).cleanSchematic(), application.getPos(), dir));
         } else if (pos1 != null && pos2 != null){
-            Network.getPlayChannel().sendToServer(new MessageSetShip(Schematic.genSchematic(pos1, pos2), application.getPos(), dir));
+            Network.getPlayChannel().sendToServer(new MessageSetShip(Schematic.genSchematic(pos1, pos2).cleanSchematic(), application.getPos(), dir));
+        } else {
+            Network.getPlayChannel().sendToServer(new MessageSetShip(Schematic.readSchematic(Minecraft.getInstance().player.getMainHandItem().getOrCreateTag().getCompound("schematic")).cleanSchematic(), application.getPos(), dir));
         }
     }
 

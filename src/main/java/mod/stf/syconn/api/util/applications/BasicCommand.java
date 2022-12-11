@@ -1,7 +1,11 @@
 package mod.stf.syconn.api.util.applications;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -54,4 +58,28 @@ public abstract class BasicCommand<T extends BasicApplication> {
     public abstract CommandStatus hasParameters(String cmd);
     public abstract void execute();
     public abstract CommandStatus info();
+
+    public boolean isTrue(String s){
+        return s.toLowerCase().matches("true") || s.matches("0");
+    }
+
+    @Nullable
+    public Direction getDir(String s){
+        for (Direction direction : Direction.values()) {
+            if (direction.getName().equalsIgnoreCase(s)) {
+                return direction;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public Player getPlayer(String s){
+        for (PlayerInfo playerInfo : Minecraft.getInstance().getConnection().getOnlinePlayers()){
+            if (playerInfo.getProfile().getName().equalsIgnoreCase(s)){
+                return Minecraft.getInstance().level.getPlayerByUUID(playerInfo.getProfile().getId());
+            }
+        }
+        return null;
+    }
 }

@@ -31,16 +31,13 @@ public class MoveCMD extends BasicCommand<NavigationApplication> {
             if (parameters.length > 1) {
                 p1 = Integer.parseInt(parameters[0]);
 
-                for (Direction direction : Direction.values()) {
-                    if (direction.getName().equals(parameters[1].toLowerCase())) {
-                        p2 = direction;
-
-                        if (parameters.length > 2 && Mths.isNumeric(parameters[2])){
-                            p3 = Integer.parseInt(parameters[2]);
-                        }
-                        if (meetsFlightRequirements()) return new CommandStatus("3. 2. 1. GO!", CommandStatus.Status.SUCCESS);
-                        return new CommandStatus("Navigator Not In Side of Ship", CommandStatus.Status.ERROR);
+                if (getDir(parameters[1]) != null){
+                    p2 = getDir(parameters[1]);
+                    if (parameters.length > 2 && Mths.isNumeric(parameters[2])){
+                        p3 = Integer.parseInt(parameters[2]);
                     }
+                    if (meetsFlightRequirements()) return new CommandStatus("3. 2. 1. GO!", CommandStatus.Status.SUCCESS);
+                    return new CommandStatus("Navigator Not In Side of Ship", CommandStatus.Status.ERROR);
                 }
                 return new CommandStatus("Parameter not Valid Direction", CommandStatus.Status.ERROR);
             }

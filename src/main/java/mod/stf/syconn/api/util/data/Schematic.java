@@ -53,6 +53,39 @@ public class Schematic {
         return new AnchorPos((int) ((bX + sX) / 2), (int) sY, (int) ((bZ + sZ) / 2));
     }
 
+    public int evenXLen(){
+        BlockPos pos = blockIDs.get(0).pos();
+        double bX = pos.getX(), sX = pos.getX();
+        for (BlockID id : blockIDs) {
+            BlockPos pos2 = id.pos();
+            if (pos2.getX() > bX) bX = pos2.getX();
+            if (pos2.getX() < sX) sX = pos2.getX();
+        }
+        return (int) (((int) bX + sX) % 2);
+    }
+
+    public int evenYLen(){
+        BlockPos pos = blockIDs.get(0).pos();
+        double bY = pos.getY(), sY = pos.getY();
+        for (BlockID id : blockIDs) {
+            BlockPos pos2 = id.pos();
+            if (pos2.getY() > bY) bY = pos2.getY();
+            if (pos2.getY() < sY) sY = pos2.getY();
+        }
+        return (int) (((int) bY + sY) % 2);
+    }
+
+    public int evenZLen(){
+        BlockPos pos = blockIDs.get(0).pos();
+        double bZ = pos.getZ(), sZ = pos.getZ();
+        for (BlockID id : blockIDs) {
+            BlockPos pos2 = id.pos();
+            if (pos2.getZ() > bZ) bZ = pos2.getZ();
+            if (pos2.getZ() < sZ) sZ = pos2.getZ();
+        }
+        return (int) (((int) bZ + sZ) % 2);
+    }
+
     public List<BlockID> genStates(List<BlockPos> positions){
         List<BlockID> bs = new ArrayList<>();
         for (BlockPos pos : positions) {

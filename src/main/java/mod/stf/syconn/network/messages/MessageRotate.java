@@ -1,7 +1,10 @@
 package mod.stf.syconn.network.messages;
 
 import mod.stf.syconn.api.util.BlockID;
+import mod.stf.syconn.api.util.VectorTools;
 import mod.stf.syconn.common.blockEntity.NavBE;
+import mod.stf.syconn.init.ModBlocks;
+import mod.stf.syconn.item.SchematicItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -9,6 +12,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class MessageRotate implements IMessage<MessageRotate> {
@@ -41,11 +46,18 @@ public class MessageRotate implements IMessage<MessageRotate> {
 
             if (player != null){
                 if (player.level.getBlockEntity(message.pos) instanceof NavBE be){
-                    for (BlockID id : be.getShip().getBlockIDs()){
-                        int x = id.pos().getX() - message.pos.getX();
-                        BlockPos pos = new BlockPos(message.pos.getX() - x - 1, id.pos().getY(), id.pos().getZ());
-                        player.level.setBlock(id.pos(), Blocks.AIR.defaultBlockState(), 2);
-                        player.level.setBlock(pos, id.state(), 2);
+                    if (be.getDir() != message.dRot) {
+                        List<BlockID> placing = new ArrayList<>();
+                        for (BlockID id : be.getShip().getBlockIDs()){
+                            BlockPos pos = VectorTools.rotate(be, id, be.getDir(), message.dRot);
+                            placing.add(new BlockID(id.state(), pos));
+                            player.level.setBlock(id.pos(), Blocks.AIR.defaultBlockState(), 2);
+                        }
+                        for (BlockID id : placing){
+                            id.place(player.level);
+                            if (id.state().getBlock() == ModBlocks.NAV_COMPUTER.get())
+                                ((NavBE)player.level.getBlockEntity(id.pos())).reset(be, message.dRot, placing);
+                        }
                     }
                 }
             }

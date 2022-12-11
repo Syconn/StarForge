@@ -4,6 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
@@ -13,6 +15,10 @@ public record BlockID(BlockState state, BlockPos pos) {
 
     public AnchorPos anchorBlock(AnchorPos ap){
         return new AnchorPos(pos.getX() - ap.x(), pos.getY() - ap.y(), pos.getZ() - ap.z());
+    }
+
+    public void place(Level level){
+        level.setBlock(pos, state, 2);
     }
 
     public static BlockID read(CompoundTag tag) {

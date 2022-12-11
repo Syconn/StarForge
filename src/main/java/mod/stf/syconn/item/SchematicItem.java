@@ -22,12 +22,14 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SchematicItem extends Item {
 
     private BlockPos pos1 = null;
     private boolean confirm = false;
+    private int tick = 0;
 
     public SchematicItem() {
         super(new Item.Properties().tab(StarForge.Tab).rarity(Rarity.EPIC).stacksTo(1));
@@ -61,15 +63,18 @@ public class SchematicItem extends Item {
             if (confirm){
                 confirm = false;
                 pPlayer.sendMessage(new TextComponent("Spawned Structure").withStyle(ChatFormatting.GREEN), Util.NIL_UUID);
+                List<BlockID> updatedSchematic = new ArrayList<>();
                 for (BlockID id : sc.getBlockIDs()){
-                    //TODO NEED FIXING
                     BlockPos p = pPlayer.getOnPos();
                     AnchorPos ap = id.anchorBlock(sc.getAnchor());
                     BlockPos relPos = new BlockPos(p.getX() + ap.x(), p.getY() + ap.y(), p.getZ() + ap.z());
+                    updatedSchematic.add(new BlockID(id.state(), relPos));
                     pLevel.setBlock(relPos, id.state(), 2);
                 }
+                stack.getOrCreateTag().put("schematic", new Schematic(updatedSchematic).saveSchematic());
             } else {
                 confirm = true;
+                tick = 0;
                 pPlayer.sendMessage(new TextComponent("Confirm Spawn Structure").withStyle(ChatFormatting.RED), Util.NIL_UUID);
             }
             return InteractionResultHolder.success(stack);
@@ -80,6 +85,10 @@ public class SchematicItem extends Item {
             pPlayer.sendMessage(new TextComponent("Reloaded Structure").withStyle(ChatFormatting.GREEN), Util.NIL_UUID);
             return InteractionResultHolder.success(stack);
         }
+        if (tick > 40){
+            confirm = false;
+        }
+        tick++;
         return InteractionResultHolder.pass(stack);
     }
 
