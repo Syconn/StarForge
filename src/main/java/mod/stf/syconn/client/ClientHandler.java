@@ -1,7 +1,13 @@
 package mod.stf.syconn.client;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3d;
+import com.mojang.math.Vector3f;
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.api.screens.ApplicationScreen;
+import mod.stf.syconn.api.util.LineRenderer;
 import mod.stf.syconn.client.rendering.blockentity.HoloRender;
 import mod.stf.syconn.client.rendering.blockentity.NavRender;
 import mod.stf.syconn.client.rendering.blockentity.SchematicRender;
@@ -17,6 +23,7 @@ import mod.stf.syconn.client.screen.SchematicScreen;
 import mod.stf.syconn.common.entity.TieFighter;
 import mod.stf.syconn.init.*;
 import mod.stf.syconn.item.Lightsaber;
+import mod.stf.syconn.item.lightsaber.LColor;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import mod.stf.syconn.network.Network;
 import mod.stf.syconn.network.messages.MessageActivateLightsaber;
@@ -27,27 +34,40 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.client.renderer.debug.ChunkBorderRenderer;
+import net.minecraft.client.renderer.debug.DebugRenderer;
+import net.minecraft.client.renderer.entity.FishingHookRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.BeaconBeamBlock;
+import net.minecraft.world.level.block.entity.BeaconBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ClientRegistry;
-import net.minecraftforge.client.event.ColorHandlerEvent;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientHandler {
-
     public static final KeyMapping KEY_LIGHTSABER_ACTIVATE = new KeyMapping("key.lightsaber.activate", GLFW.GLFW_KEY_V, "key.categories.stf");
 
     public static void setup(){
@@ -86,6 +106,11 @@ public class ClientHandler {
                 return 1.0f;
             }
         });
+    }
+
+    @SubscribeEvent
+    public void renderWorld(RenderLevelLastEvent event){
+
     }
 
     @SubscribeEvent

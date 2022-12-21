@@ -8,6 +8,7 @@ import mod.stf.syconn.api.util.applications.BasicApplication;
 import mod.stf.syconn.api.util.data.Schematic;
 import mod.stf.syconn.common.containers.NavContainer;
 import mod.stf.syconn.init.ModBlockEntities;
+import mod.stf.syconn.util.TripPath;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -16,7 +17,10 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.entity.BeaconBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.extensions.IForgeBlockEntity;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,6 +36,7 @@ public class NavBE extends ApplicationBE<NavContainer> {
     private AnchorPos pos;
     private Map<BlockPos, double[]> position;
     private Direction dir;
+    private TripPath path;
 
     public NavBE(BlockPos pWorldPosition, BlockState pBlockState) {
         super(ModBlockEntities.NAV_BE.get(), pWorldPosition, pBlockState, null);
@@ -53,13 +58,17 @@ public class NavBE extends ApplicationBE<NavContainer> {
         update();
     }
 
+    public void setPath(TripPath path) {
+        this.path = path;
+        update();
+    }
+
     public boolean isEnabled() {
         return enabled;
     }
 
-    public void setDir(Direction dir) {
-        this.dir = dir;
-        update();
+    public TripPath getPath() {
+        return path;
     }
 
     public Direction getDir() {
@@ -78,10 +87,6 @@ public class NavBE extends ApplicationBE<NavContainer> {
         return pos;
     }
 
-    public Map<BlockPos, double[]> getPosition() {
-        return position;
-    }
-
     @Override
     protected CompoundTag saveData() {
         CompoundTag tag = super.saveData();
@@ -93,6 +98,8 @@ public class NavBE extends ApplicationBE<NavContainer> {
             tag.put("positions", NbtUtil.writePositions(position));
         if (dir != null)
             tag.putInt("direction", dir.get3DDataValue());
+        if (path != null)
+            tag.put("path", path.save());
         tag.putBoolean("enabled", enabled);
         return tag;
     }
@@ -107,6 +114,8 @@ public class NavBE extends ApplicationBE<NavContainer> {
             tag.put("positions", NbtUtil.writePositions(position));
         if (dir != null)
             tag.putInt("direction", dir.get3DDataValue());
+        if (path != null)
+            tag.put("path", path.save());
         tag.putBoolean("enabled", enabled);
         super.saveAdditional(tag);
     }
@@ -129,6 +138,8 @@ public class NavBE extends ApplicationBE<NavContainer> {
             enabled = tag.getBoolean("enabled");
         if (tag.contains("direction"))
             dir = Direction.from3DDataValue(tag.getInt("direction"));
+        if (tag.contains("path"))
+            path = TripPath.read(tag.getCompound("path"));
         super.load(tag);
     }
 
@@ -189,7 +200,10 @@ public class NavBE extends ApplicationBE<NavContainer> {
         return new AnchorPos((int) ((bX + sX) / 2), (int) sY, (int) ((bZ + sZ) / 2));
     }
 
-
+    @Override
+    public AABB getRenderBoundingBox() {
+        return IForgeBlockEntity.INFINITE_EXTENT_AABB;
+    }
 
     @Override
     public void tickServer() {

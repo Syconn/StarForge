@@ -38,6 +38,14 @@ public class Schematic {
         return blockIDs;
     }
 
+    public List<BlockPos> getBlocks(){
+        List<BlockPos> pos = new ArrayList<>();
+        for (BlockID id : blockIDs){
+            pos.add(id.pos());
+        }
+        return pos;
+    }
+
     public AnchorPos getAnchor() {
         BlockPos pos = blockIDs.get(0).pos();
         double bX = pos.getX(), bY = pos.getY(), bZ = pos.getZ(), sX = pos.getX(), sY = pos.getY(), sZ = pos.getZ();

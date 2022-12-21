@@ -9,6 +9,6 @@ public class CMDTools {
         if (Mths.isNumeric(parameters[0]) && Mths.isNumeric(parameters[1]) && Mths.isNumeric(parameters[2])){
             return new BlockPos(Integer.parseInt(parameters[0]), Integer.parseInt(parameters[1]), Integer.parseInt(parameters[2]));
         }
-        return null;
+        return BlockPos.ZERO;
     }
 }

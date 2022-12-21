@@ -30,10 +30,10 @@ public class LoadShipCMD extends BasicCommand<NavigationApplication> {
         String[] parameters = cmd.trim().split("\\s+");
 
         if (parameters.length > 4) {
-            pos1 = CMDTools.getBlockPos(Mths.splitArray(parameters, 0, 3));
-            if (pos1 != null) {
-                pos2 = CMDTools.getBlockPos(Mths.splitArray(parameters, 3, 3));
-                if (pos2 != null) {
+            pos1 = getBlockPos(parameters, 0);
+            if (pos1 != BlockPos.ZERO) {
+                pos2 = getBlockPos(parameters, 3);
+                if (pos2 != BlockPos.ZERO) {
                     if (getDir(parameters[6]) != null) {
                         dir = getDir(parameters[6]);
                         return new CommandStatus("Successful BlockPos's", CommandStatus.Status.SUCCESS);

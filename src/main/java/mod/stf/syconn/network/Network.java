@@ -40,6 +40,7 @@ public class Network {
         register(MessageNavEnabled.class, new MessageNavEnabled(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageRotate.class, new MessageRotate(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageDisassemble.class, new MessageDisassemble(), NetworkDirection.PLAY_TO_SERVER);
+        register(MessageShipFly.class, new MessageShipFly(), NetworkDirection.PLAY_TO_SERVER);
     }
 
     private static <T> void register(Class<T> clazz, IMessage<T> message, NetworkDirection direction)

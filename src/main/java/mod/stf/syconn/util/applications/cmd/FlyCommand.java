@@ -1,0 +1,46 @@
+package mod.stf.syconn.util.applications.cmd;
+
+import mod.stf.syconn.api.util.Mths;
+import mod.stf.syconn.api.util.applications.BasicCommand;
+import mod.stf.syconn.api.util.applications.CommandStatus;
+import mod.stf.syconn.network.Network;
+import mod.stf.syconn.network.messages.MessageShipFly;
+import mod.stf.syconn.util.applications.NavigationApplication;
+import net.minecraft.core.BlockPos;
+
+public class FlyCommand extends BasicCommand<NavigationApplication> {
+
+    private BlockPos p1;
+    private int p2;
+
+    public FlyCommand(NavigationApplication application) {
+        super("/", "fly", application);
+    }
+
+    @Override
+    public CommandStatus hasParameters(String cmd) {
+        String[] parameters = cmd.trim().toLowerCase().split("\\s+");
+
+        if (parameters.length >= 4) {
+            p1 = getBlockPos(parameters, 0);
+            if (p1 != BlockPos.ZERO){
+                if (Mths.isNumeric(parameters[3])) {
+                    p2 = Integer.parseInt(parameters[3]);
+                    return new CommandStatus("", CommandStatus.Status.SUCCESS);
+                }
+                return new CommandStatus("Not Number", CommandStatus.Status.ERROR);
+            }
+        }
+        return new CommandStatus("Not valid block pos", CommandStatus.Status.ERROR);
+    }
+
+    @Override
+    public void execute() {
+        Network.getPlayChannel().sendToServer(new MessageShipFly(p1, p2, application.getPos()));
+    }
+
+    @Override
+    public CommandStatus info() {
+        return new CommandStatus("Needs 2 block Pos and a speed", CommandStatus.Status.SUCCESS);
+    }
+}

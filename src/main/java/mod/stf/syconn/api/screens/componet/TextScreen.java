@@ -3,7 +3,6 @@ package mod.stf.syconn.api.screens.componet;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mod.stf.syconn.api.util.MultiLineTyper;
-import mod.stf.syconn.client.screen.componets.SubmittableTextBox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;

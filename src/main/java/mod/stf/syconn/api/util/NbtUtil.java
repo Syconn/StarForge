@@ -3,13 +3,16 @@ package mod.stf.syconn.api.util;
 import com.mojang.blaze3d.platform.NativeImage;
 import mod.stf.syconn.api.util.data.ServerPixelImage;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class NbtUtil {
@@ -112,6 +115,31 @@ public class NbtUtil {
         return tag;
     }
 
+    public static CompoundTag writeBlockPositions(List<BlockPos> positions){
+        CompoundTag tag = new CompoundTag();
+        ListTag listTag = new ListTag();
+        for (BlockPos pos : positions){
+            CompoundTag data = new CompoundTag();
+            data.put("pos", NbtUtils.writeBlockPos(pos));
+            listTag.add(data);
+        }
+        tag.put("map", listTag);
+        return tag;
+    }
+
+    public static List<BlockPos> readBlockPositions(CompoundTag tag){
+        List<BlockPos> posList = new ArrayList<>();
+        if(tag.contains("map", Tag.TAG_LIST))
+        {
+            ListTag list = tag.getList("map", Tag.TAG_COMPOUND);
+            list.forEach(data -> {
+                CompoundTag nbt = (CompoundTag) data;
+                posList.add(NbtUtils.readBlockPos(nbt.getCompound("pos")));
+            });
+        }
+        return posList;
+    }
+
     public static CompoundTag writePositions(Map<BlockPos, double[]> position) {
         CompoundTag tag = new CompoundTag();
         ListTag listTag = new ListTag();
@@ -143,5 +171,15 @@ public class NbtUtil {
             });
         }
         return map;
+    }
+
+    public static CompoundTag writeDirection(Direction d){
+        CompoundTag tag = new CompoundTag();
+        tag.putInt("direction", d.get3DDataValue());
+        return tag;
+    }
+
+    public static Direction readDirection(CompoundTag tag){
+        return Direction.from3DDataValue(tag.getInt("direction"));
     }
 }

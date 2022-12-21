@@ -10,7 +10,7 @@ import mod.stf.syconn.api.util.ColorFormattedString;
 import mod.stf.syconn.api.util.applications.BasicCommand;
 import mod.stf.syconn.api.util.applications.CommandStatus;
 import mod.stf.syconn.api.util.data.Schematic;
-import mod.stf.syconn.client.screen.componets.SubmittableTextBox;
+import mod.stf.syconn.api.screens.componet.SubmittableTextBox;
 import mod.stf.syconn.common.blockEntity.NavBE;
 import mod.stf.syconn.common.containers.NavContainer;
 import mod.stf.syconn.util.applications.cmd.*;
@@ -91,6 +91,7 @@ public class NavigationApplication extends ApplicationComponent<NavContainer> {
         cmd.add(new DisplayCMD(this));
         cmd.add(new RotateCMD(this));
         cmd.add(new DisassembleCMD(this));
+        cmd.add(new FlyCommand(this));
         return cmd;
     }
 

@@ -2,6 +2,7 @@ package mod.stf.syconn.block;
 
 import mod.stf.syconn.api.blocks.InventoryBlock;
 import mod.stf.syconn.api.util.TabAble;
+import mod.stf.syconn.api.screens.componet.SubmittableTextBox;
 import mod.stf.syconn.common.blockEntity.CrafterBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

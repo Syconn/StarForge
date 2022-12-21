@@ -1,4 +1,4 @@
-package mod.stf.syconn.client.screen.componets;
+package mod.stf.syconn.api.screens.componet;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;

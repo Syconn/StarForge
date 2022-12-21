@@ -1,6 +1,7 @@
 package mod.stf.syconn.item.lightsaber;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 
@@ -11,14 +12,19 @@ public class LColor {
     private final int r;
     private final int g;
     private final int b;
+
+    private int a = 255;
     private int cycle = 0;
     private int timer = 0;
 
     public static LColor of(DyeColor color){
         return new LColor(color);
     }
+    public static LColor of(DyeColor color, int a){
+        return new LColor(color, a);
+    }
     public static LColor of(Color color){
-        return new LColor(color.getRed(), color.getGreen(), color.getBlue());
+        return new LColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
     public LColor(int r, int g, int b) {
@@ -27,14 +33,32 @@ public class LColor {
         this.b = b;
     }
 
+    public LColor(int r, int g, int b, int a) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = a;
+    }
+
     public LColor(DyeColor color){
         this(color.getFireworkColor());
+    }
+
+    public LColor(DyeColor color, int a){
+        this(color.getFireworkColor(), a);
     }
 
     public LColor(int color) {
         r = color >> 16 & 255;
         g = color >> 8 & 255;
         b = color & 255;
+    }
+
+    public LColor(int color, int a) {
+        r = color >> 16 & 255;
+        g = color >> 8 & 255;
+        b = color & 255;
+        this.a = a;
     }
 
     public LColor(int r, int g, int b, int cycle, int timer) {
@@ -55,6 +79,14 @@ public class LColor {
 
     public int getB() {
         return b;
+    }
+
+    public int getA() {
+        return a;
+    }
+
+    public int getRGBA(){
+        return a << 24 | r << 16 | g << 8 | b;
     }
 
     public int getDecimal(){

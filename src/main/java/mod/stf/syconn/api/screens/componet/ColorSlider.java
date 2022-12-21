@@ -1,4 +1,4 @@
-package mod.stf.syconn.client.screen.componets;
+package mod.stf.syconn.api.screens.componet;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import mod.stf.syconn.util.GuiHelper;

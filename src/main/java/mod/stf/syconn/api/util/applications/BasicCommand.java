@@ -1,7 +1,10 @@
 package mod.stf.syconn.api.util.applications;
 
+import mod.stf.syconn.api.util.Mths;
+import mod.stf.syconn.util.applications.cmd.CMDTools;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -81,5 +84,9 @@ public abstract class BasicCommand<T extends BasicApplication> {
             }
         }
         return null;
+    }
+
+    public BlockPos getBlockPos(String[] s, int x){
+        return CMDTools.getBlockPos(Mths.splitArray(s, x, x + 3));
     }
 }
