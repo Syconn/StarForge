@@ -20,7 +20,6 @@ import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import mod.stf.syconn.network.Network;
 import mod.stf.syconn.network.messages.MessageClickTab;
 import mod.stf.syconn.network.messages.MessageCraftHilt;
-import mod.stf.syconn.util.GuiHelper;
 import mod.stf.syconn.util.recipe.ModIngredient;
 import mod.stf.syconn.util.recipe.Recipe;
 import net.minecraft.client.Minecraft;

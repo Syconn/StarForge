@@ -7,9 +7,9 @@ import java.util.List;
 
 public class Recipe {
 
-    private ModIngredient[] inputs;
-    private ItemStack output;
-    private int id;
+    private final ModIngredient[] inputs;
+    private final ItemStack output;
+    private final int id;
 
     public Recipe(ItemStack output, int id, ModIngredient... inputs) {
         this.inputs = inputs;

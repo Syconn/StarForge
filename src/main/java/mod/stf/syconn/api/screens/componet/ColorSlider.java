@@ -1,7 +1,7 @@
 package mod.stf.syconn.api.screens.componet;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import mod.stf.syconn.util.GuiHelper;
+import mod.stf.syconn.api.util.GuiHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;

@@ -21,22 +21,23 @@ public class FlyCommand extends BasicCommand<NavigationApplication> {
     public CommandStatus hasParameters(String cmd) {
         String[] parameters = cmd.trim().toLowerCase().split("\\s+");
 
-        if (parameters.length >= 4) {
-            p1 = getBlockPos(parameters, 0);
-            if (p1 != BlockPos.ZERO){
-                if (Mths.isNumeric(parameters[3])) {
-                    p2 = Integer.parseInt(parameters[3]);
-                    return new CommandStatus("", CommandStatus.Status.SUCCESS);
-                }
-                return new CommandStatus("Not Number", CommandStatus.Status.ERROR);
-            }
-        }
-        return new CommandStatus("Not valid block pos", CommandStatus.Status.ERROR);
+//        if (parameters.length >= 4) {
+//            p1 = getBlockPos(parameters, 0);
+//            if (p1 != BlockPos.ZERO){
+//                if (Mths.isNumeric(parameters[3])) {
+//                    p2 = Integer.parseInt(parameters[3]);
+//                    return new CommandStatus("", CommandStatus.Status.SUCCESS);
+//                }
+//                return new CommandStatus("Not Number", CommandStatus.Status.ERROR);
+//            }
+//        }
+//        return new CommandStatus("Not valid block pos", CommandStatus.Status.ERROR);
+        return new CommandStatus("", CommandStatus.Status.SUCCESS);
     }
 
     @Override
     public void execute() {
-        Network.getPlayChannel().sendToServer(new MessageShipFly(p1, p2, application.getPos()));
+        Network.getPlayChannel().sendToServer(new MessageShipFly(new BlockPos(0, 122, 183), 2, application.getPos()));
     }
 
     @Override

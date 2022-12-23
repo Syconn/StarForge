@@ -13,6 +13,9 @@ public class DataGeneration {
     public static void gatherData(GatherDataEvent event) {
         DataGenerator generator = event.getGenerator();
         if (event.includeServer()) {
+            BlockTagGen blockTagGen = new BlockTagGen(generator, event.getExistingFileHelper());
+            generator.addProvider(blockTagGen);
+            generator.addProvider(new ItemTagGen(generator, blockTagGen, event.getExistingFileHelper()));
         }
         if (event.includeClient()) {
             generator.addProvider(new ItemModels(generator, event.getExistingFileHelper()));

@@ -1,18 +1,14 @@
 package mod.stf.syconn;
 
-import mod.stf.syconn.api.SyCore;
 import mod.stf.syconn.client.ClientHandler;
 import mod.stf.syconn.common.CommonHandler;
 import mod.stf.syconn.init.*;
 import mod.stf.syconn.network.Network;
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -43,13 +39,11 @@ public class StarForge {
     {
         Network.init();
         MinecraftForge.EVENT_BUS.register(new CommonHandler());
-        SyCore.onCommonSetup(event);
     }
 
     private void onClientSetup(FMLClientSetupEvent event)
     {
         event.enqueueWork(ClientHandler::setup);
         MinecraftForge.EVENT_BUS.register(new ClientHandler());
-        SyCore.onClientSetup(event);
     }
 }
