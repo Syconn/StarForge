@@ -22,6 +22,15 @@ public class Mths {
         return list;
     }
 
+    /**
+     * @param pos1 should be larger blockpos
+     * @param pos2 should be smaller blockpos
+     * @return center pos between pos1, pos2
+     */
+    public static BlockPos getCenter(BlockPos pos1, BlockPos pos2){
+        return new BlockPos((pos1.getX() + pos2.getX()) / 2, (pos1.getY() + pos2.getY()) / 2, (pos1.getZ() + pos2.getZ()) / 2);
+    }
+
     public static int distanceToPos(BlockPos p1, BlockPos p2){
         return Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY()) + Math.abs(p1.getZ() - p2.getZ());
     }

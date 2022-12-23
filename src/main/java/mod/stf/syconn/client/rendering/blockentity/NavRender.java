@@ -5,12 +5,14 @@ import com.mojang.math.Vector3f;
 import mod.stf.syconn.api.util.AnchorPos;
 import mod.stf.syconn.api.util.BlockID;
 import mod.stf.syconn.api.util.LineRenderer;
+import mod.stf.syconn.api.util.Mths;
 import mod.stf.syconn.api.util.data.ServerPixelImage;
 import mod.stf.syconn.client.rendering.entity.BlockRender;
 import mod.stf.syconn.common.blockEntity.NavBE;
 import mod.stf.syconn.common.blockEntity.SchematicBe;
 import mod.stf.syconn.init.ModBlocks;
 import mod.stf.syconn.item.lightsaber.LColor;
+import mod.stf.syconn.util.ShipBoundary;
 import mod.stf.syconn.util.TripPath;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -65,26 +67,30 @@ public class NavRender implements BlockEntityRenderer<NavBE> {
                     }
                 }
             }
-//            if (path != null && path.hasHead()){
-//                TripPath.ShipHead head = path.getHead(pBlockEntity.getDir());
-//                for (int z = head.getLeft(); z <= head.getRight(); z++) {
-//                    for (int y = head.getDown(); y <= head.getUp(); y++) {
-//                        pPoseStack.pushPose();
-//                        if (pBlockEntity.getDir().getAxis() == Direction.Axis.Z) {
-//                            pPoseStack.translate((z - head.getLeft()) + (head.getLeft() - head.getRight()) / 2, y - head.getDown() - head.getFront(pBlockEntity.getBlockPos()).getY(), -head.getFront(pBlockEntity.getBlockPos()).getZ());
-//                        } else {
-//                            pPoseStack.translate(-head.getFront(pBlockEntity.getBlockPos()).getX(), y - head.getDown() - head.getFront(pBlockEntity.getBlockPos()).getY(), z - head.getLeft() + (head.getLeft() - head.getRight()) / 2);
-//                        }
-//                        Minecraft.getInstance().getBlockRenderer().renderSingleBlock(Blocks.RED_STAINED_GLASS.defaultBlockState(), pPoseStack, pBufferSource, pPackedLight, pPackedOverlay);
-//                        pPoseStack.popPose();
-//                    }
-//                }
-//            }
+            if (path != null){
+                ShipBoundary boundary = path.getBoundary();
+                pPoseStack.pushPose();
+                BlockPos lastPos = pBlockEntity.getBlockPos();
+                BlockState state = Blocks.DIAMOND_BLOCK.defaultBlockState();
+                int x = lastPos.getX() - boundary.getPos1().getX();
+                int y = lastPos.getY() - boundary.getPos1().getY();
+                int z = lastPos.getZ() - boundary.getPos1().getZ();
+                pPoseStack.translate(-x, -y, -z);
+                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(state, pPoseStack, pBufferSource, pPackedLight, pPackedOverlay);
+                pPoseStack.popPose();
+                pPoseStack.pushPose();
+                int x2 = lastPos.getX() - boundary.getPos2().getX();
+                int y2 = lastPos.getY() - boundary.getPos2().getY();
+                int z2 = lastPos.getZ() - boundary.getPos2().getZ();
+                pPoseStack.translate(-x2, -y2, -z2);
+                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(state, pPoseStack, pBufferSource, pPackedLight, pPackedOverlay);
+                pPoseStack.popPose();
+            }
             if (path != null){
                 BlockPos lastPos = pBlockEntity.getBlockPos();
                 for (int i = 0; i < path.getTotalPoints(); i++){
                     BlockPos pos = path.getPoint(i);
-                    BlockState state = pos == path.getTarget() ? Blocks.DIAMOND_BLOCK.defaultBlockState() : Blocks.IRON_BLOCK.defaultBlockState();
+                    BlockState state = pos == path.getTarget() ? Blocks.GOLD_BLOCK.defaultBlockState() : Blocks.IRON_BLOCK.defaultBlockState();
                     int x = lastPos.getX() - pos.getX();
                     int y = lastPos.getY() - pos.getY();
                     int z = lastPos.getZ() - pos.getZ();

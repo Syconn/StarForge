@@ -2,8 +2,6 @@ HyperDrive
 -Model
 -Increase Speed
 - PATHING
-    - Ship Rotating
-    - Path Item that generates Paths
     - Calculation System that will create Path depending on BlockPos that will move in Directions
 
 

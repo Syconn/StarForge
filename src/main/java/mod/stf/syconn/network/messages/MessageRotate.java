@@ -1,18 +1,16 @@
 package mod.stf.syconn.network.messages;
 
 import mod.stf.syconn.api.util.BlockID;
-import mod.stf.syconn.api.util.VectorTools;
+import mod.stf.syconn.api.util.RotationHelper;
 import mod.stf.syconn.api.util.data.Schematic;
 import mod.stf.syconn.common.blockEntity.NavBE;
 import mod.stf.syconn.init.ModBlocks;
 import mod.stf.syconn.init.ModItems;
-import mod.stf.syconn.item.SchematicItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -57,7 +55,7 @@ public class MessageRotate implements IMessage<MessageRotate> {
                         stack.setHoverName(new TextComponent("ROTATED " + message.dRot.name().toUpperCase()));
                         List<BlockID> placing = new ArrayList<>();
                         for (BlockID id : be.getShip().getBlockIDs()){
-                            BlockPos pos = VectorTools.rotate(be, id, be.getDir(), message.dRot);
+                            BlockPos pos = RotationHelper.rotate(be, id, be.getDir(), message.dRot);
                             if (id.state().hasProperty(HorizontalDirectionalBlock.FACING)){
 
                                 placing.add(new BlockID(id.state(), pos));
