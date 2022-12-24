@@ -1,21 +1,17 @@
 package mod.stf.syconn.util;
 
-import mod.stf.syconn.api.util.Mths;
 import mod.stf.syconn.api.util.NbtUtil;
-import mod.stf.syconn.util.applications.cmd.RotateCMD;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TripPath {
 
-    private List<BlockPos> path = new ArrayList<>();
+    private List<BlockPos> flightPath = new ArrayList<>();
     private Direction facing;
     private final ShipBoundary boundary;
 
@@ -25,13 +21,14 @@ public class TripPath {
         genPath(start, end, level);
     }
 
-    public TripPath(List<BlockPos> path, ShipBoundary boundary, Direction d) {
-        this.path = path;
+    public TripPath(List<BlockPos> flightPath, ShipBoundary boundary, Direction d) {
+        this.flightPath = flightPath;
         this.boundary = boundary;
         this.facing = d;
     }
 
     private void genPath(BlockPos s, BlockPos e, Level l){
+        Direction endDir = facing;
         int x = s.getX(), y = s.getY(), z = s.getZ();
         rotate(Direction.EAST);
         while (x < e.getX()){
@@ -39,39 +36,40 @@ public class TripPath {
                 x++;
                 boundary.move(1, 0, 0);
             } else {
-                path.add(boundary.getCenter());
+                flightPath.add(boundary.getCenter());
                 rotate(Direction.SOUTH);
                 while (boundary.testCollision(l, 1, 0, 0)){
                     z++;
                     boundary.move(0, 0, 1);
                 }
-                path.add(boundary.getCenter());
-                rotate(Direction.EAST);
+                flightPath.add(boundary.getCenter());
             }
         }
-        path.add(boundary.getCenter());
+        flightPath.add(boundary.getCenter());
         rotate(Direction.SOUTH);
         while (z < e.getZ()){
             if (!getBoundary().collision(l)) {
                 z++;
                 boundary.move(0, 0, 1);
             } else {
-                path.add(boundary.getCenter());
+                flightPath.add(boundary.getCenter());
                 rotate(Direction.EAST);
                 while (boundary.testCollision(l, 0, 0, 1)){
                     x++;
                     boundary.move(1, 0, 0);
                 }
-                path.add(boundary.getCenter());
-                rotate(Direction.SOUTH);
+                flightPath.add(boundary.getCenter());
             }
         }
-        path.add(boundary.getCenter());
+        flightPath.add(boundary.getCenter());
+        rotate(endDir);
     }
 
     public void rotate(Direction d){
-        boundary.rotate(facing, d);
-        facing = d;
+        if (facing != d) {
+            boundary.rotate(facing, d);
+            facing = d;
+        }
     }
 
     public ShipBoundary getBoundary() {
@@ -79,20 +77,20 @@ public class TripPath {
     }
 
     public BlockPos getTarget(){
-        return path.get(path.size() - 1);
+        return flightPath.get(flightPath.size() - 1);
     }
 
     public BlockPos getPoint(int i){
-        return path.get(i);
+        return flightPath.get(i);
     }
 
     public int getTotalPoints() {
-        return path.size();
+        return flightPath.size();
     }
 
     public CompoundTag save(){
         CompoundTag tag = new CompoundTag();
-        tag.put("positions", NbtUtil.writeBlockPositions(path));
+        tag.put("positions", NbtUtil.writeBlockPositions(flightPath));
         tag.put("direction", NbtUtil.writeDirection(facing));
         tag.put("boarder", boundary.save());
         return tag;
