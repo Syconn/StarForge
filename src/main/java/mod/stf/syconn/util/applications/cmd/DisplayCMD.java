@@ -3,48 +3,42 @@ package mod.stf.syconn.util.applications.cmd;
 import mod.stf.syconn.api.util.ColorCodes;
 import mod.stf.syconn.api.util.applications.BasicCommand;
 import mod.stf.syconn.api.util.applications.CommandStatus;
-import mod.stf.syconn.common.blockEntity.NavBE;
-import mod.stf.syconn.network.Network;
-import mod.stf.syconn.network.messages.MessageNavEnabled;
 import mod.stf.syconn.util.applications.NavigationApplication;
+import mod.stf.syconn.util.applications.subcmd.BasicSCM;
+import mod.stf.syconn.util.applications.subcmd.DisplayPathSCM;
+import mod.stf.syconn.util.applications.subcmd.DisplayShipSCM;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DisplayCMD extends BasicCommand<NavigationApplication> {
 
-    private boolean enabled;
-    private int gof;
     public DisplayCMD(NavigationApplication application) {
         super("/", "display", application);
-        if (level.getBlockEntity(application.getPos()) instanceof NavBE)
-            enabled = ((NavBE) level.getBlockEntity(application.getPos())).isEnabled();
-        gof = 0;
+
+    }
+
+    @Override
+    protected List<BasicSCM> getSubCMDS() {
+        List<BasicSCM> sub = new ArrayList<>();
+        sub.add(new DisplayShipSCM(this));
+        sub.add(new DisplayPathSCM(this));
+        return sub;
+    }
+
+    @Override
+    protected boolean hasSubCMDS() {
+        return true;
     }
 
     @Override
     public CommandStatus hasParameters(String cmd) {
-        String[] parameters = cmd.trim().toLowerCase().split("\\s+");
-        if (parameters[0].matches("ship")){
-            if (parameters.length > 1){
-                if (isTrue(parameters[1])) {
-                    enabled = true;
-                } else {
-                    enabled = false;
-                }
-            } else {
-                if (gof == 0){
-                    enabled = !enabled;
-                    gof++;
-                } else {
-                    gof = 0;
-                }
-            }
-            return new CommandStatus("Rendering Ship: " + enabled, CommandStatus.Status.SUCCESS);
-        }
-        return new CommandStatus("Need more parameters", CommandStatus.Status.ERROR);
+        return CommandStatus.ERROR();
     }
 
     @Override
     public void execute() {
-        Network.getPlayChannel().sendToServer(new MessageNavEnabled(enabled, application.getPos()));
+
     }
 
     @Override

@@ -5,11 +5,19 @@ import mod.stf.syconn.api.util.applications.CommandStatus;
 import mod.stf.syconn.network.Network;
 import mod.stf.syconn.network.messages.MessageDisassemble;
 import mod.stf.syconn.util.applications.NavigationApplication;
+import mod.stf.syconn.util.applications.subcmd.BasicSCM;
+
+import java.util.List;
 
 public class DisassembleCMD extends BasicCommand<NavigationApplication> {
 
     public DisassembleCMD(NavigationApplication application) {
         super("/", "disassemble", application);
+    }
+
+    @Override
+    protected List<BasicSCM> getSubCMDS() {
+        return null;
     }
 
     @Override

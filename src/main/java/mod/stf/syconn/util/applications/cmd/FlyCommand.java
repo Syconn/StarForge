@@ -1,12 +1,14 @@
 package mod.stf.syconn.util.applications.cmd;
 
-import mod.stf.syconn.api.util.Mths;
 import mod.stf.syconn.api.util.applications.BasicCommand;
 import mod.stf.syconn.api.util.applications.CommandStatus;
 import mod.stf.syconn.network.Network;
 import mod.stf.syconn.network.messages.MessageShipFly;
 import mod.stf.syconn.util.applications.NavigationApplication;
+import mod.stf.syconn.util.applications.subcmd.BasicSCM;
 import net.minecraft.core.BlockPos;
+
+import java.util.List;
 
 public class FlyCommand extends BasicCommand<NavigationApplication> {
 
@@ -15,6 +17,11 @@ public class FlyCommand extends BasicCommand<NavigationApplication> {
 
     public FlyCommand(NavigationApplication application) {
         super("/", "fly", application);
+    }
+
+    @Override
+    protected List<BasicSCM> getSubCMDS() {
+        return null;
     }
 
     @Override

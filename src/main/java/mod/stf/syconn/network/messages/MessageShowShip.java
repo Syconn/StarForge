@@ -8,35 +8,35 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class MessageNavEnabled implements IMessage<MessageNavEnabled> {
+public class MessageShowShip implements IMessage<MessageShowShip> {
 
     private boolean enabled;
     private BlockPos pos;
 
-    public MessageNavEnabled() {}
+    public MessageShowShip() {}
 
-    public MessageNavEnabled(boolean enabled, BlockPos pos) {
+    public MessageShowShip(boolean enabled, BlockPos pos) {
         this.enabled = enabled;
         this.pos = pos;
     }
 
     @Override
-    public void encode(MessageNavEnabled message, FriendlyByteBuf buffer) {
+    public void encode(MessageShowShip message, FriendlyByteBuf buffer) {
         buffer.writeBoolean(message.enabled);
         buffer.writeBlockPos(message.pos);
     }
 
     @Override
-    public MessageNavEnabled decode(FriendlyByteBuf buffer) {
-        return new MessageNavEnabled(buffer.readBoolean(), buffer.readBlockPos());
+    public MessageShowShip decode(FriendlyByteBuf buffer) {
+        return new MessageShowShip(buffer.readBoolean(), buffer.readBlockPos());
     }
 
     @Override
-    public void handle(MessageNavEnabled message, Supplier<NetworkEvent.Context> supplier) {
+    public void handle(MessageShowShip message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             ServerPlayer player = supplier.get().getSender();
             if (player != null && player.level.getBlockEntity(message.pos) instanceof NavBE be){
-                be.setEnabled(message.enabled);
+                be.showShip(message.enabled);
             }
         });
         supplier.get().setPacketHandled(true);

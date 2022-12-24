@@ -1,18 +1,19 @@
 package mod.stf.syconn.util.applications.cmd;
 
 import mod.stf.syconn.api.util.ColorCodes;
-import mod.stf.syconn.api.util.Mths;
 import mod.stf.syconn.api.util.applications.BasicCommand;
 import mod.stf.syconn.api.util.applications.CommandStatus;
 import mod.stf.syconn.api.util.data.Schematic;
 import mod.stf.syconn.network.Network;
 import mod.stf.syconn.network.messages.MessageSetShip;
 import mod.stf.syconn.util.applications.NavigationApplication;
+import mod.stf.syconn.util.applications.subcmd.BasicSCM;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
+
+import java.util.List;
 
 public class LoadShipCMD extends BasicCommand<NavigationApplication> {
 
@@ -23,6 +24,11 @@ public class LoadShipCMD extends BasicCommand<NavigationApplication> {
 
     public LoadShipCMD(NavigationApplication application) {
         super("/", "load", application);
+    }
+
+    @Override
+    protected List<BasicSCM> getSubCMDS() {
+        return null;
     }
 
     @Override

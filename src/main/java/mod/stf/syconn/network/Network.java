@@ -23,29 +23,35 @@ public class Network {
                 .clientAcceptedVersions(PROTOCOL_VERSION::equals)
                 .serverAcceptedVersions(PROTOCOL_VERSION::equals)
                 .simpleChannel();
-        register(MessageActivateLightsaber.class, new MessageActivateLightsaber(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageThrowLightsaber.class, new MessageThrowLightsaber(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageChangeColor.class, new MessageChangeColor(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageClickTab.class, new MessageClickTab(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageCraftHilt.class, new MessageCraftHilt(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageHoloMode.class, new MessageHoloMode(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageSetupSkin.class, new MessageSetupSkin(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageSlimSkin.class, new MessageSlimSkin(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageResetHolo.class, new MessageResetHolo(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageHoloGear.class, new MessageHoloGear(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageShootGuns.class, new MessageShootGuns(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageLoadBlock.class, new MessageLoadBlock(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageHyperdrive.class, new MessageHyperdrive(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageSetShip.class, new MessageSetShip(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageNavEnabled.class, new MessageNavEnabled(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageRotate.class, new MessageRotate(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageDisassemble.class, new MessageDisassemble(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageShipFly.class, new MessageShipFly(), NetworkDirection.PLAY_TO_SERVER);
+        register(MessageActivateLightsaber.class, new MessageActivateLightsaber());
+        register(MessageThrowLightsaber.class, new MessageThrowLightsaber());
+        register(MessageChangeColor.class, new MessageChangeColor());
+        register(MessageClickTab.class, new MessageClickTab());
+        register(MessageCraftHilt.class, new MessageCraftHilt());
+        register(MessageHoloMode.class, new MessageHoloMode());
+        register(MessageSetupSkin.class, new MessageSetupSkin());
+        register(MessageSlimSkin.class, new MessageSlimSkin());
+        register(MessageResetHolo.class, new MessageResetHolo());
+        register(MessageHoloGear.class, new MessageHoloGear());
+        register(MessageShootGuns.class, new MessageShootGuns());
+        register(MessageLoadBlock.class, new MessageLoadBlock());
+        register(MessageHyperdrive.class, new MessageHyperdrive());
+        register(MessageSetShip.class, new MessageSetShip());
+        register(MessageShowShip.class, new MessageShowShip());
+        register(MessageRotate.class, new MessageRotate());
+        register(MessageDisassemble.class, new MessageDisassemble());
+        register(MessageShipFly.class, new MessageShipFly());
+        register(MessageShowPath.class, new MessageShowPath());
     }
 
     private static <T> void register(Class<T> clazz, IMessage<T> message, NetworkDirection direction)
     {
         playChannel.registerMessage(nextId++, clazz, message::encode, message::decode, message::handle, Optional.of(direction));
+    }
+
+    private static <T> void register(Class<T> clazz, IMessage<T> message)
+    {
+        playChannel.registerMessage(nextId++, clazz, message::encode, message::decode, message::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static SimpleChannel getPlayChannel()

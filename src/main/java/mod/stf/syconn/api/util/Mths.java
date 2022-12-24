@@ -14,11 +14,11 @@ import java.util.List;
 
 public class Mths {
 
-    public static String[] splitArray(String[] array, int start, int length){
-        String[] list = new String[length];
-        list[0] = array[start];
-        list[1] = array[start + 1];
-        list[2] = array[start + 2];
+    public static String[] splitArray(String[] array, int start, int end){
+        String[] list = new String[end - start];
+        for (int s = start; s < end; s++) {
+            list[(s - start)] = array[start + (s - start)];
+        }
         return list;
     }
 

@@ -1,18 +1,13 @@
 package mod.stf.syconn.api.util.applications;
 
-import mod.stf.syconn.api.util.Mths;
-import mod.stf.syconn.util.applications.cmd.CMDTools;
+import mod.stf.syconn.util.applications.cmd.CMDHelper;
+import mod.stf.syconn.util.applications.subcmd.BasicSCM;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.PlayerInfo;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class BasicCommand<T extends BasicApplication> {
+public abstract class BasicCommand<T extends BasicApplication> extends CMDHelper {
 
     private final String symbol;
     private final String name;
@@ -36,9 +31,24 @@ public abstract class BasicCommand<T extends BasicApplication> {
         return name;
     }
 
+    public T getApplication() {
+        return application;
+    }
+
+    protected abstract List<BasicSCM> getSubCMDS();
+    protected boolean hasSubCMDS(){
+        return getSubCMDS() != null;
+    }
+
     public boolean run(String cmd){
-        if (validCMD(cmd)){
-            execute();
+        if (!hasSubCMDS()) {
+            if (validCMD(cmd)) {
+                execute();
+            }
+        } else {
+            if (handleSubParameters(cmd)) {
+                return cmd.split(" ")[0].matches(symbol + name);
+            }
         }
         return cmd.split(" ")[0].matches(symbol + name);
     }
@@ -48,7 +58,20 @@ public abstract class BasicCommand<T extends BasicApplication> {
             String begin = cmd.substring(0, start.length());
             if (begin.toLowerCase().matches(start.toLowerCase())){
                 status = hasParameters(cmd.substring(start.length()));
-                return hasParameters(cmd.substring(start.length())).status().isSuccessful();
+                return hasParameters(cmd.substring(start.length())).isSuccessful();
+            }
+        }
+        return false;
+    }
+
+    protected boolean handleSubParameters(String t){
+        status = new CommandStatus("No Valid Sub CMDS", CommandStatus.Status.ERROR);
+        String text = t.substring(start.length());
+        for (BasicSCM cmd : getSubCMDS()){
+            if (cmd.validCMD(text).isSuccessful()){
+                status = cmd.validCMD(text);
+                cmd.execute();
+                return true;
             }
         }
         return false;
@@ -61,32 +84,4 @@ public abstract class BasicCommand<T extends BasicApplication> {
     public abstract CommandStatus hasParameters(String cmd);
     public abstract void execute();
     public abstract CommandStatus info();
-
-    public boolean isTrue(String s){
-        return s.toLowerCase().matches("true") || s.matches("0");
-    }
-
-    @Nullable
-    public Direction getDir(String s){
-        for (Direction direction : Direction.values()) {
-            if (direction.getName().equalsIgnoreCase(s)) {
-                return direction;
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    public Player getPlayer(String s){
-        for (PlayerInfo playerInfo : Minecraft.getInstance().getConnection().getOnlinePlayers()){
-            if (playerInfo.getProfile().getName().equalsIgnoreCase(s)){
-                return Minecraft.getInstance().level.getPlayerByUUID(playerInfo.getProfile().getId());
-            }
-        }
-        return null;
-    }
-
-    public BlockPos getBlockPos(String[] s, int x){
-        return CMDTools.getBlockPos(Mths.splitArray(s, x, x + 3));
-    }
 }

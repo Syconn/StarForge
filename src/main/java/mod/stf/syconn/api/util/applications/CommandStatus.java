@@ -10,6 +10,10 @@ public record CommandStatus(String msg, Status status) {
         return new ColoredString(status.type + " - " + msg, status.color);
     }
 
+    public boolean isSuccessful(){
+        return status.isSuccessful();
+    }
+
     public enum Status {
         SUCCESS("SUCCESS", DyeColor.LIME.getFireworkColor()),
         HELP("USAGE", DyeColor.BLUE.getFireworkColor()),
@@ -36,5 +40,13 @@ public record CommandStatus(String msg, Status status) {
         public int getColor() {
             return color;
         }
+    }
+
+    public static CommandStatus ERROR(){
+        return new CommandStatus("ERROR", Status.ERROR);
+    }
+
+    public static CommandStatus SUCCESS(){
+        return new CommandStatus("ERROR", Status.SUCCESS);
     }
 }

@@ -6,7 +6,10 @@ import mod.stf.syconn.common.blockEntity.NavBE;
 import mod.stf.syconn.network.Network;
 import mod.stf.syconn.network.messages.MessageRotate;
 import mod.stf.syconn.util.applications.NavigationApplication;
+import mod.stf.syconn.util.applications.subcmd.BasicSCM;
 import net.minecraft.core.Direction;
+
+import java.util.List;
 
 public class RotateCMD extends BasicCommand<NavigationApplication> {
 
@@ -14,6 +17,11 @@ public class RotateCMD extends BasicCommand<NavigationApplication> {
 
     public RotateCMD(NavigationApplication application) {
         super("/", "r", application);
+    }
+
+    @Override
+    protected List<BasicSCM> getSubCMDS() {
+        return null;
     }
 
     @Override

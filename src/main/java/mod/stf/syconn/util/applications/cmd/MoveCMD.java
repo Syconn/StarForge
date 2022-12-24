@@ -7,10 +7,10 @@ import mod.stf.syconn.api.util.applications.CommandStatus;
 import mod.stf.syconn.network.Network;
 import mod.stf.syconn.network.messages.MessageHyperdrive;
 import mod.stf.syconn.util.applications.NavigationApplication;
+import mod.stf.syconn.util.applications.subcmd.BasicSCM;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
 
-import java.util.Locale;
+import java.util.List;
 
 public class MoveCMD extends BasicCommand<NavigationApplication> {
 
@@ -21,6 +21,11 @@ public class MoveCMD extends BasicCommand<NavigationApplication> {
 
     public MoveCMD(NavigationApplication application) {
         super("/", "move", application);
+    }
+
+    @Override
+    protected List<BasicSCM> getSubCMDS() {
+        return null;
     }
 
     @Override

@@ -17,7 +17,6 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.level.block.entity.BeaconBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.extensions.IForgeBlockEntity;
@@ -31,7 +30,8 @@ import java.util.Map;
 
 public class NavBE extends ApplicationBE<NavContainer> {
 
-    private boolean enabled = false;
+    private boolean showShip = false;
+    private boolean showPath = false;
     private Schematic ship;
     private AnchorPos pos;
     private Map<BlockPos, double[]> position;
@@ -53,8 +53,13 @@ public class NavBE extends ApplicationBE<NavContainer> {
         createBlockImage();
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void showShip(boolean showShip) {
+        this.showShip = showShip;
+        update();
+    }
+
+    public void showPath(boolean showPath) {
+        this.showPath = showPath;
         update();
     }
 
@@ -63,9 +68,14 @@ public class NavBE extends ApplicationBE<NavContainer> {
         update();
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    public boolean showShip() {
+        return showShip;
     }
+
+    public boolean showPath() {
+        return showPath;
+    }
+
 
     public TripPath getPath() {
         return path;
@@ -100,7 +110,8 @@ public class NavBE extends ApplicationBE<NavContainer> {
             tag.putInt("direction", dir.get3DDataValue());
         if (path != null)
             tag.put("path", path.save());
-        tag.putBoolean("enabled", enabled);
+        tag.putBoolean("show_ship", showShip);
+        tag.putBoolean("show_path", showPath);
         return tag;
     }
 
@@ -116,7 +127,8 @@ public class NavBE extends ApplicationBE<NavContainer> {
             tag.putInt("direction", dir.get3DDataValue());
         if (path != null)
             tag.put("path", path.save());
-        tag.putBoolean("enabled", enabled);
+        tag.putBoolean("show_ship", showShip);
+        tag.putBoolean("show_path", showPath);
         super.saveAdditional(tag);
     }
 
@@ -134,8 +146,10 @@ public class NavBE extends ApplicationBE<NavContainer> {
             pos = AnchorPos.read(tag.getCompound("pos"));
         if (tag.contains("positions"))
             position = NbtUtil.readPositions(tag.getCompound("positions"));
-        if (tag.contains("enabled"))
-            enabled = tag.getBoolean("enabled");
+        if (tag.contains("show_ship"))
+            showShip = tag.getBoolean("show_ship");
+        if (tag.contains("show_path"))
+            showPath = tag.getBoolean("show_path");
         if (tag.contains("direction"))
             dir = Direction.from3DDataValue(tag.getInt("direction"));
         if (tag.contains("path"))
@@ -144,7 +158,7 @@ public class NavBE extends ApplicationBE<NavContainer> {
     }
 
     public boolean shouldRender(){
-        return ship != null && !position.isEmpty() && enabled;
+        return ship != null && !position.isEmpty() && showShip;
     }
 
     public void createBlockImage(){
@@ -245,7 +259,8 @@ public class NavBE extends ApplicationBE<NavContainer> {
     }
 
     public void reset(NavBE be, Direction dir, List<BlockID> ids) {
-        this.enabled = be.isEnabled();
+        this.showShip = be.showShip;
+        this.showPath = be.showPath;
         this.dir = dir;
         this.ship = new Schematic(ids);
         createBlockImage();
@@ -254,7 +269,8 @@ public class NavBE extends ApplicationBE<NavContainer> {
 
     public void move(NavBE be, Direction dir, double distance) {
         this.pos = be.getPos();
-        this.enabled = be.isEnabled();
+        this.showShip = be.showShip;
+        this.showPath = be.showPath;
         this.dir = be.getDir();
         moveSchem(be.getShip(), dir, distance);
         createBlockImage();
