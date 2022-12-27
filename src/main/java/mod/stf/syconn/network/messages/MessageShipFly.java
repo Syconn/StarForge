@@ -41,7 +41,7 @@ public class MessageShipFly implements IMessage<MessageShipFly> {
             ServerPlayer player = supplier.get().getSender();
 
             if (player != null && player.level.getBlockEntity(message.block) instanceof NavBE be){
-                be.setPath(new TripPath(be.getShip().getBlocks(), message.block, message.dest, be.getDir(), player.level));
+                be.setPath(new TripPath(be.getShip().getBlocks(), message.dest, be.getDir(), player.level));
             }
         });
         supplier.get().setPacketHandled(true);

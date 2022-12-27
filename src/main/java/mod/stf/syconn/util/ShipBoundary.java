@@ -3,7 +3,9 @@ package mod.stf.syconn.util;
 import mod.stf.syconn.api.util.Mths;
 import mod.stf.syconn.api.util.NbtUtil;
 import mod.stf.syconn.api.util.RotationHelper;
+import mod.stf.syconn.api.util.data.Schematic;
 import mod.stf.syconn.init.ModTags;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -37,10 +39,10 @@ public class ShipBoundary {
         return pos2.getPos();
     }
 
-    public void rotate(Direction i, Direction t){
+    public void rotate(Schematic s, Direction i, Direction t){
         BlockPos c = getCenter();
-        pos1.rotate(c, i, t);
-        pos2.rotate(c, i, t);
+        pos1.rotate(c, s, i, t);
+        pos2.rotate(c, s, i, t);
     }
 
     public void move(int x, int y, int z){
@@ -68,8 +70,8 @@ public class ShipBoundary {
         return false;
     }
 
-    public boolean testCollision(Level l, int x, int y, int z){
-        for (BlockPos pos : getBoundary(x, y, z)){
+    public boolean testCollision(Level l, MutablePos.Way way, int f){
+        for (BlockPos pos : getBoundary(way.getX() * f, way.getY() * f, way.getZ() * f)){
             BlockState bs = l.getBlockState(pos);
             if (!bs.is(ModTags.Blocks.OPEN_BLOCK)){
                 boolean match = false;
@@ -90,6 +92,10 @@ public class ShipBoundary {
 
     public Iterable<BlockPos> getBoundary(int x, int y, int z){
         return BlockPos.betweenClosed(pos1.of(x, y, z).getPos(), pos2.of(x, y, z).getPos());
+    }
+
+    public Schematic getSchem(){
+        return new Schematic(ship, Minecraft.getInstance().level);
     }
 
     private void findBoarders(){
@@ -122,66 +128,5 @@ public class ShipBoundary {
 
     public static ShipBoundary read(CompoundTag tag){
         return new ShipBoundary(NbtUtil.readBlockPositions(tag.getCompound("blocks")), MutablePos.read(tag.getCompound("pos1")), MutablePos.read(tag.getCompound("pos2")));
-    }
-
-    static class MutablePos {
-        private int x;
-        private int y;
-        private int z;
-
-        public MutablePos(int x, int y, int z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        public int getX() {
-            return x;
-        }
-
-        public int getY() {
-            return y;
-        }
-
-        public int getZ() {
-            return z;
-        }
-
-        public void move(int x, int y, int z){
-            this.x += x;
-            this.y += y;
-            this.z += z;
-        }
-
-        public void set(BlockPos pos){
-            this.x = pos.getX();
-            this.y = pos.getY();
-            this.z = pos.getZ();
-        }
-
-        public BlockPos getPos(){
-            return new BlockPos(x, y, z);
-        }
-
-        public void rotate(BlockPos rp, Direction i, Direction t){
-            BlockPos pos = RotationHelper.rotate(rp, getPos(), i, t);
-            set(pos);
-        }
-
-        public MutablePos of(int x, int y, int z){
-            return new MutablePos(this.x + x, this.y + y, this.z + z);
-        }
-
-        public CompoundTag save(){
-            CompoundTag tag = new CompoundTag();
-            tag.putInt("x", this.x);
-            tag.putInt("y", this.y);
-            tag.putInt("z", this.z);
-            return tag;
-        }
-
-        public static MutablePos read(CompoundTag tag){
-            return new MutablePos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
-        }
     }
 }

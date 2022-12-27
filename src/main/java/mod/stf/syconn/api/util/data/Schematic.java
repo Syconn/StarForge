@@ -24,8 +24,8 @@ public class Schematic {
         this.blockIDs = blocks;
     }
 
-    public Schematic(List<BlockPos> blocks, int i) {
-        this.blockIDs = genStates(blocks);
+    public Schematic(List<BlockPos> blocks, Level l) {
+        this.blockIDs = genStates(blocks, l);
     }
 
     public Schematic(List<BlockPos> blocks, List<BlockState> states) {
@@ -94,10 +94,10 @@ public class Schematic {
         return (int) (((int) bZ + sZ) % 2);
     }
 
-    public List<BlockID> genStates(List<BlockPos> positions){
+    public List<BlockID> genStates(List<BlockPos> positions, Level l){
         List<BlockID> bs = new ArrayList<>();
         for (BlockPos pos : positions) {
-            bs.add(new BlockID(Minecraft.getInstance().level.getBlockState(pos), pos));
+            bs.add(new BlockID(l.getBlockState(pos), pos));
         }
         return bs;
     }
@@ -169,6 +169,6 @@ public class Schematic {
                 }
             }
         }
-        return new Schematic(posses, 0);
+        return new Schematic(posses, Minecraft.getInstance().level);
     }
 }
