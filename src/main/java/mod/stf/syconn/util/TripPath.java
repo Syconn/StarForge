@@ -1,6 +1,7 @@
 package mod.stf.syconn.util;
 
 import mod.stf.syconn.api.util.NbtUtil;
+import mod.stf.syconn.api.util.data.Schematic;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -15,10 +16,10 @@ public class TripPath {
     private Direction facing;
     private final ShipBoundary boundary;
 
-    public TripPath(List<BlockPos> ship, BlockPos start, BlockPos end, Direction f, Level level) {
+    public TripPath(List<BlockPos> ship, BlockPos end, Direction f, Level level) {
         this.facing = f;
         this.boundary = new ShipBoundary(ship);
-        genPath(start, end, level);
+        genPath(new BlockPos(-40, 120, 145), level);
     }
 
     public TripPath(List<BlockPos> flightPath, ShipBoundary boundary, Direction d) {
@@ -27,49 +28,20 @@ public class TripPath {
         this.facing = d;
     }
 
-    private void genPath(BlockPos s, BlockPos e, Level l){
+    private void genPath(BlockPos e, Level l) {  //-40, 120, 145                               //0, 122, 183
         Direction endDir = facing;
-        int x = s.getX(), y = s.getY(), z = s.getZ();
-        rotate(Direction.EAST);
-        while (x < e.getX()){
-            if (!getBoundary().collision(l)) {
-                x++;
-                boundary.move(1, 0, 0);
-            } else {
-                flightPath.add(boundary.getCenter());
-                rotate(Direction.SOUTH);
-                while (boundary.testCollision(l, 1, 0, 0)){
-                    z++;
-                    boundary.move(0, 0, 1);
-                }
-                flightPath.add(boundary.getCenter());
-            }
-        }
-        flightPath.add(boundary.getCenter());
-        rotate(Direction.SOUTH);
-        while (z < e.getZ()){
-            if (!getBoundary().collision(l)) {
-                z++;
-                boundary.move(0, 0, 1);
-            } else {
-                flightPath.add(boundary.getCenter());
-                rotate(Direction.EAST);
-                while (boundary.testCollision(l, 0, 0, 1)){
-                    x++;
-                    boundary.move(1, 0, 0);
-                }
-                flightPath.add(boundary.getCenter());
-            }
-        }
-        flightPath.add(boundary.getCenter());
-        rotate(endDir);
+        int attempts = 1000;
     }
 
-    public void rotate(Direction d){
+    private void rotate(Direction d){
         if (facing != d) {
-            boundary.rotate(facing, d);
+            boundary.rotate(boundary.getSchem(), facing, d);
             facing = d;
         }
+    }
+
+    private void move(MutablePos.Way way, int f){
+        boundary.move(way.getX() * f, way.getY() * f, way.getZ() * f);
     }
 
     public ShipBoundary getBoundary() {

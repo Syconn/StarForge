@@ -66,12 +66,14 @@ public abstract class BasicCommand<T extends BasicApplication> extends CMDHelper
 
     protected boolean handleSubParameters(String t){
         status = new CommandStatus("No Valid Sub CMDS", CommandStatus.Status.ERROR);
-        String text = t.substring(start.length());
-        for (BasicSCM cmd : getSubCMDS()){
-            if (cmd.validCMD(text).isSuccessful()){
-                status = cmd.validCMD(text);
-                cmd.execute();
-                return true;
+        if (t.length() > start.length()) {
+            String text = t.substring(start.length());
+            for (BasicSCM cmd : getSubCMDS()) {
+                if (cmd.validCMD(text).isSuccessful()) {
+                    status = cmd.validCMD(text);
+                    cmd.execute();
+                    return true;
+                }
             }
         }
         return false;

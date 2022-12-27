@@ -33,33 +33,33 @@ public class RotationHelper {
                 if (init.getAxis() == Direction.Axis.X){
                     int x = id.getX() - c.getX();
                     int z = id.getZ() - c.getZ();
-                    return new BlockPos(c.getX() - x + even[0], id.getY(), id.getZ() - 2 * z + 1);
+                    return new BlockPos(c.getX() - x + even[0], id.getY(), id.getZ() - 2 * z + even[1]);
                 }
                 if (init.getAxis() == Direction.Axis.Z){
                     int x = id.getX() - c.getX();
                     int z = id.getZ() - c.getZ();
-                    return new BlockPos(id.getX() - 2 * x + 1, id.getY(),c.getZ() - z + even[1]);
+                    return new BlockPos(id.getX() - 2 * x + even[0], id.getY(),c.getZ() - z + even[1]);
                 }
             } else {
                 int x = id.getX() - c.getX();
                 int z = id.getZ() - c.getZ();
                 if (init == Direction.EAST){
                     if (target == Direction.NORTH)
-                        return new BlockPos(c.getX() + z - 1, id.getY(), c.getZ() - x);
-                    return new BlockPos(c.getX() - z, id.getY(), c.getZ() + x + 1);
+                        return new BlockPos(c.getX() + z - even[1], id.getY(), c.getZ() - x);
+                    return new BlockPos(c.getX() - z, id.getY(), c.getZ() + x + even[0]);
                 } if (init == Direction.WEST){
                     if (target == Direction.SOUTH)
-                        return new BlockPos(c.getX() + z, id.getY(), c.getZ() - x + 1);
-                    return new BlockPos(c.getX() - z + 1, id.getY(), c.getZ() + x);
+                        return new BlockPos(c.getX() + z, id.getY(), c.getZ() - x + even[0]);
+                    return new BlockPos(c.getX() - z + even[1], id.getY(), c.getZ() + x);
                 } if (init == Direction.NORTH) {
                     if (target == Direction.WEST)
-                        return new BlockPos(c.getX() + z, id.getY(), c.getZ() - x + 1);
-                    return new BlockPos(c.getX() - z + 1, id.getY(), c.getZ() + x);
+                        return new BlockPos(c.getX() + z, id.getY(), c.getZ() - x + even[0]);
+                    return new BlockPos(c.getX() - z + even[1], id.getY(), c.getZ() + x);
                 }
                 if (init == Direction.SOUTH) {
                     if (target == Direction.WEST)
-                        return new BlockPos(c.getX() - z, id.getY(), c.getZ() + x - 1);
-                    return new BlockPos(c.getX() + z + 1, id.getY(), c.getZ() - x);
+                        return new BlockPos(c.getX() - z, id.getY(), c.getZ() + x - even[0]);
+                    return new BlockPos(c.getX() + z + even[1], id.getY(), c.getZ() - x);
                 }
             }
         }

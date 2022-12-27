@@ -80,6 +80,32 @@ public class NavRender implements BlockEntityRenderer<NavBE> {
                     lastPos = pos;
                 }
             }
+            if (path != null){
+                ShipBoundary boundary = path.getBoundary();
+                pPoseStack.pushPose();
+                BlockPos lastPos = pBlockEntity.getBlockPos();
+                BlockState state = Blocks.DIAMOND_BLOCK.defaultBlockState();
+                int x = lastPos.getX() - boundary.getPos1().getX();
+                int y = lastPos.getY() - boundary.getPos1().getY();
+                int z = lastPos.getZ() - boundary.getPos1().getZ();
+                pPoseStack.translate(-x, -y, -z);
+                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(state, pPoseStack, pBufferSource, pPackedLight, pPackedOverlay);
+                pPoseStack.popPose();
+                pPoseStack.pushPose();
+                int x2 = lastPos.getX() - boundary.getPos2().getX();
+                int y2 = lastPos.getY() - boundary.getPos2().getY();
+                int z2 = lastPos.getZ() - boundary.getPos2().getZ();
+                pPoseStack.translate(-x2, -y2, -z2);
+                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(state, pPoseStack, pBufferSource, pPackedLight, pPackedOverlay);
+                pPoseStack.popPose();
+                pPoseStack.pushPose();
+                int x3 = lastPos.getX() - boundary.getCenter().getX();
+                int y3 = lastPos.getY() - boundary.getCenter().getY();
+                int z3 = lastPos.getZ() - boundary.getCenter().getZ();
+                pPoseStack.translate(-x3, -y3, -z3);
+                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(Blocks.GOLD_BLOCK.defaultBlockState(), pPoseStack, pBufferSource, pPackedLight, pPackedOverlay);
+                pPoseStack.popPose();
+            }
         }
     }
 
