@@ -19,7 +19,7 @@ public class TripPath {
     public TripPath(List<BlockPos> ship, BlockPos end, Direction f, Level level) {
         this.facing = f;
         this.boundary = new ShipBoundary(ship);
-        genPath(new BlockPos(-40, 120, 145), level);
+        genPath(end, level);
     }
 
     public TripPath(List<BlockPos> flightPath, ShipBoundary boundary, Direction d) {
@@ -28,9 +28,51 @@ public class TripPath {
         this.facing = d;
     }
 
-    private void genPath(BlockPos e, Level l) {  //-40, 120, 145                               //0, 122, 183
+    private void genPath(BlockPos e, Level l) {  //0, 122, 183
         Direction endDir = facing;
-        int attempts = 1000;
+        if (boundary.getCenter().getX() < e.getX()){
+            moveL(Direction.EAST, Direction.SOUTH, MutablePos.Way.X, MutablePos.Way.Z, boundary.getCenter().getX(), e.getX(), l);
+        }
+        if (boundary.getCenter().getZ() < e.getZ()){
+            moveL(Direction.EAST, Direction.SOUTH, MutablePos.Way.X, MutablePos.Way.Z, boundary.getCenter().getX(), e.getX(), l);
+        }
+        rotate(endDir);
+    }
+
+    private void moveL(Direction fd, Direction ad, MutablePos.Way mw, MutablePos.Way aw, int p, int e, Level l) {
+        rotate(fd);
+        while (p < e){
+            if (!getBoundary().collision(l)) {
+                p++;
+                move(mw, 1);
+            } else {
+                flightPath.add(boundary.getCenter());
+                rotate(ad);
+                while (boundary.testCollision(l, mw, 1)){
+                    move(aw, 1);
+                }
+                flightPath.add(boundary.getCenter());
+            }
+        }
+        flightPath.add(boundary.getCenter());
+    }
+
+    private void moveG(Direction fd, Direction ad, MutablePos.Way mw, MutablePos.Way aw, int p, int e, Level l) {
+        rotate(fd);
+        while (p > e){
+            if (!getBoundary().testCollision(l, mw, -1)) {
+                p++;
+                move(MutablePos.Way.X, -1);
+            } else {
+                flightPath.add(boundary.getCenter());
+                rotate(ad);
+                while (boundary.testCollision(l, mw, -1)){
+                    move(aw, -1);
+                }
+                flightPath.add(boundary.getCenter());
+            }
+        }
+        flightPath.add(boundary.getCenter());
     }
 
     private void rotate(Direction d){
