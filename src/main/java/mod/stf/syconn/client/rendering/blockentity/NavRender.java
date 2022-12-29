@@ -2,39 +2,22 @@ package mod.stf.syconn.client.rendering.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
-import mod.stf.syconn.api.util.AnchorPos;
 import mod.stf.syconn.api.util.BlockID;
-import mod.stf.syconn.api.util.LineRenderer;
-import mod.stf.syconn.api.util.Mths;
-import mod.stf.syconn.api.util.data.ServerPixelImage;
 import mod.stf.syconn.client.rendering.entity.BlockRender;
 import mod.stf.syconn.common.blockEntity.NavBE;
-import mod.stf.syconn.common.blockEntity.SchematicBe;
 import mod.stf.syconn.init.ModBlocks;
-import mod.stf.syconn.item.lightsaber.LColor;
-import mod.stf.syconn.util.ShipBoundary;
 import mod.stf.syconn.util.TripPath;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.blockentity.BeaconRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BeaconBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.AttachFace;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.Map;
-import java.util.Objects;
 
 @OnlyIn(Dist.CLIENT)
 public class NavRender implements BlockEntityRenderer<NavBE> {
@@ -70,14 +53,14 @@ public class NavRender implements BlockEntityRenderer<NavBE> {
             if (path != null && pBlockEntity.showPath()){
                 BlockPos lastPos = pBlockEntity.getBlockPos();
                 for (int i = 0; i < path.getTotalPoints(); i++){
-                    BlockPos pos = path.getPoint(i);
-                    BlockState state = pos == path.getTarget() ? Blocks.GOLD_BLOCK.defaultBlockState() : Blocks.IRON_BLOCK.defaultBlockState();
-                    int x = lastPos.getX() - pos.getX();
-                    int y = lastPos.getY() - pos.getY();
-                    int z = lastPos.getZ() - pos.getZ();
+                    TripPath.Directions d = path.getDirections(i);
+                    BlockState state = d.pos() == path.getTarget() ? Blocks.GOLD_BLOCK.defaultBlockState() : Blocks.IRON_BLOCK.defaultBlockState();
+                    int x = lastPos.getX() - d.pos().getX();
+                    int y = lastPos.getY() - d.pos().getY();
+                    int z = lastPos.getZ() - d.pos().getZ();
                     pPoseStack.translate(-x, -y, -z);
                     Minecraft.getInstance().getBlockRenderer().renderSingleBlock(state, pPoseStack, pBufferSource, pPackedLight, pPackedOverlay);
-                    lastPos = pos;
+                    lastPos = d.pos();
                 }
             }
 //            if (path != null){

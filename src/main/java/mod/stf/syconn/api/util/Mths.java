@@ -35,6 +35,10 @@ public class Mths {
         return Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY()) + Math.abs(p1.getZ() - p2.getZ());
     }
 
+    public static BlockPos moveBlockPos(BlockPos pos, int x, int y, int z){
+        return new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
+    }
+
     public static Vec3 frontPos(LivingEntity entity, double increment){
         float f2 = Mth.sin(entity.yBodyRot * ((float)Math.PI / 180F));
         float f = Mth.cos(entity.yBodyRot * ((float)Math.PI / 180F));

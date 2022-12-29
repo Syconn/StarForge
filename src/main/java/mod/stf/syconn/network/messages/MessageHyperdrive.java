@@ -57,18 +57,18 @@ public class MessageHyperdrive implements IMessage<MessageHyperdrive> {
             //TODO 0 is instant movement AND UPDATE NEW BLOCKPOS OF NAV COMPUTER
             ServerPlayer player = supplier.get().getSender();
             if (player != null) {
-                ServerLevel world = player.getLevel();
-                for (BlockID id : message.schem.getBlockIDs()){
-                    if (id.state().getBlock() instanceof Computer){
-                        MovingBlockEntity block = new MovingBlockEntity(world, id.state(), id.pos(), message.distance, message.direction, message.speed, (NavBE) player.level.getBlockEntity(id.pos()));
-                        world.addFreshEntity(block);
-                        world.removeBlock(id.pos(), true);
-                    } else {
-                        MovingBlock block = new MovingBlock(world, id.state(), id.pos(), message.distance, message.direction, message.speed);
-                        world.addFreshEntity(block);
-                        world.removeBlock(id.pos(), true);
-                    }
-                }
+//                ServerLevel world = player.getLevel();
+//                for (BlockID id : message.schem.getBlockIDs()){
+//                    if (id.state().getBlock() instanceof Computer){
+//                        MovingBlockEntity block = new MovingBlockEntity(world, id.state(), id.pos(), message.distance, message.direction, message.speed, (NavBE) player.level.getBlockEntity(id.pos()));
+//                        world.addFreshEntity(block);
+//                        world.removeBlock(id.pos(), true);
+//                    } else {
+//                        MovingBlock block = new MovingBlock(world, id.state(), id.pos(), message.distance, message.direction, message.speed);
+//                        world.addFreshEntity(block);
+//                        world.removeBlock(id.pos(), true);
+//                    }
+//                }
             }
         });
         supplier.get().setPacketHandled(true);

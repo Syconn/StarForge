@@ -2,6 +2,7 @@ package mod.stf.syconn.api.util;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import mod.stf.syconn.api.util.data.ServerPixelImage;
+import mod.stf.syconn.util.TripPath;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -115,6 +116,31 @@ public class NbtUtil {
         return tag;
     }
 
+    public static CompoundTag writeDirections(List<TripPath.Directions> ds){
+        CompoundTag tag = new CompoundTag();
+        ListTag listTag = new ListTag();
+        for (TripPath.Directions d : ds){
+            CompoundTag data = new CompoundTag();
+            data.put("pos", d.save());
+            listTag.add(data);
+        }
+        tag.put("map", listTag);
+        return tag;
+    }
+
+    public static List<TripPath.Directions> readDirections(CompoundTag tag){
+        List<TripPath.Directions> directions = new ArrayList<>();
+        if(tag.contains("map", Tag.TAG_LIST))
+        {
+            ListTag list = tag.getList("map", Tag.TAG_COMPOUND);
+            list.forEach(data -> {
+                CompoundTag nbt = (CompoundTag) data;
+                directions.add(TripPath.Directions.read(nbt.getCompound("pos")));
+            });
+        }
+        return directions;
+    }
+
     public static CompoundTag writeBlockPositions(List<BlockPos> positions){
         CompoundTag tag = new CompoundTag();
         ListTag listTag = new ListTag();
@@ -135,6 +161,31 @@ public class NbtUtil {
             list.forEach(data -> {
                 CompoundTag nbt = (CompoundTag) data;
                 posList.add(NbtUtils.readBlockPos(nbt.getCompound("pos")));
+            });
+        }
+        return posList;
+    }
+
+    public static CompoundTag writeBlockIDS(List<BlockID> positions){
+        CompoundTag tag = new CompoundTag();
+        ListTag listTag = new ListTag();
+        for (BlockID id : positions){
+            CompoundTag data = new CompoundTag();
+            data.put("id", id.write());
+            listTag.add(data);
+        }
+        tag.put("map", listTag);
+        return tag;
+    }
+
+    public static List<BlockID> readBlockIDS(CompoundTag tag){
+        List<BlockID> posList = new ArrayList<>();
+        if(tag.contains("map", Tag.TAG_LIST))
+        {
+            ListTag list = tag.getList("map", Tag.TAG_COMPOUND);
+            list.forEach(data -> {
+                CompoundTag nbt = (CompoundTag) data;
+                posList.add(BlockID.read(nbt.getCompound("id")));
             });
         }
         return posList;

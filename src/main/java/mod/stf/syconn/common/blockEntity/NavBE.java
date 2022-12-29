@@ -245,15 +245,15 @@ public class NavBE extends ApplicationBE<NavContainer> {
         return new NavContainer(pContainerId, worldPosition, pPlayerInventory, pPlayer);
     }
 
-    public void moveSchem(Schematic sc, Direction dir, double distance) {
+    public void moveSchem(Schematic sc, BlockPos pos) {
         List<BlockID> ids = new ArrayList<>();
         position = new HashMap<>();
         for (BlockID id : sc.getBlockIDs()) {
-            double x = id.pos().getX() + (dir.getStepX() * distance);
-            double y = id.pos().getY() + (dir.getStepY() * distance);
-            double z = id.pos().getZ() + (dir.getStepZ() * distance);
+            double x = pos.getX();
+            double y = pos.getY();
+            double z = pos.getZ();
             ids.add(new BlockID(id.state(), new BlockPos(x, y, z)));
-            position.put(new BlockPos(x, y, z), genPosition(new BlockPos(x, y, z), pos));
+            position.put(new BlockPos(x, y, z), genPosition(new BlockPos(x, y, z), this.pos));
         }
         this.ship = new Schematic(ids);
     }
@@ -267,12 +267,12 @@ public class NavBE extends ApplicationBE<NavContainer> {
         update();
     }
 
-    public void move(NavBE be, Direction dir, double distance) {
+    public void move(NavBE be, Direction dir, BlockPos pos) {
         this.pos = be.getPos();
         this.showShip = be.showShip;
         this.showPath = be.showPath;
-        this.dir = be.getDir();
-        moveSchem(be.getShip(), dir, distance);
+        this.dir = dir;
+        moveSchem(be.getShip(), pos);
         createBlockImage();
         update();
     }
