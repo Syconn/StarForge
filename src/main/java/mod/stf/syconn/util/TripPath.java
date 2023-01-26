@@ -17,19 +17,21 @@ public class TripPath {
 
     private List<Directions> flightPath = new ArrayList<>();
     private final ShipBoundary boundary;
+    private Direction facing;
 
-    public TripPath(ShipBody ship, BlockPos end, Level level) {
+    public TripPath(ShipBody ship, BlockPos end, Direction facing, Level level) {
         this.boundary = new ShipBoundary(ship);
+        this.facing = facing;
         genPath(end, level);
     }
 
-    public TripPath(List<Directions> flightPath, ShipBoundary boundary) {
+    public TripPath(List<Directions> flightPath, Direction facing, ShipBoundary boundary) {
         this.flightPath = flightPath;
         this.boundary = boundary;
+        this.facing = facing;
     }
 
     private void genPath(BlockPos e, Level l) {  //-40, 122, 143
-        Direction current = boundary.ship().facing;
         while (boundary.ship().getCenter().getX() != e.getX() || boundary.ship().getCenter().getZ() != e.getZ()) {
             if (boundary.ship().getCenter().getX() < e.getX()) {
                 moveL(Direction.EAST, Direction.SOUTH, MutablePos.Way.X, MutablePos.Way.Z, boundary.ship().getCenter().getX(), e.getX(), l);
@@ -45,7 +47,7 @@ public class TripPath {
             }
         }
         handHeight(boundary.ship().getCenter().getY(), e.getY(), l);
-        rotate(boundary.ship().getFacing());
+        rotate(facing);
     }
 
     private void handHeight(int p, int e, Level l){
@@ -107,9 +109,9 @@ public class TripPath {
     }
 
     private void rotate(Direction d){
-        if (boundary.ship().facing != d) {
-            boundary.rotate(boundary.getSchem(), boundary.ship().facing, d);
-            boundary.ship().facing = d;
+        if (facing != d) {
+            boundary.rotate(boundary.getSchem(), facing, d);
+            facing = d;
         }
     }
 
@@ -141,11 +143,12 @@ public class TripPath {
         CompoundTag tag = new CompoundTag();
         tag.put("ds", writeDirections(flightPath));
         tag.put("boarder", boundary.save());
+        tag.put("d", NbtUtil.writeDirection(facing));
         return tag;
     }
 
     public static TripPath read(CompoundTag tag){
-        return new TripPath(readDirections(tag.getCompound("ds")), ShipBoundary.read(tag.getCompound("boarder")));
+        return new TripPath(readDirections(tag.getCompound("ds")), NbtUtil.readDirection(tag.getCompound("d")), ShipBoundary.read(tag.getCompound("boarder")));
     }
 
     public record Directions(BlockPos pos, Direction dir) {

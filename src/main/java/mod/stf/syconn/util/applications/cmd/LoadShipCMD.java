@@ -32,6 +32,11 @@ public class LoadShipCMD extends BasicCommand<NavigationApplication> {
     }
 
     @Override
+    public List<String> getSudo() {
+        return createList(super.getSudo(), new String[]{"l"});
+    }
+
+    @Override
     public CommandStatus hasParameters(String cmd) {
         String[] parameters = cmd.trim().split("\\s+");
 

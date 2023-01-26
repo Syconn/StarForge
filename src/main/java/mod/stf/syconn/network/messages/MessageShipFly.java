@@ -42,9 +42,9 @@ public class MessageShipFly implements IMessage<MessageShipFly> {
         supplier.get().enqueueWork(() -> {
             ServerPlayer player = supplier.get().getSender();
 
-            if (player != null && player.level.getBlockEntity(message.block) instanceof NavBE be){
-                be.setPath(new TripPath(new ShipBody(be.getShip().getBlockIDs(), be.getDir()), message.dest, player.level));
-                ShipFlightController cnt = new ShipFlightController(be.getPath().getBoundary().ship(), be.getPath().getFlightPath(), message.speed);
+            if (player != null && player.level.getBlockEntity(message.block) instanceof NavBE be && be.getShip() != null){
+                be.setPath(new TripPath(new ShipBody(be.getShip().getBlockIDs()), message.dest, be.getDir(), player.level));
+                ShipFlightController cnt = new ShipFlightController(be.getPath().getBoundary().ship(), be.getDir(), be.getPath().getFlightPath(), message.speed);
                 cnt.start(player.level);
                 //0 144 160
             }

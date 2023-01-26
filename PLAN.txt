@@ -8,3 +8,14 @@ HyperDrive
 Flying Ship
 -Engine
 -Moving Block Base
+
+
+
+NAVIGATION TABLE
+-GUI BASED, PoSSIBLE DISPLAY AT TOP OF BLOCK
+-MOUSE WILL SHOW X<Y<Z coords
+-will give u location
+-similar to map with topdown view but movable with wasd keys
+    -control click could do +10 blocks etc
+    -zoom in and out with mouse wheel
+-could show flight directions when building path

@@ -15,27 +15,20 @@ public class ShipBody {
     private List<BlockID> body;
     public MutablePos pos1;
     public MutablePos pos2;
-    public Direction facing;
 
-    public ShipBody(List<BlockID> body, Direction facing) {
+    public ShipBody(List<BlockID> body) {
         this.body = body;
-        this.facing = facing;
         findBoarders();
     }
 
     public ShipBody(CompoundTag tag) {
         body = NbtUtil.readBlockIDS(tag.getCompound("blocks"));
-        facing = NbtUtil.readDirection(tag.getCompound("direction"));
         pos1 = MutablePos.read(tag.getCompound("pos1"));
         pos2 = MutablePos.read(tag.getCompound("pos2"));
     }
 
     public List<BlockID> getShip() {
         return body;
-    }
-
-    public Direction getFacing() {
-        return facing;
     }
 
     public void move(int x, int y, int z) {
@@ -79,7 +72,6 @@ public class ShipBody {
     public CompoundTag save(){
         CompoundTag tag = new CompoundTag();
         tag.put("blocks", NbtUtil.writeBlockIDS(body));
-        tag.put("direction", NbtUtil.writeDirection(facing));
         tag.put("pos1", pos1.save());
         tag.put("pos2", pos2.save());
         return tag;

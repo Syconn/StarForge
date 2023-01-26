@@ -34,11 +34,14 @@ public class RotationHelper {
      * @return List of Rotated BlockID's
      */
     public static List<BlockID> rotateAllIDs(List<BlockID> list, Direction i, Direction t) {
-        List<BlockID> positions = new ArrayList<>();
-        for (BlockID pos : list){
-            positions.add(new BlockID(pos.state(), rotate(findCenterID(list), pos.pos(), new int[] {evenXLenID(list), evenZLenID(list)}, i, t)));
+        if (!i.equals(t)) {
+            List<BlockID> positions = new ArrayList<>();
+            for (BlockID pos : list){
+                positions.add(new BlockID(pos.state(), rotate(findCenterID(list), pos.pos(), new int[] {evenXLenID(list), evenZLenID(list)}, i, t)));
+            }
+            return positions;
         }
-        return positions;
+        return list;
     }
 
     /**

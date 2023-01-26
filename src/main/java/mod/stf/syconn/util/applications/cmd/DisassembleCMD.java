@@ -16,8 +16,8 @@ public class DisassembleCMD extends BasicCommand<NavigationApplication> {
     }
 
     @Override
-    protected List<BasicSCM> getSubCMDS() {
-        return null;
+    public List<String> getSudo() {
+        return createList(super.getSudo(), new String[] {"destroy", "remove"});
     }
 
     @Override

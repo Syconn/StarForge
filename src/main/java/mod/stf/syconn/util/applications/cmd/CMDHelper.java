@@ -8,6 +8,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CMDHelper {
 
     public boolean isTrue(String s){
@@ -34,7 +37,12 @@ public class CMDHelper {
         return null;
     }
 
-    public BlockPos getBlockPos(String[] s, int x){
+    public BlockPos getBlockPos(String[] s, int x) {
         return CMDTools.getBlockPos(Mths.splitArray(s, x, x + 3));
+    }
+
+    public List<String> createList(List<String> list, String[] array){
+        list.addAll(Arrays.asList(array));
+        return list;
     }
 }

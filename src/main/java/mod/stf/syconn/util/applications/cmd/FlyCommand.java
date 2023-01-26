@@ -10,6 +10,7 @@ import mod.stf.syconn.util.applications.NavigationApplication;
 import mod.stf.syconn.util.applications.subcmd.BasicSCM;
 import net.minecraft.core.BlockPos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FlyCommand extends BasicCommand<NavigationApplication> {
@@ -27,10 +28,15 @@ public class FlyCommand extends BasicCommand<NavigationApplication> {
     }
 
     @Override
+    public List<String> getSudo() {
+        return createList(super.getSudo(), new String[] {"f"});
+    }
+
+    @Override
     public CommandStatus hasParameters(String cmd) {
         String[] parameters = cmd.trim().split("\\s+");
 
-        if (cmd.length() > 4) {
+        if (parameters.length > 2) {
             p1 = getBlockPos(parameters, 0);
             if (p1 != BlockPos.ZERO){
                 return new CommandStatus("", CommandStatus.Status.SUCCESS);

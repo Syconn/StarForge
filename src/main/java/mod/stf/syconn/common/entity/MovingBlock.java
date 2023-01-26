@@ -15,9 +15,11 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,26 +30,16 @@ public class MovingBlock extends Entity {
     protected BlockPos start;
     protected BlockPos end;
     protected Direction direction;
+    protected double distance;
     protected boolean update = false;
-    protected double speed = 0;
+    protected double speed;
     protected ShipFlightController controller;
 
     public MovingBlock(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
-    public MovingBlock(Level pLevel, ShipFlightController controller, BlockState state, BlockPos start, double distance, Direction direction, double speed) {
-        super(ModEntities.MOVING_BLOCK.get(), pLevel);
-        setPos(start.getX() + 0.5, start.getY(), start.getZ() + 0.5);
-        this.getEntityData().set(DATA_BLOCK_STATE, Optional.ofNullable(state));
-        this.controller = controller;
-        this.start = start;
-        this.direction = direction;
-        this.speed = speed / 100;
-        end = new BlockPos((int) (getX() + (direction.getStepX() * distance)), (int) (getY() + (direction.getStepY() * distance)), (int) (getZ() + (direction.getStepZ() * distance)));
-    }
-
-    public MovingBlock(Level pLevel, ShipFlightController controller, BlockState state, BlockPos start, BlockPos end, Direction direction, double speed) {
+    public MovingBlock(Level pLevel, ShipFlightController controller, BlockState state, BlockPos start, int distance, Direction direction, double speed) {
         super(ModEntities.MOVING_BLOCK.get(), pLevel);
         setPos(start.getX() + 0.5, start.getY(), start.getZ() + 0.5);
         this.getEntityData().set(DATA_BLOCK_STATE, Optional.of(state));
@@ -55,7 +47,8 @@ public class MovingBlock extends Entity {
         this.start = start;
         this.direction = direction;
         this.speed = speed / 100;
-        this.end = new BlockPos((int) (getX() + direction.getStepX() * Mths.distanceToPos(start, end)), (int) (getY() + direction.getStepY() * Mths.distanceToPos(start, end)), (int) (getZ() + direction.getStepZ() * Mths.distanceToPos(start, end)));
+        this.distance = distance;
+        this.end = new BlockPos(start.getX() + direction.getStepX() * distance, start.getY() + direction.getStepY() * distance, start.getZ() + direction.getStepZ() * distance);
     }
 
     @Override
@@ -69,11 +62,7 @@ public class MovingBlock extends Entity {
         if (update && !level.isClientSide){
             arrived();
         } else if (start != null && !level.isClientSide && end != null) {
-            if (end.getX() != (int) getX() || end.getY() != (int) getY() || end.getZ() != (int) getZ()){
-                double x = getX() + (direction.getStepX() * speed);
-                double y = getY() + (direction.getStepY() * speed);
-                double z = getZ() + (direction.getStepZ() * speed);
-
+            if (end.getX() > getX()){
                 List<Entity> entity = level.getEntities(this, this.getBoundingBox().inflate(0, 1, 0));
                 entity.forEach((e) -> {
                     if (e.isAlive() && !(e instanceof MovingBlock)){
@@ -89,7 +78,7 @@ public class MovingBlock extends Entity {
                     }
                 });
 
-                setPos(x, y, z);
+                setPos(getX() + (speed * direction.getStepX()), getY() + (speed * direction.getStepY()), getZ() + (speed * direction.getStepZ()));
             } else {
                 if (this.entityData.get(DATA_BLOCK_STATE).isPresent()) {
                     if (shouldPlace())
@@ -110,9 +99,6 @@ public class MovingBlock extends Entity {
     }
 
     protected void arrived(){
-        if (this.entityData.get(DATA_BLOCK_STATE).get().getBlock() instanceof NavigationalComputer){
-            controller.reachDestination(level);
-        }
         discard();
     }
 
@@ -140,7 +126,6 @@ public class MovingBlock extends Entity {
     }
 
     public BlockState getBlockState(){
-        System.out.println(this.getEntityData().get(DATA_BLOCK_STATE).orElse(null));
         return this.getEntityData().get(DATA_BLOCK_STATE).orElse(null);
     }
 }
