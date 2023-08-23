@@ -21,7 +21,7 @@ public class DisassembleCMD extends BasicCommand<NavigationApplication> {
     }
 
     @Override
-    public CommandStatus hasParameters(String cmd) {
+    public CommandStatus hasParameters(String[] cmd) {
         return new CommandStatus("DONE", CommandStatus.Status.SUCCESS);
     }
 

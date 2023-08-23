@@ -38,6 +38,7 @@ public class MessageDisassemble implements IMessage<MessageDisassemble> {
                 if (player.level.getBlockEntity(message.pos) instanceof NavBE be){
                     for (BlockID id : be.getShip().getBlockIDs()){
                         player.addItem(new ItemStack(id.state().getBlock(), 1));
+                        System.out.println(id.pos());
                         player.level.setBlock(id.pos(), Blocks.AIR.defaultBlockState(), 2);
                     }
                 }

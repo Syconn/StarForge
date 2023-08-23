@@ -8,6 +8,8 @@ import mod.stf.syconn.api.util.applications.BasicApplication;
 import mod.stf.syconn.api.util.data.Schematic;
 import mod.stf.syconn.common.containers.NavContainer;
 import mod.stf.syconn.init.ModBlockEntities;
+import mod.stf.syconn.util.FlightController;
+import mod.stf.syconn.util.ShipBody;
 import mod.stf.syconn.util.TripPath;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,6 +19,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.extensions.IForgeBlockEntity;
@@ -32,11 +35,13 @@ public class NavBE extends ApplicationBE<NavContainer> {
 
     private boolean showShip = false;
     private boolean showPath = false;
-    private Schematic ship;
+    private boolean flying = false;
     private AnchorPos pos;
+    private ShipBody ship;
     private Map<BlockPos, double[]> position;
     private Direction dir;
     private TripPath path;
+    private FlightController controller;
 
     public NavBE(BlockPos pWorldPosition, BlockState pBlockState) {
         super(ModBlockEntities.NAV_BE.get(), pWorldPosition, pBlockState, null);
@@ -47,24 +52,24 @@ public class NavBE extends ApplicationBE<NavContainer> {
     }
 
     public void setShip(Schematic ship, Direction dir) {
-        this.ship = ship;
+        this.ship = new ShipBody(ship);
         this.dir = dir;
         update();
         createRendering();
     }
 
+    public void setDir(Direction dir) {
+        this.dir = dir;
+    }
+
     public void showShip(boolean showShip) {
+        createRendering();
         this.showShip = showShip;
         update();
     }
 
     public void showPath(boolean showPath) {
         this.showPath = showPath;
-        update();
-    }
-
-    public void setPath(TripPath path) {
-        this.path = path;
         update();
     }
 
@@ -76,16 +81,16 @@ public class NavBE extends ApplicationBE<NavContainer> {
         return showPath;
     }
 
+    public boolean isFlying() {
+        return flying;
+    }
+
     public TripPath getPath() {
         return path;
     }
 
     public Direction getDir() {
         return dir;
-    }
-
-    public Schematic getShip() {
-        return ship;
     }
 
     public double[] getPosition(BlockPos state) {
@@ -96,11 +101,13 @@ public class NavBE extends ApplicationBE<NavContainer> {
         return pos;
     }
 
+    public ShipBody getShip() {
+        return ship;
+    }
+
     @Override
     protected CompoundTag saveData() {
         CompoundTag tag = super.saveData();
-        if (ship != null)
-            tag.put("ship", ship.saveSchematic());
         if (pos != null)
             tag.put("pos", pos.save());
         if (position != null)
@@ -109,15 +116,18 @@ public class NavBE extends ApplicationBE<NavContainer> {
             tag.putInt("direction", dir.get3DDataValue());
         if (path != null)
             tag.put("path", path.save());
+        if (controller != null)
+            tag.put("cntrl", controller.save());
+        if (ship != null)
+            tag.put("body", ship.save());
         tag.putBoolean("show_ship", showShip);
         tag.putBoolean("show_path", showPath);
+        tag.putBoolean("flying", flying);
         return tag;
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
-        if (ship != null)
-            tag.put("ship", ship.saveSchematic());
         if (pos != null)
             tag.put("pos", pos.save());
         if (position != null)
@@ -126,8 +136,13 @@ public class NavBE extends ApplicationBE<NavContainer> {
             tag.putInt("direction", dir.get3DDataValue());
         if (path != null)
             tag.put("path", path.save());
+        if (controller != null)
+            tag.put("cntrl", controller.save());
+        if (ship != null)
+            tag.put("body", ship.save());
         tag.putBoolean("show_ship", showShip);
         tag.putBoolean("show_path", showPath);
+        tag.putBoolean("flying", flying);
         super.saveAdditional(tag);
     }
 
@@ -139,21 +154,53 @@ public class NavBE extends ApplicationBE<NavContainer> {
 
     @Override
     public void load(CompoundTag tag) {
-        if (tag.contains("ship"))
-            ship = Schematic.readSchematic(tag.getCompound("ship"));
         if (tag.contains("pos"))
             pos = AnchorPos.read(tag.getCompound("pos"));
         if (tag.contains("positions"))
             position = NbtUtil.readPositions(tag.getCompound("positions"));
-        if (tag.contains("show_ship"))
-            showShip = tag.getBoolean("show_ship");
-        if (tag.contains("show_path"))
-            showPath = tag.getBoolean("show_path");
         if (tag.contains("direction"))
             dir = Direction.from3DDataValue(tag.getInt("direction"));
         if (tag.contains("path"))
             path = TripPath.read(tag.getCompound("path"));
+        if (tag.contains("cntrl"))
+            controller = new FlightController(tag.getCompound("cntrl"));
+        if (tag.contains("body"))
+            ship = new ShipBody(tag.getCompound("body"));
+        showShip = tag.getBoolean("show_ship");
+        showPath = tag.getBoolean("show_path");
+        flying = tag.getBoolean("flying");
         super.load(tag);
+    }
+
+    public void fly(BlockPos d, int s) {
+        if (ship != null && !flying) {
+            flying = true;
+            createPath(d);
+            controller = new FlightController(getPath(), s);
+            update();
+            controller.start(level, this);
+            removeShip();
+        }
+    }
+
+    public void reachDest(){
+        if (controller != null && !controller.getFlightPath().isEmpty() && flying) {
+            flying = false;
+            //removeShip();
+            update();
+            //controller.start(level, this);
+        }
+    }
+
+    private void removeShip(){
+        for (BlockID id : ship.getBlockIDs()) {
+            level.setBlock(id.pos(), Blocks.AIR.defaultBlockState(), 2);
+        }
+    }
+
+    private void createPath(BlockPos d){
+        path = new TripPath(ship, d, dir, level);
+        update();
     }
 
     public boolean shouldShipRender(){
@@ -165,7 +212,8 @@ public class NavBE extends ApplicationBE<NavContainer> {
         if (ship != null) {
             pos = anchorPos(ship.getBlockIDs());
             for (BlockID id : ship.getBlockIDs()){
-                position.put(id.pos(), genPosition(id.pos(), pos));
+                if (level.getBlockState(id.pos()).equals(id.state()))
+                    position.put(id.pos(), genPosition(id.pos(), pos));
             }
             update();
         }
@@ -176,7 +224,7 @@ public class NavBE extends ApplicationBE<NavContainer> {
         double xDif = anchorPos.x() - pos.getX();
         double yDif = anchorPos.y() - pos.getY();
         double zDif = anchorPos.z() - pos.getZ();
-        position[0] = xDif;
+        position[0] = -xDif;
         position[1] = yDif;
         position[2] = zDif;
         position[3] = 0;
@@ -186,9 +234,9 @@ public class NavBE extends ApplicationBE<NavContainer> {
             position[4] = 4 * -yDif;
         }
         if (xDif < 0){
-            position[3] = 4 * -xDif;
+            position[3] = -4 * -xDif;
         } else if (xDif > 0){
-            position[3] = -4 * xDif;
+            position[3] = 4 * xDif;
         }
         if (zDif < 0){
             position[5] = 4 * -zDif;
@@ -244,7 +292,7 @@ public class NavBE extends ApplicationBE<NavContainer> {
         return new NavContainer(pContainerId, worldPosition, pPlayerInventory, pPlayer);
     }
 
-    public void moveSchem(Schematic sc, Direction dir, double distance) {
+    public void moveSchem(ShipBody sc, Direction dir, double distance) {
         List<BlockID> ids = new ArrayList<>();
         for (BlockID id : sc.getBlockIDs()) {
             double x = id.pos().getX() + dir.getStepX() * distance;
@@ -252,14 +300,14 @@ public class NavBE extends ApplicationBE<NavContainer> {
             double z = id.pos().getZ() + dir.getStepZ() * distance;
             ids.add(new BlockID(id.state(), new BlockPos(x, y, z)));
         }
-        this.ship = new Schematic(ids);
+        this.ship = new ShipBody(ids);
     }
 
     public void reset(NavBE be, Direction dir, List<BlockID> ids) {
         this.showShip = be.showShip;
         this.showPath = be.showPath;
         this.dir = dir;
-        this.ship = new Schematic(ids);
+        this.ship = new ShipBody(ids);
         createRendering();
         update();
     }
@@ -269,7 +317,9 @@ public class NavBE extends ApplicationBE<NavContainer> {
             this.pos = be.getPos();
             this.showShip = be.showShip;
             this.showPath = be.showPath;
+            this.flying = be.flying;
             this.dir = dir;
+            this.controller = be.controller;
             moveSchem(be.getShip(), dir, distance);
             createRendering();
             update();

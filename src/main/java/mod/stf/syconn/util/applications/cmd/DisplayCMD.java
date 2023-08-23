@@ -32,7 +32,7 @@ public class DisplayCMD extends BasicCommand<NavigationApplication> {
     }
 
     @Override
-    public CommandStatus hasParameters(String cmd) {
+    public CommandStatus hasParameters(String[] cmd) {
         return CommandStatus.ERROR();
     }
 

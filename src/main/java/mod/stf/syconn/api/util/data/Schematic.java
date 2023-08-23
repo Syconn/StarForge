@@ -18,7 +18,7 @@ import java.util.List;
 
 public class Schematic {
 
-    private List<BlockID> blockIDs = new ArrayList<>();
+    protected List<BlockID> blockIDs = new ArrayList<>();
 
     public Schematic(List<BlockID> blocks) {
         this.blockIDs = blocks;

@@ -29,9 +29,7 @@ public class MoveCMD extends BasicCommand<NavigationApplication> {
     }
 
     @Override
-    public CommandStatus hasParameters(String cmd) {
-        String[] parameters = cmd.trim().split("\\s+");
-
+    public CommandStatus hasParameters(String[] parameters) {
         if (Mths.isNumeric(parameters[0])){
             if (parameters.length > 1) {
                 p1 = Integer.parseInt(parameters[0]);

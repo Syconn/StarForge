@@ -4,6 +4,9 @@ import mod.stf.syconn.StarForge;
 import mod.stf.syconn.api.util.AnchorPos;
 import mod.stf.syconn.api.util.BlockID;
 import mod.stf.syconn.api.util.data.Schematic;
+import mod.stf.syconn.block.Computer;
+import mod.stf.syconn.block.NavigationalComputer;
+import mod.stf.syconn.common.blockEntity.NavBE;
 import mod.stf.syconn.common.blockEntity.SchematicBe;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -70,6 +73,9 @@ public class SchematicItem extends Item {
                     BlockPos relPos = new BlockPos(p.getX() + ap.x(), p.getY() + ap.y(), p.getZ() + ap.z());
                     updatedSchematic.add(new BlockID(id.state(), relPos));
                     pLevel.setBlock(relPos, id.state(), 2);
+                    if (id.state().getBlock() instanceof Computer){
+                        ((NavBE) pLevel.getBlockEntity(id.pos())).setShip(sc, pPlayer.getDirection());
+                    }
                 }
                 stack.getOrCreateTag().put("schematic", new Schematic(updatedSchematic).saveSchematic());
             } else {

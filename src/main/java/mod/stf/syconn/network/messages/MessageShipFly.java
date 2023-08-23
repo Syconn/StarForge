@@ -2,7 +2,7 @@ package mod.stf.syconn.network.messages;
 
 import mod.stf.syconn.common.blockEntity.NavBE;
 import mod.stf.syconn.util.ShipBody;
-import mod.stf.syconn.util.ShipFlightController;
+import mod.stf.syconn.util.FlightController;
 import mod.stf.syconn.util.TripPath;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -42,11 +42,8 @@ public class MessageShipFly implements IMessage<MessageShipFly> {
         supplier.get().enqueueWork(() -> {
             ServerPlayer player = supplier.get().getSender();
 
-            if (player != null && player.level.getBlockEntity(message.block) instanceof NavBE be && be.getShip() != null){
-                be.setPath(new TripPath(new ShipBody(be.getShip().getBlockIDs()), message.dest, be.getDir(), player.level));
-                ShipFlightController cnt = new ShipFlightController(be.getPath().getBoundary().ship(), be.getDir(), be.getPath().getFlightPath(), message.speed);
-                cnt.start(player.level);
-                //0 144 160
+            if (player != null && player.level.getBlockEntity(message.block) instanceof NavBE be){
+                be.fly(message.dest, message.speed);
             }
         });
         supplier.get().setPacketHandled(true);

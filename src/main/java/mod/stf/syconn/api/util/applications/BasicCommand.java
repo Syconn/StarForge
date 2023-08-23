@@ -55,7 +55,11 @@ public abstract class BasicCommand<T extends BasicApplication> extends CMDHelper
                 if (hasSubCMDS()){
                     handleSubParameters(comb, cmd);
                 } else {
-                    String substring = cmd.substring(symbol.length() + name.length());
+                    String[] substring = cmd.substring(symbol.length() + name.length()).trim().split("\\s+");
+                    if (substring[0].matches("help")){
+                        status = info();
+                        return true;
+                    }
                     status = hasParameters(substring);
                     if (status.isSuccessful()){
                         execute();
@@ -82,7 +86,7 @@ public abstract class BasicCommand<T extends BasicApplication> extends CMDHelper
         return status;
     }
 
-    public abstract CommandStatus hasParameters(String cmd);
+    public abstract CommandStatus hasParameters(String[] cmd);
     public abstract void execute();
     public abstract CommandStatus info();
 }

@@ -29,7 +29,7 @@ public record ShipBoundary(ShipBody ship) {
             BlockState bs = l.getBlockState(pos);
             if (!bs.is(ModTags.Blocks.OPEN_BLOCK)) {
                 boolean match = false;
-                for (BlockID pos3 : ship.getShip())
+                for (BlockID pos3 : ship.getBlockIDs())
                     if (pos3.pos().equals(pos)) {
                         match = true;
                     }
@@ -45,7 +45,7 @@ public record ShipBoundary(ShipBody ship) {
             BlockState bs = l.getBlockState(pos);
             if (!bs.is(ModTags.Blocks.OPEN_BLOCK)) {
                 boolean match = false;
-                for (BlockID pos3 : ship.getShip())
+                for (BlockID pos3 : ship.getBlockIDs())
                     if (pos3.pos().equals(pos)) {
                         match = true;
                     }
@@ -65,12 +65,12 @@ public record ShipBoundary(ShipBody ship) {
     }
 
     public Schematic getSchem() {
-        return new Schematic(ship.getShip());
+        return new Schematic(ship.getBlockIDs());
     }
 
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
-        tag.put("blocks", NbtUtil.writeBlockIDS(this.ship.getShip()));
+        tag.put("blocks", NbtUtil.writeBlockIDS(this.ship.getBlockIDs()));
         return tag;
     }
 

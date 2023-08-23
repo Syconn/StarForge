@@ -25,9 +25,7 @@ public class RotateCMD extends BasicCommand<NavigationApplication> {
     }
 
     @Override
-    public CommandStatus hasParameters(String cmd) {
-        String[] parameters = cmd.trim().split("\\s+");
-
+    public CommandStatus hasParameters(String[] parameters) {
         if (parameters.length > 0){
             if (getDir(parameters[0]) != null){
                 dir = getDir(parameters[0]);

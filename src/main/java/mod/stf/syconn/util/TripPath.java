@@ -31,7 +31,8 @@ public class TripPath {
         this.facing = facing;
     }
 
-    private void genPath(BlockPos e, Level l) {  //-40, 122, 143
+    private void genPath(BlockPos e, Level l) {
+        System.out.println(boundary.ship().getCenter());
         while (boundary.ship().getCenter().getX() != e.getX() || boundary.ship().getCenter().getZ() != e.getZ()) {
             if (boundary.ship().getCenter().getX() < e.getX()) {
                 moveL(Direction.EAST, Direction.SOUTH, MutablePos.Way.X, MutablePos.Way.Z, boundary.ship().getCenter().getX(), e.getX(), l);
@@ -46,7 +47,7 @@ public class TripPath {
                 moveG(Direction.NORTH, Direction.WEST, MutablePos.Way.Z, MutablePos.Way.X, boundary.ship().getCenter().getZ(), e.getZ(), l);
             }
         }
-        handHeight(boundary.ship().getCenter().getY(), e.getY(), l);
+        //handHeight(boundary.ship().getCenter().getY(), e.getY(), l);
         rotate(facing);
     }
 
@@ -67,7 +68,8 @@ public class TripPath {
                 p = e;
             }
         }
-        flightPath.add(new Directions(boundary.ship().getCenter(), flightPath.get(flightPath.size() - 1).dir));
+        if (!flightPath.isEmpty())
+            flightPath.add(new Directions(boundary.ship().getCenter(), flightPath.get(flightPath.size() - 1).dir));
     }
 
     private void moveL(Direction fd, Direction ad, MutablePos.Way mw, MutablePos.Way aw, int p, int e, Level l) {

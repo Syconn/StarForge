@@ -37,9 +37,7 @@ public class LoadShipCMD extends BasicCommand<NavigationApplication> {
     }
 
     @Override
-    public CommandStatus hasParameters(String cmd) {
-        String[] parameters = cmd.trim().split("\\s+");
-
+    public CommandStatus hasParameters(String[] parameters) {
         if (parameters.length > 4) {
             pos1 = getBlockPos(parameters, 0);
             if (pos1 != BlockPos.ZERO) {

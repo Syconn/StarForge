@@ -47,6 +47,6 @@ public record CommandStatus(String msg, Status status) {
     }
 
     public static CommandStatus SUCCESS(){
-        return new CommandStatus("ERROR", Status.SUCCESS);
+        return new CommandStatus("SUCCESS", Status.SUCCESS);
     }
 }

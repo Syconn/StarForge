@@ -33,9 +33,7 @@ public class FlyCommand extends BasicCommand<NavigationApplication> {
     }
 
     @Override
-    public CommandStatus hasParameters(String cmd) {
-        String[] parameters = cmd.trim().split("\\s+");
-
+    public CommandStatus hasParameters(String[] parameters) {
         if (parameters.length > 2) {
             p1 = getBlockPos(parameters, 0);
             if (p1 != BlockPos.ZERO){

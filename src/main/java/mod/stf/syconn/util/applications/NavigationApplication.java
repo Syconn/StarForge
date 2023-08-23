@@ -27,7 +27,6 @@ public class NavigationApplication extends ApplicationComponent<NavContainer> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/navigation.png");
     private final Font font = Minecraft.getInstance().font;
-
     private SubmittableTextBox typer;
     private TextScreen textScreen;
 
