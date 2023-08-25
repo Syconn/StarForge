@@ -1,14 +1,9 @@
 package mod.stf.syconn.block;
 
 import mod.stf.syconn.api.blockEntity.MenuBlockEntity;
-import mod.stf.syconn.api.blocks.InventoryBlock;
 import mod.stf.syconn.api.blocks.RotatableBlock;
-import mod.stf.syconn.client.screen.HoloScreen;
-import mod.stf.syconn.client.screen.SchematicScreen;
 import mod.stf.syconn.common.blockEntity.CrafterBE;
-import mod.stf.syconn.common.blockEntity.HoloBE;
 import mod.stf.syconn.common.blockEntity.SchematicBe;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,9 +28,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
@@ -78,7 +71,7 @@ public class SchematicProjector extends RotatableBlock implements EntityBlock {
         if (!level.isClientSide) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof MenuBlockEntity) {
-                NetworkHooks.openGui((ServerPlayer) player, (MenuProvider) be, be.getBlockPos());
+                NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider) be, be.getBlockPos());
             } else {
                 throw new IllegalStateException("Our named container provider is missing!");
             }
@@ -90,7 +83,7 @@ public class SchematicProjector extends RotatableBlock implements EntityBlock {
         if (!pState.is(pNewState.getBlock())) {
             BlockEntity blockentity = pLevel.getBlockEntity(pPos);
             if (blockentity instanceof CrafterBE) {
-                blockentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
+                blockentity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
                     for (int i = 0; i < handler.getSlots(); i++){
                         if (handler.getStackInSlot(i) != ItemStack.EMPTY){
                             pLevel.addFreshEntity(new ItemEntity(pLevel, pPos.getX(), pPos.getY(), pPos.getZ(), handler.getStackInSlot(i)));

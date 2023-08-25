@@ -19,7 +19,7 @@ import java.util.Objects;
 public abstract class GunItem extends Item {
 
     protected int maxHeat;
-    protected final String HEAT = "HEAT";
+    protected static final String HEAT = "HEAT";
 
     public GunItem(Properties pProperties, int maxHeat) {
         super(pProperties);
@@ -66,11 +66,5 @@ public abstract class GunItem extends Item {
         return true;
     }
 
-    @Override
-    public void fillItemCategory(CreativeModeTab pCategory, NonNullList<ItemStack> pItems) {
-        pItems.add(createGun());
-    }
-
     public abstract ThrowableProjectile createBullet(LivingEntity shooter);
-    public abstract ItemStack createGun();
 }

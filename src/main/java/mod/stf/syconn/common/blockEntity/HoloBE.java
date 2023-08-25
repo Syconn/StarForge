@@ -1,30 +1,18 @@
 package mod.stf.syconn.common.blockEntity;
 
-import com.mojang.blaze3d.platform.NativeImage;
 import mod.stf.syconn.api.blockEntity.ClientBlockEntity;
-import mod.stf.syconn.api.util.NbtUtil;
-import mod.stf.syconn.api.util.SkinGrabber;
-import mod.stf.syconn.api.util.data.ServerPixelImage;
+import mod.stf.syconn.api.util.data.PixelImage;
 import mod.stf.syconn.init.ModBlockEntities;
-import mod.stf.syconn.world.data.SkinManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.CauldronBlock;
-import net.minecraft.world.level.block.entity.BeaconBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
 
 public class HoloBE extends ClientBlockEntity {
 
     private boolean slim;
-    private ServerPixelImage skin;
+    private PixelImage skin;
     private String urlOrName = "Username";
     private String mode = "Username";
     private ItemStack mainHand = null;
@@ -39,12 +27,12 @@ public class HoloBE extends ClientBlockEntity {
 
     }
 
-    public void setSkin(ServerPixelImage skin) {
+    public void setSkin(PixelImage skin) {
         this.skin = skin;
         update(worldPosition, getBlockState());
     }
 
-    public ServerPixelImage getSkin() {
+    public PixelImage getSkin() {
         return skin;
     }
 
@@ -109,7 +97,7 @@ public class HoloBE extends ClientBlockEntity {
         pTag.putString("urlorname", urlOrName);
         pTag.putBoolean("slim", slim);
         if (skin != null)
-            pTag.put("skin", NbtUtil.writeServerImage(skin));
+            pTag.put("skin", skin.write());
         if (mainHand != null)
             pTag.put("mainhand", mainHand.save(new CompoundTag()));
         if (offHand != null)
@@ -128,7 +116,7 @@ public class HoloBE extends ClientBlockEntity {
         pTag.putString("urlorname", urlOrName);
         pTag.putBoolean("slim", slim);
         if (skin != null)
-            pTag.put("skin", NbtUtil.writeServerImage(skin));
+            pTag.put("skin", skin.write());
         if (mainHand != null)
             pTag.put("mainhand", mainHand.save(new CompoundTag()));
         if (offHand != null)
@@ -146,7 +134,7 @@ public class HoloBE extends ClientBlockEntity {
         urlOrName = pTag.getString("urlorname");
         slim = pTag.getBoolean("slim");
         if (pTag.contains("skin"))
-            skin = NbtUtil.readServerImage(pTag.getCompound("skin"));
+            skin = PixelImage.read(pTag.getCompound("skin"));
         if (pTag.contains("mainhand"))
             mainHand = ItemStack.of(pTag.getCompound("mainhand"));
         if (pTag.contains("offhand"))

@@ -1,17 +1,11 @@
 package mod.stf.syconn.common.entity;
 
-import mod.stf.syconn.api.entity.Vehicle;
 import mod.stf.syconn.api.util.Mths;
 import mod.stf.syconn.init.ModEntities;
 import mod.stf.syconn.init.ModItems;
-import net.minecraft.client.gui.components.DebugScreenOverlay;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.entity.GuardianRenderer;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddMobPacket;
-import net.minecraft.tags.FluidTags;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -19,21 +13,10 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
-import net.minecraft.world.entity.animal.horse.Horse;
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.entity.boss.wither.WitherBoss;
-import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.DragonFireball;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.Boat;
-import net.minecraft.world.entity.vehicle.Minecart;
-import net.minecraft.world.item.BoatItem;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 import javax.annotation.Nullable;
 
@@ -97,8 +80,8 @@ public class TieFighter extends Mob implements PlayerRideableJumping {
         return (pEntity.canBeCollidedWith() || pEntity.isPushable()) && !pVehicle.isPassengerOfSameVehicle(pEntity) && !(pEntity instanceof TieBolt);
     }
 
-    public Packet<?> getAddEntityPacket() {
-        return new ClientboundAddMobPacket(this);
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return new ClientboundAddEntityPacket(this);
     }
 
     @Override
@@ -129,17 +112,23 @@ public class TieFighter extends Mob implements PlayerRideableJumping {
         return InteractionResult.sidedSuccess(this.level.isClientSide);
     }
 
-    @Override
     public boolean canBeControlledByRider() {
-        return this.getControllingPassenger() instanceof LivingEntity;
+        return this.getControllingPassenger() != null;
     }
 
     @Nullable
-    public Entity getControllingPassenger() {
-        return this.getFirstPassenger();
+    public LivingEntity getControllingPassenger() {
+        Entity entity = this.getFirstPassenger();
+        LivingEntity livingentity1;
+        if (entity instanceof LivingEntity livingentity) {
+            livingentity1 = livingentity;
+        } else {
+            livingentity1 = null;
+        }
+
+        return livingentity1;
     }
 
-    @Override
     public boolean isNoGravity() {
         return canBeControlledByRider();
     }
@@ -167,7 +156,7 @@ public class TieFighter extends Mob implements PlayerRideableJumping {
                     f1 *= 0.25F;
                 }
 
-                this.flyingSpeed = this.getSpeed() * 0.1F;
+//                this.flyingSpeed = this.getSpeed() * 0.1F;
 
                 float speed = 1.0F;
                 //Breaking
@@ -205,10 +194,10 @@ public class TieFighter extends Mob implements PlayerRideableJumping {
                     this.setDeltaMovement(Vec3.ZERO);
                 }
 
-                this.calculateEntityAnimation(this, true);
+                this.calculateEntityAnimation(true);
                 this.tryCheckInsideBlocks();
             } else {
-                this.flyingSpeed = 0.02F;
+//                this.flyingSpeed = 0.02F;
                 super.travel(pTravelVector);
             }
         }
@@ -219,8 +208,7 @@ public class TieFighter extends Mob implements PlayerRideableJumping {
         return false;
     }
 
-    @Override
-    public boolean canBeRiddenInWater(Entity rider) {
+    protected boolean updateInWaterStateAndDoFluidPushing() {
         return true;
     }
 

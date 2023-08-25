@@ -1,12 +1,9 @@
 package mod.stf.syconn.api.entity;
 
-import mod.stf.syconn.common.entity.TieFighter;
 import mod.stf.syconn.init.ModItems;
-import net.minecraft.client.renderer.entity.BoatRenderer;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundAddMobPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -14,23 +11,21 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
-import net.minecraft.world.item.trading.Merchant;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
 public abstract class Vehicle extends Entity {
 
-    protected static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(TieFighter.class, EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(TieFighter.class, EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(Vehicle.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(Vehicle.class, EntityDataSerializers.FLOAT);
     private int lerpSteps;
     private double lerpX;
     private double lerpY;
@@ -71,7 +66,7 @@ public abstract class Vehicle extends Entity {
             this.setHurtTime(10);
             this.setDamage(this.getDamage() + pAmount * 10.0F);
             this.markHurt();
-            this.gameEvent(GameEvent.ENTITY_DAMAGED, pSource.getEntity());
+            this.gameEvent(GameEvent.ENTITY_DAMAGE, pSource.getEntity());
             boolean flag = pSource.getEntity() instanceof Player && ((Player)pSource.getEntity()).getAbilities().instabuild;
             if (flag || this.getDamage() > 40.0F) {
                 if (!flag && this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
@@ -87,7 +82,6 @@ public abstract class Vehicle extends Entity {
         }
     }
 
-    @Override
     public void tick() {
         if (this.getHurtTime() > 0) {
             this.setHurtTime(this.getHurtTime() - 1);
@@ -102,7 +96,7 @@ public abstract class Vehicle extends Entity {
     private void tickLerp() {
         if (this.isControlledByLocalInstance()) {
             this.lerpSteps = 0;
-            this.setPacketCoordinates(this.getX(), this.getY(), this.getZ());
+            this.setPos(this.getX(), this.getY(), this.getZ());
         }
 
         if (this.lerpSteps > 0) {
@@ -118,22 +112,18 @@ public abstract class Vehicle extends Entity {
         }
     }
 
-    @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return new ClientboundAddEntityPacket(this);
     }
 
-    @Override
     public boolean isPushable() {
         return false;
     }
 
-    @Override
     public boolean isPushedByFluid() {
         return false;
     }
 
-    @Override
     public boolean canBeCollidedWith() {
         return true;
     }
@@ -142,9 +132,16 @@ public abstract class Vehicle extends Entity {
         return Boat.canVehicleCollide(this, pEntity);
     }
 
-    @Nullable
-    public Entity getControllingPassenger() {
-        return this.getFirstPassenger();
+    public LivingEntity getControllingPassenger() {
+        Entity entity = this.getFirstPassenger();
+        LivingEntity livingentity1;
+        if (entity instanceof LivingEntity livingentity) {
+            livingentity1 = livingentity;
+        } else {
+            livingentity1 = null;
+        }
+
+        return livingentity1;
     }
 
     public InteractionResult interact(Player pPlayer, InteractionHand pHand) {

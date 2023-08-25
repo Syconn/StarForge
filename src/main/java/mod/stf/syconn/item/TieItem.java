@@ -25,7 +25,7 @@ public class TieItem extends Item {
 
     private static final Predicate<Entity> ENTITY_PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
     public TieItem() {
-        super(new Properties().tab(StarForge.Tab));
+        super(new Properties());
     }
 
     @Override
@@ -57,7 +57,7 @@ public class TieItem extends Item {
                 } else {
                     if (!pLevel.isClientSide) {
                         pLevel.addFreshEntity(tie);
-                        pLevel.gameEvent(pPlayer, GameEvent.ENTITY_PLACE, new BlockPos(hitresult.getLocation()));
+                        pLevel.gameEvent(pPlayer, GameEvent.ENTITY_PLACE, hitresult.getLocation());
                         if (!pPlayer.getAbilities().instabuild) {
                             itemstack.shrink(1);
                         }

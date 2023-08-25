@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 public class ModBlocks {
 
     public static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Reference.MOD_ID);
-    public static final Item.Properties ITEM_PROPERTIES = new Item.Properties().tab(StarForge.Tab);
+    public static final Item.Properties ITEM_PROPERTIES = new Item.Properties();
 
     public static final RegistryObject<Block> LIGHTSABER_CRAFTER = REGISTER.register("lightsaber_crafter", LightsaberCrafter::new);
     public static final RegistryObject<Item> CRAFTER_ITEM = fromBlock(LIGHTSABER_CRAFTER);

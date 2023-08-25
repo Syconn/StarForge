@@ -8,12 +8,13 @@ import mod.stf.syconn.init.ModDamage;
 import mod.stf.syconn.init.ModItems;
 import mod.stf.syconn.item.Lightsaber;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
 
 public class LangDatagen extends LanguageProvider {
 
-    public LangDatagen(DataGenerator gen, String locale) {
-        super(gen, Reference.MOD_ID, locale);
+    public LangDatagen(PackOutput packOutput, String locale) {
+        super(packOutput, Reference.MOD_ID, locale);
     }
 
     @Override
@@ -26,6 +27,7 @@ public class LangDatagen extends LanguageProvider {
         add(ModItems.SCHEMATIC_ITEM.get(), "Schematic Item");
         add(ModBlocks.LIGHTSABER_CRAFTER.get(), "Lightsaber Workstation");
         add(ModBlocks.SCHEMATIC_PROJECTOR.get(), "Schematic Projector");
+        add(ModBlocks.HOLO_PROJECTOR.get(), "Holographic Projector");
         add("key.lightsaber.activate", "Key Activate Lightsaber");
         add("key.categories.stf", "StarForge");
         add("itemGroup.StarForge", "StarForge");

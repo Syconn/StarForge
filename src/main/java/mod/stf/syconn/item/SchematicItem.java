@@ -2,10 +2,8 @@ package mod.stf.syconn.item;
 
 import mod.stf.syconn.StarForge;
 import mod.stf.syconn.api.util.data.Schematic;
-import mod.stf.syconn.common.blockEntity.SchematicBe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +20,7 @@ public class SchematicItem extends Item {
     private BlockPos pos1 = null;
 
     public SchematicItem() {
-        super(new Item.Properties().tab(StarForge.Tab).rarity(Rarity.EPIC).stacksTo(1));
+        super(new Item.Properties().rarity(Rarity.EPIC).stacksTo(1));
     }
 
     @Override
@@ -49,7 +47,7 @@ public class SchematicItem extends Item {
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
         if (pIsAdvanced.isAdvanced()){
             for (BlockPos pos : Schematic.readSchematic(pLevel, pStack.getOrCreateTag().getCompound("schematic"))){
-                pTooltipComponents.add(new TextComponent(pos.toShortString() + ": " + pLevel.getBlockState(pos).getBlock().getName().getString()));
+                pTooltipComponents.add(Component.literal(pos.toShortString() + ": " + pLevel.getBlockState(pos).getBlock().getName().getString()));
             }
         }
     }

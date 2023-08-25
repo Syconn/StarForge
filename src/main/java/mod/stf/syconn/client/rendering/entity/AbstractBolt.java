@@ -3,9 +3,10 @@ package mod.stf.syconn.client.rendering.entity;
 import mod.stf.syconn.common.entity.BlasterBolt;
 import mod.stf.syconn.init.ModDamage;
 import mod.stf.syconn.item.Lightsaber;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -47,7 +48,7 @@ public abstract class AbstractBolt extends ThrowableProjectile {
             deflect((Player) entity);
         }
 
-        else if (!entity.is(getOwner()) && entity.hurt(ModDamage.blaster(this, getOwner()), damage())) {
+        else if (!entity.is(getOwner()) && entity.hurt(entity.damageSources().source(ModDamage.BLASTER, this, getOwner()), damage())) {
             if (entity.getType() == EntityType.ENDERMAN)
                 return;
 

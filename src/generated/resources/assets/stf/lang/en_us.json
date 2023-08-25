@@ -1,4 +1,5 @@
 {
+  "block.stf.holo_projector": "Holographic Projector",
   "block.stf.lightsaber_crafter": "Lightsaber Workstation",
   "block.stf.schematic_projector": "Schematic Projector",
   "death.attack.lightsaber.item": "%1$s was cut down by %2$s with %3$s",

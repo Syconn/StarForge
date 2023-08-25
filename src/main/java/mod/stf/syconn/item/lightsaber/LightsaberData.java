@@ -8,10 +8,19 @@ public class LightsaberData {
     private boolean state;
     private LColor color;
 
+    private boolean hideBar = false;
+
     public LightsaberData(HandleType handle, boolean state, LColor color) {
         this.handle = handle;
         this.state = state;
         this.color = color;
+    }
+
+    public LightsaberData(HandleType handle, boolean state, LColor color, boolean hideBar) {
+        this.handle = handle;
+        this.state = state;
+        this.color = color;
+        this.hideBar = hideBar;
     }
 
     public HandleType getHandle() {
@@ -24,6 +33,10 @@ public class LightsaberData {
 
     public LColor getColor() {
         return color;
+    }
+
+    public boolean hideBar() {
+        return hideBar;
     }
 
     public LightsaberData setHandle(HandleType handle) {

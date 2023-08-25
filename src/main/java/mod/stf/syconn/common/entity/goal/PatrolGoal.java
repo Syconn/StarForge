@@ -2,6 +2,7 @@ package mod.stf.syconn.common.entity.goal;
 
 import mod.stf.syconn.common.entity.StormTrooper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Monster;
@@ -61,7 +62,7 @@ public class PatrolGoal<T extends StormTrooper> extends Goal {
             Vec3 vec32 = vec31.subtract(vec3);
             vec3 = vec32.yRot(90.0F).scale(0.4D).add(vec3);
             Vec3 vec33 = vec3.subtract(vec31).normalize().scale(10.0D).add(vec31);
-            BlockPos blockpos = new BlockPos(vec33);
+            BlockPos blockpos = new BlockPos((int) vec33.x, (int) vec33.y, (int) vec33.z);
             blockpos = this.mob.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, blockpos);
 
             if (flag){
@@ -99,7 +100,7 @@ public class PatrolGoal<T extends StormTrooper> extends Goal {
     }
 
     private boolean moveRandomly() {
-        Random random = this.mob.getRandom();
+        RandomSource random = this.mob.getRandom();
         BlockPos blockpos = this.mob.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, this.mob.blockPosition().offset(-8 + random.nextInt(16), 0, -8 + random.nextInt(16)));
         return this.mob.getNavigation().moveTo((double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ(), this.speedModifier);
     }

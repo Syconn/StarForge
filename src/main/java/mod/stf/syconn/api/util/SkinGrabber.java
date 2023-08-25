@@ -73,7 +73,6 @@ public class SkinGrabber {
 
     public static NativeImage getSkinTexture(String url){
         try {
-            System.out.println(url);
             HttpGet request = new HttpGet(url);
             CloseableHttpClient client = HttpClients.createDefault();
             CloseableHttpResponse response = client.execute(request);

@@ -2,40 +2,36 @@ package mod.stf.syconn.common.blockEntity;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import mod.stf.syconn.Reference;
-import mod.stf.syconn.api.blockEntity.ClientBlockEntity;
 import mod.stf.syconn.api.blockEntity.ClientMenuBlockEntity;
 import mod.stf.syconn.api.util.NbtUtil;
 import mod.stf.syconn.api.util.data.DirectionalTexture;
-import mod.stf.syconn.api.util.data.ServerPixelImage;
+import mod.stf.syconn.api.util.data.PixelImage;
 import mod.stf.syconn.common.containers.SchematicContainer;
 import mod.stf.syconn.init.ModBlockEntities;
-import mod.stf.syconn.init.ModBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SchematicBe extends ClientMenuBlockEntity {
 
     private String block = "Block";
-    private HashMap<BlockPos, ServerPixelImage> blockImage = new HashMap<>();
+    private HashMap<BlockPos, PixelImage> blockImage = new HashMap<>();
     private List<BlockPos> schematic = null;
 
     public SchematicBe(BlockPos pWorldPosition, BlockState pBlockState) {
@@ -50,12 +46,12 @@ public class SchematicBe extends ClientMenuBlockEntity {
                     BlockState state = level.getBlockState(pos);
                     DirectionalTexture[] sprites = new DirectionalTexture[Direction.values().length];
                     for (int i = 0; i < Direction.values().length; i++){
-                        if (!Minecraft.getInstance().getBlockRenderer().getBlockModel(state).getQuads(state, Direction.from3DDataValue(i), new Random()).isEmpty())
-                            sprites[i] = new DirectionalTexture(Minecraft.getInstance().getBlockRenderer().getBlockModel(state).getQuads(state, Direction.from3DDataValue(i), new Random()).get(0).getSprite(), Direction.from3DDataValue(i));
+                        if (!Minecraft.getInstance().getBlockRenderer().getBlockModel(state).getQuads(state, Direction.from3DDataValue(i), RandomSource.create()).isEmpty())
+                            sprites[i] = new DirectionalTexture(Minecraft.getInstance().getBlockRenderer().getBlockModel(state).getQuads(state, Direction.from3DDataValue(i), RandomSource.create()).get(0).getSprite().contents().getOriginalImage(), Direction.from3DDataValue(i));
                     }
-                    NativeImage background = NativeImage.read(Minecraft.getInstance().getResourceManager().getResource(new ResourceLocation(Reference.MOD_ID, "textures/entity/block.png")).getInputStream());
+                    NativeImage background = NativeImage.read(Minecraft.getInstance().getResourceManager().getResource(new ResourceLocation(Reference.MOD_ID, "textures/entity/block.png")).get().open());
                     if (sprites.length == 6)
-                        blockImage.put(pos, new ServerPixelImage(background, sprites));
+                        blockImage.put(pos, new PixelImage(background, sprites));
                 }
                 update(worldPosition, getBlockState());
             } catch (IOException e) {
@@ -77,14 +73,14 @@ public class SchematicBe extends ClientMenuBlockEntity {
         return block.toLowerCase();
     }
 
-    public NativeImage getBlockImage(BlockPos pos) {
+    public DynamicTexture getBlockImage(BlockPos pos) {
         if (blockImage != null)
             return blockImage.get(pos).getImageFromPixels();
         return null;
     }
 
     @Nullable
-    public Map<BlockPos, ServerPixelImage> getImages(){
+    public Map<BlockPos, PixelImage> getImages(){
         return blockImage;
     }
 
@@ -132,7 +128,7 @@ public class SchematicBe extends ClientMenuBlockEntity {
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent("Schematic");
+        return Component.literal("Schematic");
     }
 
     @Nullable
