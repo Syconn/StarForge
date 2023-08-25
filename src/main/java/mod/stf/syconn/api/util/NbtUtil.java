@@ -1,7 +1,7 @@
 package mod.stf.syconn.api.util;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import mod.stf.syconn.api.util.data.ServerPixelImage;
+import mod.stf.syconn.api.util.data.PixelImage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -43,33 +43,8 @@ public class NbtUtil {
         return image;
     }
 
-    public static ServerPixelImage readServerImage(CompoundTag tag){
-        int pixels[][] = new int[tag.getInt("width")][tag.getInt("height")];
-        for (int x = 0; x < tag.getInt("width"); x++) {
-            for (int y = 0; y < tag.getInt("height"); y++) {
-                pixels[x][y] = tag.getInt(x + "_" + y);
-            }
-        }
-
-        return new ServerPixelImage(tag.getInt("width"), tag.getInt("height"), pixels);
-    }
-
-    public static CompoundTag writeServerImage(ServerPixelImage image){
-        CompoundTag tag = new CompoundTag();
-        tag.putInt("width", image.getWidth());
-        tag.putInt("height", image.getHeight());
-
-        for (int x = 0; x < image.getWidth(); x++) {
-            for (int y = 0; y < image.getHeight(); y++) {
-                tag.putInt(x + "_" + y, image.getPixels()[x][y]);
-            }
-        }
-
-        return tag;
-    }
-
-    public static HashMap<BlockPos, ServerPixelImage> readServerImageList(CompoundTag tag){
-        HashMap<BlockPos, ServerPixelImage> map = new HashMap<>();
+    public static HashMap<BlockPos, PixelImage> readServerImageList(CompoundTag tag){
+        HashMap<BlockPos, PixelImage> map = new HashMap<>();
         if(tag.contains("map", Tag.TAG_LIST))
         {
             ListTag list = tag.getList("map", Tag.TAG_COMPOUND);
@@ -84,14 +59,14 @@ public class NbtUtil {
                         pixels[x][y] = nbt.getInt(x + "_" + y);
                     }
                 }
-                map.put(NbtUtils.readBlockPos(nbt.getCompound("blockpos")), new ServerPixelImage(width, height, pixels));
+                map.put(NbtUtils.readBlockPos(nbt.getCompound("blockpos")), new PixelImage(width, height, pixels));
             });
         }
 
         return map;
     }
 
-    public static CompoundTag writeServerImageList(HashMap<BlockPos, ServerPixelImage> images){
+    public static CompoundTag writeServerImageList(HashMap<BlockPos, PixelImage> images){
         CompoundTag tag = new CompoundTag();
         ListTag listTag = new ListTag();
 

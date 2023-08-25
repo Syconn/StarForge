@@ -4,17 +4,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.api.screens.BasicContainerScreen;
-import mod.stf.syconn.api.screens.componet.ToggleButton;
-import mod.stf.syconn.common.blockEntity.HoloBE;
-import mod.stf.syconn.common.blockEntity.SchematicBe;
 import mod.stf.syconn.common.containers.SchematicContainer;
 import mod.stf.syconn.network.Network;
-import mod.stf.syconn.network.messages.*;
-import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.Screen;
+import mod.stf.syconn.network.messages.MessageLoadBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
@@ -37,7 +31,7 @@ public class SchematicScreen extends BasicContainerScreen<SchematicContainer> {
         super.init();
         relX = (this.width - this.imageWidth) / 2 + imageWidth / 2 - 30;
         relY = (this.height - this.imageHeight) / 2 + 20;
-        addRenderableWidget(new ExtendedButton(relX, relY + 45, 60, 20, new TextComponent("Load Block"), pButton -> {
+        addRenderableWidget(new ExtendedButton(relX, relY + 45, 60, 20, Component.literal("Load Block"), pButton -> {
             Network.getPlayChannel().sendToServer(new MessageLoadBlock(pos));
             //onClose();
         }));

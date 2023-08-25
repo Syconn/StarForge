@@ -11,7 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ModBlockEntities {
 
-    public static final DeferredRegister<BlockEntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Reference.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Reference.MOD_ID);
 
     public static final RegistryObject<BlockEntityType<CrafterBE>> CRAFTER_BE = REGISTER.register("crafter", () -> BlockEntityType.Builder.of(CrafterBE::new, ModBlocks.LIGHTSABER_CRAFTER.get()).build(null));
     public static final RegistryObject<BlockEntityType<HoloBE>> HOLO_BE = REGISTER.register("holo_projector", () -> BlockEntityType.Builder.of(HoloBE::new, ModBlocks.HOLO_PROJECTOR.get()).build(null));

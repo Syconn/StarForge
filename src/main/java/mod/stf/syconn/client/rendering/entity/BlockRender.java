@@ -1,25 +1,18 @@
 package mod.stf.syconn.client.rendering.entity;
 
-import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.client.rendering.model.BlockModel;
-import mod.stf.syconn.client.rendering.model.TieModel;
 import mod.stf.syconn.common.blockEntity.SchematicBe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockRender extends EntityRenderer<Entity> {
 
@@ -53,7 +46,7 @@ public class BlockRender extends EntityRenderer<Entity> {
     }
 
     public ResourceLocation getTexture(){
-        return Minecraft.getInstance().getTextureManager().register("holo", new DynamicTexture(this.be.getBlockImage(pos)));
+        return Minecraft.getInstance().getTextureManager().register("holo", this.be.getBlockImage(pos));
     }
 
     @Override

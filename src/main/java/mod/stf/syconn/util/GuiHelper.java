@@ -14,7 +14,6 @@ public class GuiHelper {
         pRenderer.vertex((double)(pX + 0), (double)(pY + pHeight), 0.0D).color(pRed, pGreen, pBlue, pAlpha).endVertex();
         pRenderer.vertex((double)(pX + pWidth), (double)(pY + pHeight), 0.0D).color(pRed, pGreen, pBlue, pAlpha).endVertex();
         pRenderer.vertex((double)(pX + pWidth), (double)(pY + 0), 0.0D).color(pRed, pGreen, pBlue, pAlpha).endVertex();
-        pRenderer.end();
-        BufferUploader.end(pRenderer);
+        BufferUploader.draw(pRenderer.end());
     }
 }

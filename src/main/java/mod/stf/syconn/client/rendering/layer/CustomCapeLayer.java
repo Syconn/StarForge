@@ -2,7 +2,7 @@ package mod.stf.syconn.client.rendering.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -29,7 +29,6 @@ public class CustomCapeLayer extends RenderLayer<Player, PlayerModel<Player>> {
     @Override
     public void render(PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, Player pLivingEntity, float pLimbSwing, float pLimbSwingAmount, float pPartialTick, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         AbstractClientPlayer clientPlayer = new AbstractClientPlayer(Minecraft.getInstance().level, pLivingEntity.getGameProfile()) {
-            @Override
             public boolean isSpectator() {
                 return false;
             }
@@ -61,9 +60,9 @@ public class CustomCapeLayer extends RenderLayer<Player, PlayerModel<Player>> {
                     f1 += 25.0F;
                 }
 
-                pPoseStack.mulPose(Vector3f.XP.rotationDegrees(6.0F + f2 / 2.0F + f1));
-                pPoseStack.mulPose(Vector3f.ZP.rotationDegrees(f3 / 2.0F));
-                pPoseStack.mulPose(Vector3f.YP.rotationDegrees(180.0F - f3 / 2.0F));
+                pPoseStack.mulPose(Axis.XP.rotationDegrees(6.0F + f2 / 2.0F + f1));
+                pPoseStack.mulPose(Axis.ZP.rotationDegrees(f3 / 2.0F));
+                pPoseStack.mulPose(Axis.YP.rotationDegrees(180.0F - f3 / 2.0F));
                 VertexConsumer vertexconsumer = pBuffer.getBuffer(RenderType.entitySolid(clientPlayer.getCloakTextureLocation()));
                 this.getParentModel().renderCloak(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
                 pPoseStack.popPose();

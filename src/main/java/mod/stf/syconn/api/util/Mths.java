@@ -1,13 +1,8 @@
 package mod.stf.syconn.api.util;
 
-import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-
-import javax.swing.text.html.parser.Entity;
 
 public class Mths {
 

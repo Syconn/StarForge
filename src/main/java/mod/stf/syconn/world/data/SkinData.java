@@ -1,9 +1,7 @@
 package mod.stf.syconn.world.data;
 
-import com.mojang.blaze3d.platform.NativeImage;
 import mod.stf.syconn.api.capability.ISSavable;
-import mod.stf.syconn.api.util.NbtUtil;
-import mod.stf.syconn.api.util.data.ServerPixelImage;
+import mod.stf.syconn.api.util.data.PixelImage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -13,20 +11,20 @@ import java.util.Map;
 
 public class SkinData implements ISSavable {
 
-    Map<String, ServerPixelImage> skins = new HashMap<>();
+    Map<String, PixelImage> skins = new HashMap<>();
     Map<String, Boolean> slim_skins = new HashMap<>();
 
-    public ServerPixelImage getSkin(String name) {
+    public PixelImage getSkin(String name) {
         return skins.get(name);
     }
 
-    public void putSkins(String name, ServerPixelImage skin){
+    public void putSkins(String name, PixelImage skin){
         if (!skins.containsKey(name)){
             skins.put(name, skin);
         }
     }
 
-    public void setSkins(Map<String, ServerPixelImage> skins){
+    public void setSkins(Map<String, PixelImage> skins){
         this.skins = skins;
     }
 
@@ -44,14 +42,6 @@ public class SkinData implements ISSavable {
         }
     }
 
-    public void setSlimSkins(Map<String, Boolean> skins){
-        this.slim_skins = skins;
-    }
-
-    public boolean containsSlim(String name){
-        return slim_skins.containsKey(name);
-    }
-
     public void resetSkins(){
         skins.clear();
         slim_skins.clear();
@@ -64,7 +54,7 @@ public class SkinData implements ISSavable {
             if (skin != null) {
                 CompoundTag tag = new CompoundTag();
                 tag.putString("name", name);
-                tag.put("pixels", NbtUtil.writeServerImage(skin));
+                tag.put("pixels", skin.write());
                 tag.putBoolean("slim", slim_skins.get(name));
                 map.add(tag);
             }
@@ -81,7 +71,7 @@ public class SkinData implements ISSavable {
             map.forEach(nbt -> {
                 CompoundTag tag = (CompoundTag) nbt;
                 String name = tag.getString("name");
-                ServerPixelImage image = NbtUtil.readServerImage(tag.getCompound("pixels"));
+                PixelImage image = PixelImage.read(tag.getCompound("pixels"));
                 boolean slim = tag.getBoolean("slim");
                 skins.put(name, image);
                 slim_skins.put(name, slim);

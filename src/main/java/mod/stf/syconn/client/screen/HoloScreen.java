@@ -4,17 +4,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.api.screens.componet.ToggleButton;
-import mod.stf.syconn.api.util.SkinGrabber;
 import mod.stf.syconn.common.blockEntity.HoloBE;
 import mod.stf.syconn.network.Network;
 import mod.stf.syconn.network.messages.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
@@ -30,7 +26,7 @@ public class HoloScreen extends Screen {
     private ExtendedButton slim;
 
     public HoloScreen(HoloBE be, BlockPos pos) {
-        super(new TextComponent("Holo Screen"));
+        super(Component.literal("Holo Screen"));
         this.pos = pos;
         this.be = be;
     }
@@ -45,29 +41,29 @@ public class HoloScreen extends Screen {
             Network.getPlayChannel().sendToServer(new MessageHoloMode(((ToggleButton) pButton).current, pos));
             slim.visible = ((ToggleButton) pButton).current.matches("URL");
         }));
-        addRenderableWidget(new ExtendedButton(relX, relY + 60, 60, 20, new TextComponent("Set Skin"), pButton -> {
+        addRenderableWidget(new ExtendedButton(relX, relY + 60, 60, 20, Component.literal("Set Skin"), pButton -> {
             if (!text.getValue().contains(" ") && !text.getValue().matches("Username") && !text.getValue().matches("URL")) {
                 Network.getPlayChannel().sendToServer(new MessageSetupSkin(text.getValue(), pos, slim.getMessage().getContents().equals("Slim")));
                 onClose();
             }
         }));
-        addRenderableWidget(text = new EditBox(font, relX - 30, relY + 30, 120, 20, new TextComponent(be.getUrlOrName())));
+        addRenderableWidget(text = new EditBox(font, relX - 30, relY + 30, 120, 20, Component.literal(be.getUrlOrName())));
         addRenderableWidget(slim = new ToggleButton(relX, relY + 85, 60, 20, "", "Standard", "Slim", be.isSlim() ? "Slim" : "Standard", pButton -> {
             Network.getPlayChannel().sendToServer(new MessageSlimSkin(pButton.getMessage().equals("Slim"), pos));
         }));
-        if (Reference.DEV_MODE) addRenderableWidget(new ExtendedButton(0, 0, 60, 20, new TextComponent("RESET"), pButton -> {
+        if (Reference.DEV_MODE) addRenderableWidget(new ExtendedButton(0, 0, 60, 20, Component.literal("RESET"), pButton -> {
             Network.getPlayChannel().sendToServer(new MessageResetHolo(pos));
         }));
 
         relX = (this.width - this.imageWidth) / 2;
         relY = (this.height - this.imageHeight) / 2;
-        addRenderableWidget(new ExtendedButton(relX - 59, relY + 20, 20, 20, new TextComponent("M"), pButton -> {
+        addRenderableWidget(new ExtendedButton(relX - 59, relY + 20, 20, 20, Component.literal("M"), pButton -> {
             Network.getPlayChannel().sendToServer(new MessageHoloGear("M", pos));
         }));
-        addRenderableWidget(new ExtendedButton(relX - 31, relY + 20, 20, 20, new TextComponent("O"), pButton -> {
+        addRenderableWidget(new ExtendedButton(relX - 31, relY + 20, 20, 20, Component.literal("O"), pButton -> {
             Network.getPlayChannel().sendToServer(new MessageHoloGear("O", pos));
         }));
-        addRenderableWidget(new ExtendedButton(relX - 45, relY + 42, 20, 20, new TextComponent("A"), pButton -> {
+        addRenderableWidget(new ExtendedButton(relX - 45, relY + 42, 20, 20, Component.literal("A"), pButton -> {
             Network.getPlayChannel().sendToServer(new MessageHoloGear("A", pos));
         }));
 

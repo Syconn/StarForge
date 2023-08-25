@@ -1,51 +1,29 @@
 package mod.stf.syconn.client.rendering.entity;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import com.mojang.authlib.yggdrasil.response.MinecraftTexturesPayload;
-import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import mod.stf.syconn.Reference;
-import mod.stf.syconn.api.util.ImageUtil;
-import mod.stf.syconn.api.util.SkinGrabber;
 import mod.stf.syconn.client.rendering.layer.CustomCapeLayer;
 import mod.stf.syconn.common.blockEntity.HoloBE;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.MapRenderer;
+import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.*;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.PlayerModelPart;
-import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.SkullBlock;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.UseAnim;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.resource.PathResourcePack;
-import org.jetbrains.annotations.Nullable;
-
-import java.awt.image.BufferedImage;
-import java.net.URL;
-import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
 public class HoloPlayerRender extends LivingEntityRenderer<Player, PlayerModel<Player>> {
@@ -54,11 +32,11 @@ public class HoloPlayerRender extends LivingEntityRenderer<Player, PlayerModel<P
 
     public HoloPlayerRender(EntityRendererProvider.Context pContext, HoloBE be) {
         super(pContext, new PlayerModel<>(pContext.bakeLayer(be.isSlim() ? ModelLayers.PLAYER_SLIM : ModelLayers.PLAYER), be.isSlim()), 0.5F);
-        this.addLayer(new HumanoidArmorLayer<>(this, new HumanoidModel(pContext.bakeLayer(be.isSlim() ? ModelLayers.PLAYER_SLIM_INNER_ARMOR : ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidModel(pContext.bakeLayer(be.isSlim() ? ModelLayers.PLAYER_SLIM_OUTER_ARMOR : ModelLayers.PLAYER_OUTER_ARMOR))));
-        this.addLayer(new PlayerItemInHandLayer<>(this));
+        this.addLayer(new HumanoidArmorLayer<>(this, new HumanoidArmorModel(pContext.bakeLayer(be.isSlim() ? ModelLayers.PLAYER_SLIM_INNER_ARMOR : ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidArmorModel(pContext.bakeLayer(be.isSlim() ? ModelLayers.PLAYER_SLIM_OUTER_ARMOR : ModelLayers.PLAYER_OUTER_ARMOR)), pContext.getModelManager()));
+        this.addLayer(new PlayerItemInHandLayer<>(this, pContext.getItemInHandRenderer()));
         this.addLayer(new ArrowLayer<>(pContext, this));
         this.addLayer(new CustomCapeLayer(this));
-        this.addLayer(new CustomHeadLayer<>(this, pContext.getModelSet()));
+        this.addLayer(new CustomHeadLayer<>(this, pContext.getModelSet(), pContext.getItemInHandRenderer()));
         this.addLayer(new ElytraLayer<>(this, pContext.getModelSet()));
         this.addLayer(new ParrotOnShoulderLayer<>(this, pContext.getModelSet()));
         this.addLayer(new SpinAttackEffectLayer<>(this, pContext.getModelSet()));
@@ -82,9 +60,7 @@ public class HoloPlayerRender extends LivingEntityRenderer<Player, PlayerModel<P
         if (be.getSkin() == null){
             return DefaultPlayerSkin.getDefaultSkin();
         }
-
-        //return Minecraft.getInstance().getTextureManager().register("holo", new DynamicTexture(ImageUtil.tintV2(this.be.getSkin(), DyeColor.LIGHT_BLUE)));
-        return Minecraft.getInstance().getTextureManager().register("holo", new DynamicTexture(this.be.getSkin().getImageFromPixels()));
+        return Minecraft.getInstance().getTextureManager().register("holo", this.be.getSkin().getImageFromPixels());
     }
 
     private void setModelProperties(Player pClientPlayer) {

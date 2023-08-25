@@ -13,7 +13,7 @@ public class StormTrooperRender extends HumanoidMobRenderer<StormTrooper, Player
 
     public StormTrooperRender(EntityRendererProvider.Context context) {
         super(context, new PlayerLikeModel(context.bakeLayer(PlayerLikeModel.MODEL)), 0.5F);
-        this.addLayer(new HumanoidArmorLayer<>(this, new PlayerLikeModel(context.bakeLayer(PlayerLikeModel.MODEL)), new PlayerLikeModel(context.bakeLayer(PlayerLikeModel.MODEL))));
+        this.addLayer(new HumanoidArmorLayer<>(this, new PlayerLikeModel(context.bakeLayer(PlayerLikeModel.MODEL)), new PlayerLikeModel(context.bakeLayer(PlayerLikeModel.MODEL)), context.getModelManager()));
     }
 
     @Override

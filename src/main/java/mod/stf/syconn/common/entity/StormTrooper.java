@@ -3,45 +3,36 @@ package mod.stf.syconn.common.entity;
 import mod.stf.syconn.common.entity.goal.NearestAttackablePatrolTargetGoal;
 import mod.stf.syconn.common.entity.goal.PatrolGoal;
 import mod.stf.syconn.common.entity.goal.RangedGunAttackGoal;
-import mod.stf.syconn.init.ModEntities;
 import mod.stf.syconn.init.ModItems;
 import mod.stf.syconn.item.GunItem;
-import mod.stf.syconn.item.lightsaber.LightsaberHelper;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.animal.Turtle;
-import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
-import net.minecraft.world.entity.raid.Raid;
-import net.minecraft.world.item.BannerPatternItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.levelgen.PatrolSpawner;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 public class StormTrooper extends AbstractSkeleton {
@@ -64,13 +55,7 @@ public class StormTrooper extends AbstractSkeleton {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
-        return super.getAddEntityPacket();
-    }
-
-    @Override
     protected void registerGoals() {
-        //this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.2D));
         this.goalSelector.addGoal(1, new RangedGunAttackGoal<>(this, 1.0D, 5, 30.0F));
         this.goalSelector.addGoal(2, new PatrolGoal(this, 0.712D, 0.868D));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
@@ -176,13 +161,7 @@ public class StormTrooper extends AbstractSkeleton {
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
 
-    @Override
-    protected void populateDefaultEquipmentEnchantments(DifficultyInstance pDifficulty) {
-
-    }
-
-    @Override
-    protected void populateDefaultEquipmentSlots(DifficultyInstance pDifficulty) {
+    protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.F_11D.get()));
     }
 

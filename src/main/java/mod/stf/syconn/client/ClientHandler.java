@@ -10,15 +10,12 @@ import mod.stf.syconn.client.rendering.model.PlayerLikeModel;
 import mod.stf.syconn.client.rendering.model.TieModel;
 import mod.stf.syconn.client.screen.ColorScreen;
 import mod.stf.syconn.client.screen.HiltScreen;
-import mod.stf.syconn.client.screen.HoloScreen;
 import mod.stf.syconn.client.screen.SchematicScreen;
-import mod.stf.syconn.common.entity.TieFighter;
 import mod.stf.syconn.init.*;
 import mod.stf.syconn.item.Lightsaber;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import mod.stf.syconn.network.Network;
 import mod.stf.syconn.network.messages.MessageActivateLightsaber;
-import mod.stf.syconn.network.messages.MessageShootGuns;
 import mod.stf.syconn.network.messages.MessageThrowLightsaber;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -31,13 +28,12 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ClientRegistry;
-import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.Nullable;
@@ -49,12 +45,12 @@ public class ClientHandler {
     public static final KeyMapping KEY_LIGHTSABER_ACTIVATE = new KeyMapping("key.lightsaber.activate", GLFW.GLFW_KEY_V, "key.categories.stf");
 
     public static void setup(){
-        ClientRegistry.registerKeyBinding(KEY_LIGHTSABER_ACTIVATE);
-
         MenuScreens.register(ModContainers.COLOR_CONTAINER.get(), ColorScreen::new);
         MenuScreens.register(ModContainers.HILT_CONTAINER.get(), HiltScreen::new);
         MenuScreens.register(ModContainers.SCHEM_CONTAINER.get(), SchematicScreen::new);
 
+
+        // TODO UPDATE JSON WITH RENDERTYPE
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.LIGHTSABER_CRAFTER.get(), RenderType.translucent());
 
         registerProperties();
@@ -86,13 +82,17 @@ public class ClientHandler {
     }
 
     @SubscribeEvent
-    public static void registerColors(final ColorHandlerEvent.Item event) {
-        // LightsaberHelper.getData(pStack) != null ? LightsaberHelper.getData(pStack).getColor().getDecimal() : -1
+    public static void registerColors(final RegisterColorHandlersEvent.Item event) {
         event.getItemColors().register(((pStack, pTintIndex) -> pStack.getHoverName().getContents().equals("rainbow") ? LightsaberHelper.getData(pStack).getColor().rainbow(pStack) : LightsaberHelper.getData(pStack).getColor().getDecimal()), ModItems.LIGHTSABER.get());
     }
 
     @SubscribeEvent
-    public void onKeyPress(InputEvent.KeyInputEvent event)
+    public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
+        event.register(KEY_LIGHTSABER_ACTIVATE);
+    }
+
+    @SubscribeEvent
+    public void onKeyPress(InputEvent.Key event)
     {
         LocalPlayer player = Minecraft.getInstance().player;
 
@@ -107,14 +107,6 @@ public class ClientHandler {
             }
         }
     }
-
-//    @SubscribeEvent
-//    public void onMousePress(InputEvent.MouseInputEvent event) {
-//        LocalPlayer player = Minecraft.getInstance().player;
-//        if (Minecraft.getInstance().options.keyAttack.isDown() && player.isPassenger() && player.getVehicle() instanceof TieFighter){
-//            //Network.getPlayChannel().sendToServer(new MessageShootGuns());
-//        }
-//    }
 
     @SubscribeEvent
     public static void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {

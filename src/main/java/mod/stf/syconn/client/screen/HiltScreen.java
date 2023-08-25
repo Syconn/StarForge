@@ -1,45 +1,25 @@
 package mod.stf.syconn.client.screen;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mod.stf.syconn.Reference;
-import mod.stf.syconn.api.containers.slots.ToggleSlotHandler;
 import mod.stf.syconn.api.screens.TabbedScreen;
 import mod.stf.syconn.api.screens.componet.TabButton;
 import mod.stf.syconn.api.util.Tab;
 import mod.stf.syconn.block.LightsaberCrafter;
-import mod.stf.syconn.common.blockEntity.CrafterBE;
-import mod.stf.syconn.common.containers.ColorContainer;
 import mod.stf.syconn.common.containers.HiltContainer;
 import mod.stf.syconn.init.ModBlocks;
-import mod.stf.syconn.init.ModRecipes;
-import mod.stf.syconn.item.lightsaber.LColor;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import mod.stf.syconn.network.Network;
 import mod.stf.syconn.network.messages.MessageClickTab;
 import mod.stf.syconn.network.messages.MessageCraftHilt;
-import mod.stf.syconn.util.GuiHelper;
 import mod.stf.syconn.util.recipe.ModIngredient;
-import mod.stf.syconn.util.recipe.Recipe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.gui.screens.inventory.StonecutterScreen;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
@@ -55,7 +35,7 @@ public class HiltScreen extends TabbedScreen<HiltContainer> {
     private Inventory playerInv;
 
     public HiltScreen(HiltContainer container, Inventory inv, Component name) {
-        super(container, inv, new TextComponent(""));
+        super(container, inv, Component.empty());
         this.playerInv = inv;
         this.inv = container;
         this.pos = container.getBlockEntity().getBlockPos();
@@ -93,7 +73,7 @@ public class HiltScreen extends TabbedScreen<HiltContainer> {
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
         super.init();
-        addRenderableWidget(new ExtendedButton(relX + 8, relY + 53, 20, 20, new TextComponent("<"), pButton -> {
+        addRenderableWidget(new ExtendedButton(relX + 8, relY + 53, 20, 20, Component.literal("<"), pButton -> {
             if (inv.recipeNum == 0) {
                 inv.selectedRecipe = inv.recipes.get(inv.recipes.size() - 1);
                 inv.recipeNum = inv.recipes.size() - 1;
@@ -103,7 +83,7 @@ public class HiltScreen extends TabbedScreen<HiltContainer> {
             }
         }));
 
-        addRenderableWidget(new ExtendedButton(relX + 148, relY + 53, 20, 20, new TextComponent(">"), pButton -> {
+        addRenderableWidget(new ExtendedButton(relX + 148, relY + 53, 20, 20, Component.literal(">"), pButton -> {
             if (inv.recipeNum == inv.recipes.size() - 1) {
                 inv.selectedRecipe = inv.recipes.get(0);
                 inv.recipeNum = 0;
@@ -113,7 +93,7 @@ public class HiltScreen extends TabbedScreen<HiltContainer> {
             }
         }));
 
-        addRenderableWidget(craftButton = new ExtendedButton(relX + 155, relY + 78, 36, 18, new TextComponent("Craft"), pButton -> {
+        addRenderableWidget(craftButton = new ExtendedButton(relX + 155, relY + 78, 36, 18, Component.literal("Craft"), pButton -> {
             Network.getPlayChannel().sendToServer(new MessageCraftHilt(inv.selectedRecipe));
         }));
     }
@@ -165,12 +145,12 @@ public class HiltScreen extends TabbedScreen<HiltContainer> {
             RenderSystem.setShaderTexture(0, GUI);
             if (amountNeeded <= 0) {
                 this.blit(pPoseStack, relX + 11 + (27 * i), relY + 76, 198, 20, 18, 18);
-                itemRenderer.renderAndDecorateItem(new ItemStack(ingredient.item()), relX + 12 + (27 * i), relY + 76);
+                itemRenderer.renderAndDecorateItem(pPoseStack, new ItemStack(ingredient.item()), relX + 12 + (27 * i), relY + 76);
                 checks++;
             } else {
                 this.blit(pPoseStack, relX + 11 + (27 * i), relY + 76, 198, 38, 18, 18);
-                itemRenderer.renderAndDecorateItem(new ItemStack(ingredient.item()), relX + 12 + (27 * i), relY + 76);
-                itemRenderer.renderGuiItemDecorations(font, new ItemStack(ingredient.item(), amountNeeded), relX + 12 + (27 * i), relY + 76);
+                itemRenderer.renderAndDecorateItem(pPoseStack, new ItemStack(ingredient.item()), relX + 12 + (27 * i), relY + 76);
+                itemRenderer.renderGuiItemDecorations(pPoseStack, font, new ItemStack(ingredient.item(), amountNeeded), relX + 12 + (27 * i), relY + 76);
             }
         }
 

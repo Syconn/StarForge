@@ -5,6 +5,7 @@ import mod.stf.syconn.init.ModItems;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -50,15 +51,15 @@ public class Jedi extends AbstractForceUser implements RangedAttackMob {
         return new ResourceLocation[]{ new ResourceLocation(Reference.MOD_ID, "textures/entity/jedi/jedi.png"), new ResourceLocation(Reference.MOD_ID, "textures/entity/jedi/jedi2.png"), new ResourceLocation(Reference.MOD_ID, "textures/entity/jedi/jedi3.png"), new ResourceLocation(Reference.MOD_ID, "textures/entity/jedi/jedi4.png"), new ResourceLocation(Reference.MOD_ID, "textures/entity/jedi/jedi6.png"), new ResourceLocation(Reference.MOD_ID, "textures/entity/jedi/jedi7.png"), new ResourceLocation(Reference.MOD_ID, "textures/entity/jedi/jedi8.png")};
     }
 
-    @Nullable
-    @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
-        populateDefaultEquipmentSlots(pDifficulty);
+        populateDefaultEquipmentSlots(pLevel.getRandom(), pDifficulty);
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
 
+
+
     @Override
-    protected void populateDefaultEquipmentSlots(DifficultyInstance pDifficulty) {
+    protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, LightsaberHelper.randomPreset(true));
     }
 

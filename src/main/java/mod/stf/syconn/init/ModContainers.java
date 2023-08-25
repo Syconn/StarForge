@@ -12,7 +12,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ModContainers {
 
-    public static final DeferredRegister<MenuType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.CONTAINERS, Reference.MOD_ID);
+    public static final DeferredRegister<MenuType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Reference.MOD_ID);
     public static final RegistryObject<MenuType<ColorContainer>> COLOR_CONTAINER = REGISTER.register("color",
             () -> IForgeMenuType.create((windowId, inv, data) -> new ColorContainer(windowId, data.readBlockPos(), inv, inv.player)));
     public static final RegistryObject<MenuType<HiltContainer>> HILT_CONTAINER = REGISTER.register("hilt",

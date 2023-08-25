@@ -1,15 +1,10 @@
 package mod.stf.syconn.api.util.data;
 
+import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 
-public record DirectionalTexture(TextureAtlasSprite texture,
-                                 Direction direction) {
-
-    public TextureAtlasSprite getTexture() {
-        return texture;
-    }
-
+public record DirectionalTexture(NativeImage texture, Direction direction) {
     public int x() {
         switch (direction) {
             default:

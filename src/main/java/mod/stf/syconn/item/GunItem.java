@@ -66,11 +66,6 @@ public abstract class GunItem extends Item {
         return true;
     }
 
-    @Override
-    public void fillItemCategory(CreativeModeTab pCategory, NonNullList<ItemStack> pItems) {
-        pItems.add(createGun());
-    }
-
     public abstract ThrowableProjectile createBullet(LivingEntity shooter);
     public abstract ItemStack createGun();
 }

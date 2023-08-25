@@ -2,9 +2,8 @@ package mod.stf.syconn.network.messages;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import mod.stf.syconn.api.util.SkinGrabber;
-import mod.stf.syconn.api.util.data.ServerPixelImage;
+import mod.stf.syconn.api.util.data.PixelImage;
 import mod.stf.syconn.common.blockEntity.HoloBE;
-import mod.stf.syconn.world.data.SkinData;
 import mod.stf.syconn.world.data.SkinManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -67,9 +66,9 @@ public class MessageSetupSkin implements IMessage<MessageSetupSkin> {
                             skin = SkinGrabber.getSkinTexture(SkinGrabber.getTextureURL(message.urlOrName));
                             slim = SkinGrabber.getModelType(message.urlOrName);
                         }
-                        be.setSkin(new ServerPixelImage(skin));
+                        be.setSkin(new PixelImage(skin));
                         be.setSlim(slim);
-                        cap.putSkins(message.urlOrName, new ServerPixelImage(skin));
+                        cap.putSkins(message.urlOrName, new PixelImage(skin));
                         cap.putSlimSkins(message.urlOrName, slim);
                     }
                 });
