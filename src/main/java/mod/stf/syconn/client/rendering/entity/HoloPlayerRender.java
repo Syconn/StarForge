@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import mod.stf.syconn.client.rendering.layer.CustomCapeLayer;
 import mod.stf.syconn.common.blockEntity.HoloBE;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -24,6 +25,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.joml.Matrix4f;
 
 @OnlyIn(Dist.CLIENT)
 public class HoloPlayerRender extends LivingEntityRenderer<Player, PlayerModel<Player>> {
@@ -32,7 +34,7 @@ public class HoloPlayerRender extends LivingEntityRenderer<Player, PlayerModel<P
 
     public HoloPlayerRender(EntityRendererProvider.Context pContext, HoloBE be) {
         super(pContext, new PlayerModel<>(pContext.bakeLayer(be.isSlim() ? ModelLayers.PLAYER_SLIM : ModelLayers.PLAYER), be.isSlim()), 0.5F);
-        this.addLayer(new HumanoidArmorLayer<>(this, new HumanoidArmorModel(pContext.bakeLayer(be.isSlim() ? ModelLayers.PLAYER_SLIM_INNER_ARMOR : ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidArmorModel(pContext.bakeLayer(be.isSlim() ? ModelLayers.PLAYER_SLIM_OUTER_ARMOR : ModelLayers.PLAYER_OUTER_ARMOR)), pContext.getModelManager()));
+        this.addLayer(new HumanoidArmorLayer<>(this, new HumanoidArmorModel<>(pContext.bakeLayer(be.isSlim() ? ModelLayers.PLAYER_SLIM_INNER_ARMOR : ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidArmorModel(pContext.bakeLayer(be.isSlim() ? ModelLayers.PLAYER_SLIM_OUTER_ARMOR : ModelLayers.PLAYER_OUTER_ARMOR)), pContext.getModelManager()));
         this.addLayer(new PlayerItemInHandLayer<>(this, pContext.getItemInHandRenderer()));
         this.addLayer(new ArrowLayer<>(pContext, this));
         this.addLayer(new CustomCapeLayer(this));
@@ -44,9 +46,8 @@ public class HoloPlayerRender extends LivingEntityRenderer<Player, PlayerModel<P
         this.be = be;
     }
 
-    @Override
     protected void renderNameTag(Player pEntity, Component pDisplayName, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
-
+//        super.renderNameTag(pEntity, pDisplayName, pMatrixStack, pBuffer, pPackedLight);
     }
 
     @Override

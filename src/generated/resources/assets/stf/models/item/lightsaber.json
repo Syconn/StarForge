@@ -2,158 +2,158 @@
   "parent": "stf:item/lightsaber_off/yoda",
   "overrides": [
     {
+      "model": "stf:item/lightsaber_off/ahsoka",
       "predicate": {
-        "minecraft:model": 1.0,
-        "minecraft:active": 0.0
-      },
-      "model": "stf:item/lightsaber_off/ahsoka"
+        "minecraft:active": 0.0,
+        "minecraft:model": 1.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_on/ahsoka",
       "predicate": {
-        "minecraft:model": 1.0,
-        "minecraft:active": 1.0
-      },
-      "model": "stf:item/lightsaber_on/ahsoka"
+        "minecraft:active": 1.0,
+        "minecraft:model": 1.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_off/anakin",
       "predicate": {
-        "minecraft:model": 2.0,
-        "minecraft:active": 0.0
-      },
-      "model": "stf:item/lightsaber_off/anakin"
+        "minecraft:active": 0.0,
+        "minecraft:model": 2.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_on/anakin",
       "predicate": {
-        "minecraft:model": 2.0,
-        "minecraft:active": 1.0
-      },
-      "model": "stf:item/lightsaber_on/anakin"
+        "minecraft:active": 1.0,
+        "minecraft:model": 2.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_off/dark_saber",
       "predicate": {
-        "minecraft:model": 3.0,
-        "minecraft:active": 0.0
-      },
-      "model": "stf:item/lightsaber_off/dark_saber"
+        "minecraft:active": 0.0,
+        "minecraft:model": 3.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_on/dark_saber",
       "predicate": {
-        "minecraft:model": 3.0,
-        "minecraft:active": 1.0
-      },
-      "model": "stf:item/lightsaber_on/dark_saber"
+        "minecraft:active": 1.0,
+        "minecraft:model": 3.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_off/guard",
       "predicate": {
-        "minecraft:model": 4.0,
-        "minecraft:active": 0.0
-      },
-      "model": "stf:item/lightsaber_off/guard"
+        "minecraft:active": 0.0,
+        "minecraft:model": 4.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_on/guard",
       "predicate": {
-        "minecraft:model": 4.0,
-        "minecraft:active": 1.0
-      },
-      "model": "stf:item/lightsaber_on/guard"
+        "minecraft:active": 1.0,
+        "minecraft:model": 4.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_off/kal",
       "predicate": {
-        "minecraft:model": 5.0,
-        "minecraft:active": 0.0
-      },
-      "model": "stf:item/lightsaber_off/kal"
+        "minecraft:active": 0.0,
+        "minecraft:model": 5.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_on/kal",
       "predicate": {
-        "minecraft:model": 5.0,
-        "minecraft:active": 1.0
-      },
-      "model": "stf:item/lightsaber_on/kal"
+        "minecraft:active": 1.0,
+        "minecraft:model": 5.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_off/kylo",
       "predicate": {
-        "minecraft:model": 6.0,
-        "minecraft:active": 0.0
-      },
-      "model": "stf:item/lightsaber_off/kylo"
+        "minecraft:active": 0.0,
+        "minecraft:model": 6.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_on/kylo",
       "predicate": {
-        "minecraft:model": 6.0,
-        "minecraft:active": 1.0
-      },
-      "model": "stf:item/lightsaber_on/kylo"
+        "minecraft:active": 1.0,
+        "minecraft:model": 6.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_off/luke",
       "predicate": {
-        "minecraft:model": 7.0,
-        "minecraft:active": 0.0
-      },
-      "model": "stf:item/lightsaber_off/luke"
+        "minecraft:active": 0.0,
+        "minecraft:model": 7.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_on/luke",
       "predicate": {
-        "minecraft:model": 7.0,
-        "minecraft:active": 1.0
-      },
-      "model": "stf:item/lightsaber_on/luke"
+        "minecraft:active": 1.0,
+        "minecraft:model": 7.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_off/mace",
       "predicate": {
-        "minecraft:model": 8.0,
-        "minecraft:active": 0.0
-      },
-      "model": "stf:item/lightsaber_off/mace"
+        "minecraft:active": 0.0,
+        "minecraft:model": 8.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_on/mace",
       "predicate": {
-        "minecraft:model": 8.0,
-        "minecraft:active": 1.0
-      },
-      "model": "stf:item/lightsaber_on/mace"
+        "minecraft:active": 1.0,
+        "minecraft:model": 8.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_off/maul",
       "predicate": {
-        "minecraft:model": 9.0,
-        "minecraft:active": 0.0
-      },
-      "model": "stf:item/lightsaber_off/maul"
+        "minecraft:active": 0.0,
+        "minecraft:model": 9.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_on/maul",
       "predicate": {
-        "minecraft:model": 9.0,
-        "minecraft:active": 1.0
-      },
-      "model": "stf:item/lightsaber_on/maul"
+        "minecraft:active": 1.0,
+        "minecraft:model": 9.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_off/obi",
       "predicate": {
-        "minecraft:model": 10.0,
-        "minecraft:active": 0.0
-      },
-      "model": "stf:item/lightsaber_off/obi"
+        "minecraft:active": 0.0,
+        "minecraft:model": 10.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_on/obi",
       "predicate": {
-        "minecraft:model": 10.0,
-        "minecraft:active": 1.0
-      },
-      "model": "stf:item/lightsaber_on/obi"
+        "minecraft:active": 1.0,
+        "minecraft:model": 10.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_off/yoda",
       "predicate": {
-        "minecraft:model": 11.0,
-        "minecraft:active": 0.0
-      },
-      "model": "stf:item/lightsaber_off/yoda"
+        "minecraft:active": 0.0,
+        "minecraft:model": 11.0
+      }
     },
     {
+      "model": "stf:item/lightsaber_on/yoda",
       "predicate": {
-        "minecraft:model": 11.0,
-        "minecraft:active": 1.0
-      },
-      "model": "stf:item/lightsaber_on/yoda"
+        "minecraft:active": 1.0,
+        "minecraft:model": 11.0
+      }
     }
   ]
 }

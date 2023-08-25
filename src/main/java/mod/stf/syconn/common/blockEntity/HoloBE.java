@@ -1,7 +1,6 @@
 package mod.stf.syconn.common.blockEntity;
 
 import mod.stf.syconn.api.blockEntity.ClientBlockEntity;
-import mod.stf.syconn.api.util.NbtUtil;
 import mod.stf.syconn.api.util.data.PixelImage;
 import mod.stf.syconn.init.ModBlockEntities;
 import net.minecraft.core.BlockPos;

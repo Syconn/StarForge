@@ -57,7 +57,6 @@ public class Lightsaber extends Item {
                 MovableLightBlock.removeLightSource(pStack, pLevel);
                 pos=null;
             }
-            // TODO SOLVE BETTER
             else if (data != null && !data.isActive() && pos != null){
                 pLevel.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
                 pos=null;
@@ -73,16 +72,18 @@ public class Lightsaber extends Item {
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
         LightsaberData data = LightsaberHelper.getData(pStack);
 
-        pTooltipComponents.add(Component.literal(data.getColor().getClosetColor().getName()).withStyle(ColorConverter.convert(data.getColor().getClosetColor())));
-        if (pIsAdvanced.isAdvanced()){
-            pTooltipComponents.add(Component.empty().withStyle(ChatFormatting.GREEN));
-            pTooltipComponents.add(Component.literal("Properties").withStyle(ChatFormatting.GREEN));
-            pTooltipComponents.add(Component.literal("Model: " + data.getHandle().getType()).withStyle(ChatFormatting.GREEN));
+        if (data != null) {
+            pTooltipComponents.add(Component.literal(data.getColor().getClosetColor().getName()).withStyle(ColorConverter.convert(data.getColor().getClosetColor())));
+            if (pIsAdvanced.isAdvanced()){
+                pTooltipComponents.add(Component.empty().withStyle(ChatFormatting.GREEN));
+                pTooltipComponents.add(Component.literal("Properties").withStyle(ChatFormatting.GREEN));
+                pTooltipComponents.add(Component.literal("Model: " + data.getHandle().getType()).withStyle(ChatFormatting.GREEN));
+            }
         }
     }
 
     public boolean isBarVisible(ItemStack pStack) {
-        return true;
+        return LightsaberHelper.getData(pStack) != null && !LightsaberHelper.getData(pStack).hideBar();
     }
 
     public int getBarWidth(ItemStack pStack) {

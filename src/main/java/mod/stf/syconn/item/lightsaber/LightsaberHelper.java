@@ -15,6 +15,7 @@ public class LightsaberHelper {
         tag.putFloat("id", data.getHandle().getId());
         tag.putBoolean("state", data.isActive());
         LColor.save(tag, data.getColor());
+        tag.putBoolean("hide_bar", data.hideBar());
         stack.getOrCreateTag().put("ldata", tag);
     }
 
@@ -26,7 +27,7 @@ public class LightsaberHelper {
     public static LightsaberData getData(ItemStack stack){
         if (hasData(stack)) {
             CompoundTag tag = stack.getOrCreateTag().getCompound("ldata");
-            return new LightsaberData(LightsaberData.HandleType.getHandle(tag.getFloat("id")), tag.getBoolean("state"), LColor.read(tag));
+            return new LightsaberData(LightsaberData.HandleType.getHandle(tag.getFloat("id")), tag.getBoolean("state"), LColor.read(tag), tag.getBoolean("hide_bar"));
         }
         return null;
     }
@@ -36,7 +37,7 @@ public class LightsaberHelper {
 
         for (LightsaberData.HandleType type : LightsaberData.HandleType.values()){
             ItemStack stack = new ItemStack(ModItems.LIGHTSABER.get());
-            LightsaberData data = new LightsaberData(type, false, new LColor(type.getColor()));
+            LightsaberData data = new LightsaberData(type, false, new LColor(type.getColor()), false);
             LightsaberHelper.setData(stack, data);
             pItems.add(stack);
         }
@@ -73,10 +74,18 @@ public class LightsaberHelper {
         return stack;
     }
 
-    public static ItemStack customLightsaber(LightsaberData.HandleType type, boolean state, LColor color){
+    public static ItemStack customOnLightsaber(LightsaberData.HandleType type, LColor color){
         ItemStack stack = new ItemStack(ModItems.LIGHTSABER.get());
         //stack.setHoverName(new TextComponent(type.getName()).append(new TextComponent(" Lightsaber").withStyle(ColorConverter.convert(type.getDefaultColor()))));
-        LightsaberData data = new LightsaberData(type, state, color);
+        LightsaberData data = new LightsaberData(type, true, color);
+        LightsaberHelper.setData(stack, data);
+        return stack;
+    }
+
+    public static ItemStack customOffLightsaber(LightsaberData.HandleType type, LColor color, boolean hideBar){
+        ItemStack stack = new ItemStack(ModItems.LIGHTSABER.get());
+        //stack.setHoverName(new TextComponent(type.getName()).append(new TextComponent(" Lightsaber").withStyle(ColorConverter.convert(type.getDefaultColor()))));
+        LightsaberData data = new LightsaberData(type, false, color, hideBar);
         LightsaberHelper.setData(stack, data);
         return stack;
     }

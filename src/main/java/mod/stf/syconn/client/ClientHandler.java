@@ -83,7 +83,12 @@ public class ClientHandler {
 
     @SubscribeEvent
     public static void registerColors(final RegisterColorHandlersEvent.Item event) {
-        event.getItemColors().register(((pStack, pTintIndex) -> pStack.getHoverName().getContents().equals("rainbow") ? LightsaberHelper.getData(pStack).getColor().rainbow(pStack) : LightsaberHelper.getData(pStack).getColor().getDecimal()), ModItems.LIGHTSABER.get());
+        event.getItemColors().register((pStack, pTintIndex) -> {
+            if (LightsaberHelper.getData(pStack) != null) {
+                return pStack.getHoverName().getContents().equals("rainbow") ? LightsaberHelper.getData(pStack).getColor().rainbow(pStack) : LightsaberHelper.getData(pStack).getColor().getDecimal();
+            }
+            return -1;
+        }, ModItems.LIGHTSABER.get());
     }
 
     @SubscribeEvent

@@ -8,6 +8,7 @@ import mod.stf.syconn.common.blockEntity.HoloBE;
 import mod.stf.syconn.init.ModBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -28,7 +29,6 @@ public class HoloRender implements BlockEntityRenderer<HoloBE> {
     public HoloRender(BlockEntityRendererProvider.Context pContext) {
     }
 
-    @Override
     public void render(HoloBE pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
         if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.HOLO_PROJECTOR.get() && pBlockEntity.getSkin() != null) {
             HoloPlayerRender playerRenderer = new HoloPlayerRender(new EntityRendererProvider.Context(mc.getEntityRenderDispatcher(), mc.getItemRenderer(), mc.getBlockRenderer(), mc.gameRenderer.itemInHandRenderer, mc.getResourceManager(), mc.getEntityModels(), mc.font), pBlockEntity);
@@ -81,7 +81,7 @@ public class HoloRender implements BlockEntityRenderer<HoloBE> {
             }
 
             pPoseStack.scale(0.5f, 0.5f, 0.5f);
-            playerRenderer.render(player, 0, pPartialTick, pPoseStack, pBufferSource, pPackedLight);
+            playerRenderer.render(player, 0, pPartialTick, pPoseStack, pBufferSource, LightTexture.FULL_BLOCK);
             pPoseStack.popPose();
         }
     }

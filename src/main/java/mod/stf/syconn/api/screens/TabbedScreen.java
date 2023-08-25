@@ -47,7 +47,7 @@ public abstract class TabbedScreen<T extends AbstractContainerMenu> extends Basi
         return (imageWidth / size + 12) * i + (4 * i);
     }
 
-    public void tabbedClicked(Button button){
+    protected void tabbedClicked(Button button){
         if (!((TabButton)button).isSelected()){
             for (int i = 0; i < tabs.size(); i++){
                 if (i != ((TabButton)button).getId() - 1) {

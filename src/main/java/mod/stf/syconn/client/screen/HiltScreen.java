@@ -15,6 +15,7 @@ import mod.stf.syconn.network.messages.MessageClickTab;
 import mod.stf.syconn.network.messages.MessageCraftHilt;
 import mod.stf.syconn.util.recipe.ModIngredient;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -52,23 +53,19 @@ public class HiltScreen extends TabbedScreen<HiltContainer> {
         return tabs;
     }
 
-    @Override
     protected int startingTabId() {
         return LightsaberCrafter.States.HILT.getId();
     }
 
-    @Override
     public void tabbedClicked(Button button) {
         super.tabbedClicked(button);
         Network.getPlayChannel().sendToServer(new MessageClickTab(((TabButton)button).getId(), inv.getBlockEntity().getBlockPos()));
     }
 
-    @Override
     protected void containerTick() {
 
     }
 
-    @Override
     protected void init() {
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
@@ -98,60 +95,58 @@ public class HiltScreen extends TabbedScreen<HiltContainer> {
         }));
     }
 
-    @Override
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
         this.renderBackground(pPoseStack);
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
-        checkSlots(pPoseStack, relX, relY);
         renderGuiItem(inv.selectedRecipe.getOutput(), relX + 84, relY + 30, 40.0F, 40.0F, 32.0F, true, itemRenderer.getModel(inv.selectedRecipe.getOutput(), null, Minecraft.getInstance().player, 0));
         this.renderTooltip(pPoseStack, pMouseX, pMouseY);
-
-        if (checkSlots(pPoseStack, relX, relY)){
+        if (checkSlots(pPoseStack, pMouseX, pMouseY, relX, relY)){
             craftButton.visible = true;
         } else craftButton.visible = false;
     }
 
-    @Override
     protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
         drawCenteredString(pPoseStack, font, LightsaberHelper.getData(inv.selectedRecipe.getOutput()).getHandle().getName(), 88, 59, 0xFFFFFF);
     }
 
-    @Override
     protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
         RenderSystem.setShaderTexture(0, GUI);
-        this.blit(pPoseStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
+        blit(pPoseStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
     }
 
-    private boolean checkSlots(PoseStack pPoseStack, int relX, int relY){
+    private boolean checkSlots(PoseStack pPoseStack, int pMouseX, int pMouseY, int relX, int relY){
         int checks = 0;
 
         for (int i = 0; i < inv.selectedRecipe.getInputs().length; i++){
             ModIngredient ingredient = inv.selectedRecipe.getInputs()[i];
             int amountNeeded = inv.selectedRecipe.getInputs()[i].amount();
             int playerAmount = 0;
-
             for (int pI = 0; pI < minecraft.player.getInventory().items.size(); pI++){
                 if (minecraft.player.getInventory().items.get(pI).getItem() == ingredient.item()){
                     playerAmount += minecraft.player.getInventory().items.get(pI).getCount();
                 }
             }
-
             amountNeeded -= playerAmount;
 
             RenderSystem.setShaderTexture(0, GUI);
+            int minX = relX + 11 + (27 * i);
+            int minY = relY + 76;
             if (amountNeeded <= 0) {
-                this.blit(pPoseStack, relX + 11 + (27 * i), relY + 76, 198, 20, 18, 18);
+                blit(pPoseStack, minX, minY, 198, 20, 18, 18);
                 itemRenderer.renderAndDecorateItem(pPoseStack, new ItemStack(ingredient.item()), relX + 12 + (27 * i), relY + 76);
                 checks++;
             } else {
-                this.blit(pPoseStack, relX + 11 + (27 * i), relY + 76, 198, 38, 18, 18);
+                blit(pPoseStack, minX, minY, 198, 38, 18, 18);
                 itemRenderer.renderAndDecorateItem(pPoseStack, new ItemStack(ingredient.item()), relX + 12 + (27 * i), relY + 76);
                 itemRenderer.renderGuiItemDecorations(pPoseStack, font, new ItemStack(ingredient.item(), amountNeeded), relX + 12 + (27 * i), relY + 76);
             }
+//            if (pMouseX >= minX && pMouseX <= minX + 18 && pMouseY >= minY && pMouseY <= minY + 18) {
+//                this.renderTooltip(pPoseStack, new ItemStack(ingredient.item()), pMouseX, pMouseY);
+//            }
         }
 
         return checks >= inv.selectedRecipe.getInputs().length;

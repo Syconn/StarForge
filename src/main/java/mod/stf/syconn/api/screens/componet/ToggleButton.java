@@ -20,7 +20,7 @@ public class ToggleButton extends ExtendedButton {
 
     @Override
     public void onClick(double pMouseX, double pMouseY) {
-        if (getMessage().getContents().equals(prefix + state1)){
+        if (getMessage().getString().equals(prefix + state1)){
             setMessage(Component.literal(prefix + state2));
             current = state2;
         } else {
