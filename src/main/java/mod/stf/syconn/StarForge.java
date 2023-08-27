@@ -27,9 +27,7 @@ public class StarForge {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            bus.addListener(this::createTab);
-        });
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> bus.addListener(this::createTab));
         ModBlocks.REGISTER.register(bus);
         ModItems.REGISTER.register(bus);
         ModBlockEntities.REGISTER.register(bus);
@@ -39,18 +37,16 @@ public class StarForge {
         ModRecipes.REGISTER.register(bus);
     }
 
-    public void createTab(CreativeModeTabEvent.Register e){
+    public void createTab(CreativeModeTabEvent.Register e) {
         e.registerCreativeModeTab(new ResourceLocation(Reference.MOD_ID, "starwars"), builder -> builder.noScrollBar().title(Component.translatable("itemGroup.StarForge")).icon(() -> LightsaberHelper.customOffLightsaber(LightsaberData.HandleType.MACE, LColor.of(DyeColor.PURPLE), true)).displayItems((a, p) -> ModItems.addItems(p)).build());
     }
 
-    private void onCommonSetup(FMLCommonSetupEvent event)
-    {
+    private void onCommonSetup(FMLCommonSetupEvent event) {
         Network.init();
         MinecraftForge.EVENT_BUS.register(new CommonHandler());
     }
 
-    private void onClientSetup(FMLClientSetupEvent event)
-    {
+    private void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(ClientHandler::setup);
         MinecraftForge.EVENT_BUS.register(new ClientHandler());
     }
