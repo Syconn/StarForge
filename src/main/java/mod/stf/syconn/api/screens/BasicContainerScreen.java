@@ -53,7 +53,7 @@ public abstract class BasicContainerScreen<T extends AbstractContainerMenu> exte
             Lighting.setupForFlatItems();
         }
 
-        itemRenderer.render(pStack, ItemDisplayContext.GUI, false, new PoseStack(), multibuffersource$buffersource, 15728880, OverlayTexture.NO_OVERLAY, pBakedmodel);
+        itemRenderer.render(pStack, ItemDisplayContext.FIXED, false, new PoseStack(), multibuffersource$buffersource, 15728880, OverlayTexture.NO_OVERLAY, pBakedmodel);
         multibuffersource$buffersource.endBatch();
         RenderSystem.enableDepthTest();
         if (flag) {

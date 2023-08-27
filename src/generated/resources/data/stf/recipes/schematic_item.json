@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "b": {
+      "item": "minecraft:black_dye"
+    },
+    "d": {
+      "item": "minecraft:light_blue_dye"
+    },
+    "m": {
+      "item": "minecraft:map"
+    },
+    "p": {
+      "item": "minecraft:paper"
+    }
+  },
+  "pattern": [
+    "dbd",
+    "pmp",
+    "dpd"
+  ],
+  "result": {
+    "item": "stf:schematic_item"
+  },
+  "show_notification": true
+}

@@ -21,7 +21,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -79,12 +78,10 @@ public class SchematicBe extends ClientMenuBlockEntity {
         return null;
     }
 
-    @Nullable
     public Map<BlockPos, PixelImage> getImages(){
         return blockImage;
     }
 
-    @Override
     protected CompoundTag saveData() {
         CompoundTag pTag = new CompoundTag();
         pTag.putString("block", this.block);
@@ -94,7 +91,6 @@ public class SchematicBe extends ClientMenuBlockEntity {
         return pTag;
     }
 
-    @Override
     protected void saveAdditional(CompoundTag pTag) {
         super.saveAdditional(pTag);
         pTag.putString("block", this.block);
@@ -102,7 +98,6 @@ public class SchematicBe extends ClientMenuBlockEntity {
             pTag.put("blockimage", NbtUtil.writeServerImageList(blockImage));
     }
 
-    @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
         block = pTag.getString("block");
@@ -110,30 +105,27 @@ public class SchematicBe extends ClientMenuBlockEntity {
             blockImage = NbtUtil.readServerImageList(pTag.getCompound("blockimage"));
     }
 
-    @Override
     public void tickServer() {
 
     }
 
-    @Override
     protected ItemStackHandler createHandler() {
         return new ItemStackHandler(1) {
-
-            @Override
             protected void onContentsChanged(int slot) {
                 setChanged();
             }
         };
     }
 
-    @Override
     public Component getDisplayName() {
         return Component.literal("Schematic");
     }
 
-    @Nullable
-    @Override
     public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
         return new SchematicContainer(pContainerId, worldPosition, pPlayerInventory, pPlayer);
+    }
+
+    public ItemStackHandler getInventory() {
+        return null;
     }
 }

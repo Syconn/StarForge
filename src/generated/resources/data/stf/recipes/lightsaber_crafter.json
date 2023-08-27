@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:iron_axe"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "p": {
+      "item": "minecraft:iron_pickaxe"
+    }
+  },
+  "pattern": [
+    " a ",
+    "iii",
+    "ipi"
+  ],
+  "result": {
+    "item": "stf:lightsaber_crafter"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,17 @@
+{
+  "type": "stf:lightsaber",
+  "materials": [
+    {
+      "count": 42,
+      "item": "minecraft:quartz"
+    },
+    {
+      "count": 18,
+      "item": "minecraft:redstone"
+    }
+  ],
+  "result": {
+    "item": "stf:lightsaber",
+    "nbt": "{ldata:{b:42,cycle:0,g:207,hide_bar:0b,id:4.0f,r:222,state:0b,timer:0}}"
+  }
+}

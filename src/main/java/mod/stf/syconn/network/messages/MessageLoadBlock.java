@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -40,7 +41,7 @@ public class MessageLoadBlock implements IMessage<MessageLoadBlock> {
             ServerPlayer player = supplier.get().getSender();
             if (player != null){
                 SchematicBe be = (SchematicBe) player.level.getBlockEntity(message.pos);
-                be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+                be.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h -> {
                     be.setSchematic(Schematic.readSchematic(player.getLevel(), h.getStackInSlot(0).getOrCreateTag().getCompound("schematic")));
                     be.createBlockImage();
                 });
