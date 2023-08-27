@@ -8,14 +8,14 @@ import mod.stf.syconn.init.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 public class ColorContainer extends ContainerMenu {
 
     public ColorContainer(int windowId, BlockPos pos, Inventory playerInventory, Player player) {
         super(ModContainers.COLOR_CONTAINER.get(), windowId, pos, playerInventory, player, ModBlocks.LIGHTSABER_CRAFTER.get());
         if (blockEntity != null) {
-            blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+            blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h -> {
                 addSlot(new SpecificSlotHandler(h, 0, 8, 8, ModItems.LIGHTSABER.get()));
             });
         }

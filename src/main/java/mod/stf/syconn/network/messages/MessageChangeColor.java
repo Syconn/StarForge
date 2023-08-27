@@ -6,8 +6,8 @@ import mod.stf.syconn.item.lightsaber.LightsaberData;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -42,8 +42,7 @@ public class MessageChangeColor implements IMessage<MessageChangeColor> {
                 return;
 
             ColorContainer crafter = (ColorContainer) player.containerMenu;
-
-            LazyOptional<IItemHandler> cap = crafter.getBlockEntity().getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+            LazyOptional<IItemHandler> cap = crafter.getBlockEntity().getCapability(ForgeCapabilities.ITEM_HANDLER);
 
             if (cap.isPresent()) {
                 IItemHandler handler = cap.resolve().get();

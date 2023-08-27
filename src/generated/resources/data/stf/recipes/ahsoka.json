@@ -1,0 +1,21 @@
+{
+  "type": "stf:lightsaber",
+  "materials": [
+    {
+      "count": 30,
+      "tag": "forge:ingots/iron"
+    },
+    {
+      "count": 26,
+      "item": "minecraft:coal"
+    },
+    {
+      "count": 12,
+      "item": "minecraft:redstone"
+    }
+  ],
+  "result": {
+    "item": "stf:lightsaber",
+    "nbt": "{ldata:{b:240,cycle:0,g:240,hide_bar:0b,id:1.0f,r:240,state:0b,timer:0}}"
+  }
+}

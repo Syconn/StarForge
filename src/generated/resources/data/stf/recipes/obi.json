@@ -1,0 +1,29 @@
+{
+  "type": "stf:lightsaber",
+  "materials": [
+    {
+      "count": 12,
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "count": 12,
+      "item": "minecraft:coal"
+    },
+    {
+      "count": 24,
+      "item": "minecraft:iron_nugget"
+    },
+    {
+      "count": 1,
+      "tag": "forge:ingots/netherite"
+    },
+    {
+      "count": 1,
+      "item": "minecraft:redstone_lamp"
+    }
+  ],
+  "result": {
+    "item": "stf:lightsaber",
+    "nbt": "{ldata:{b:146,cycle:0,g:49,hide_bar:0b,id:10.0f,r:37,state:0b,timer:0}}"
+  }
+}

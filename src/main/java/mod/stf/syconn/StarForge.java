@@ -10,7 +10,6 @@ import mod.stf.syconn.network.Network;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CreativeModeTabEvent;
@@ -20,8 +19,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
-import java.awt.*;
 
 @Mod(Reference.MOD_ID)
 public class StarForge {
@@ -38,6 +35,8 @@ public class StarForge {
         ModBlockEntities.REGISTER.register(bus);
         ModEntities.REGISTER.register(bus);
         ModContainers.REGISTER.register(bus);
+        ModRecipeSerializers.REGISTER.register(bus);
+        ModRecipes.REGISTER.register(bus);
     }
 
     public void createTab(CreativeModeTabEvent.Register e){

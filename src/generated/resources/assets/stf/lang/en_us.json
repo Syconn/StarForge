@@ -12,6 +12,8 @@
   "itemGroup.StarForge": "StarForge",
   "key.categories.stf": "StarForge",
   "key.lightsaber.activate": "Key Activate Lightsaber",
+  "stf.category.lightsaber.materials": "Materials",
+  "stf.category.lightsaber.title": "Lightsaber Crafter",
   "tab.lightsaber_crafter.co": "Part Crafter",
   "tab.lightsaber_crafter.cr": "Colorizer",
   "tab.lightsaber_crafter.h": "Hilt Crafter"

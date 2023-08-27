@@ -1,0 +1,21 @@
+{
+  "type": "stf:lightsaber",
+  "materials": [
+    {
+      "count": 16,
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "count": 12,
+      "item": "minecraft:coal"
+    },
+    {
+      "count": 4,
+      "item": "minecraft:redstone_torch"
+    }
+  ],
+  "result": {
+    "item": "stf:lightsaber",
+    "nbt": "{ldata:{b:52,cycle:0,g:205,hide_bar:0b,id:11.0f,r:65,state:0b,timer:0}}"
+  }
+}

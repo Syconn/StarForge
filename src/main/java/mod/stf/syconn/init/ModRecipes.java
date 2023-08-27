@@ -1,16 +1,22 @@
 package mod.stf.syconn.init;
 
-import com.google.common.collect.ImmutableMap;
-import mod.stf.syconn.util.recipe.Recipe;
-import mod.stf.syconn.util.recipe.types.HiltRecipeType;
-import mod.stf.syconn.util.recipe.types.RecipeType;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import mod.stf.syconn.Reference;
+import mod.stf.syconn.common.recipes.LightsaberRecipe;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ModRecipes {
 
-    public static final List<Recipe> HILT_RECIPES = new HiltRecipeType().createRecipes();
+    public static final DeferredRegister<RecipeType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, Reference.MOD_ID);
+
+    public static final RegistryObject<RecipeType<LightsaberRecipe>> LIGHTSABER_RECIPE = create("lightsabers");
+
+    private static <T extends Recipe<?>> RegistryObject<RecipeType<T>> create(String name) {
+        return REGISTER.register(name, () -> new RecipeType<>() {
+            public String toString() { return name; }
+        });
+    }
 }
