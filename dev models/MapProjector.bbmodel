@@ -1,0 +1,73 @@
+{
+	"meta": {
+		"format_version": "4.5",
+		"model_format": "java_block",
+		"box_uv": false
+	},
+	"name": "map_projector",
+	"parent": "",
+	"ambientocclusion": true,
+	"front_gui_light": false,
+	"visible_box": [1, 1, 0],
+	"variable_placeholders": "",
+	"variable_placeholder_buttons": [],
+	"unhandled_root_fields": {},
+	"resolution": {
+		"width": 16,
+		"height": 16
+	},
+	"elements": [
+		{
+			"name": "cube",
+			"box_uv": false,
+			"rescale": false,
+			"locked": false,
+			"render_order": "default",
+			"allow_mirror_modeling": true,
+			"from": [-16, 0, -16],
+			"to": [32, 8, 32],
+			"autouv": 1,
+			"color": 1,
+			"origin": [0, 0, 0],
+			"faces": {
+				"north": {
+					"uv": [0, 0, 16, 8]
+				},
+				"east": {
+					"uv": [0, 0, 16, 8]
+				},
+				"south": {
+					"uv": [0, 0, 16, 8]
+				},
+				"west": {
+					"uv": [0, 0, 16, 8]
+				},
+				"up": {
+					"uv": [0, 0, 16, 16]
+				},
+				"down": {
+					"uv": [0, 0, 16, 16]
+				}
+			},
+			"type": "cube",
+			"uuid": "d3e8b86f-7b2b-a14b-1bdb-f9984a4f9a9d"
+		}
+	],
+	"outliner": [
+		{
+			"name": "VoxelShapes",
+			"origin": [0, 0, 0],
+			"color": 0,
+			"nbt": "{}",
+			"uuid": "aa8440c7-6075-1492-f8de-5a7fafd30c82",
+			"export": true,
+			"mirror_uv": false,
+			"isOpen": true,
+			"locked": false,
+			"visibility": true,
+			"autouv": 0,
+			"children": ["d3e8b86f-7b2b-a14b-1bdb-f9984a4f9a9d"]
+		}
+	],
+	"textures": []
+}

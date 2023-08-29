@@ -4,6 +4,7 @@ import mod.stf.syconn.Reference;
 import mod.stf.syconn.StarForge;
 import mod.stf.syconn.block.HoloProjector;
 import mod.stf.syconn.block.LightsaberCrafter;
+import mod.stf.syconn.block.MapProjector;
 import mod.stf.syconn.block.SchematicProjector;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -27,6 +28,9 @@ public class ModBlocks {
     public static final RegistryObject<Item> HOLO_ITEM = fromBlock(HOLO_PROJECTOR);
     public static final RegistryObject<SchematicProjector> SCHEMATIC_PROJECTOR = REGISTER.register("schematic_projector", SchematicProjector::new);
     public static final RegistryObject<Item> SCHEMATIC_ITEM = fromBlock(SCHEMATIC_PROJECTOR);
+
+    public static final RegistryObject<MapProjector> MAP_PROJECTOR = REGISTER.register("map_projector", MapProjector::new);
+    public static final RegistryObject<Item> MAP_PROJECTOR_ITEM = fromBlock(MAP_PROJECTOR);
 
     public static <B extends Block> RegistryObject<Item> fromBlock(RegistryObject<B> block) {
         return ModItems.REGISTER.register(block.getId().getPath(), () -> new BlockItem(block.get(), ITEM_PROPERTIES));
