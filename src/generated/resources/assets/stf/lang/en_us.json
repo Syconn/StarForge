@@ -14,6 +14,12 @@
   "key.lightsaber.activate": "Key Activate Lightsaber",
   "stf.category.lightsaber.materials": "Materials",
   "stf.category.lightsaber.title": "Lightsaber Crafter",
+  "subtitle.stf.block": "Lightsaber Blocks",
+  "subtitle.stf.buzz": "Lightsaber Buzz",
+  "subtitle.stf.deactivation": "Lightsaber Deactivation",
+  "subtitle.stf.ignition": "Lightsaber Ignition",
+  "subtitle.stf.shoot": "Blaster Shoot",
+  "subtitle.stf.swing": "Lightsaber Swing",
   "tab.lightsaber_crafter.co": "Part Crafter",
   "tab.lightsaber_crafter.cr": "Colorizer",
   "tab.lightsaber_crafter.h": "Hilt Crafter"

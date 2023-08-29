@@ -17,7 +17,7 @@ plugins {
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'mod.stf.syconn'
-version = '1.1.0'
+version = '1.2.1'
 
 mixin {
     add sourceSets.main, "stf.refmap.json"

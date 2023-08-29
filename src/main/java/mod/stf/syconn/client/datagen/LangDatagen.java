@@ -1,13 +1,9 @@
 package mod.stf.syconn.client.datagen;
 
 import mod.stf.syconn.Reference;
-import mod.stf.syconn.api.util.Tab;
 import mod.stf.syconn.block.LightsaberCrafter;
 import mod.stf.syconn.init.ModBlocks;
-import mod.stf.syconn.init.ModDamage;
 import mod.stf.syconn.init.ModItems;
-import mod.stf.syconn.item.Lightsaber;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
 
@@ -37,5 +33,11 @@ public class LangDatagen extends LanguageProvider {
         add("tab." + ModBlocks.LIGHTSABER_CRAFTER.getId().getPath() + "." + LightsaberCrafter.States.COLOR.getSerializedName(), "Colorizer");
         add("tab." + ModBlocks.LIGHTSABER_CRAFTER.getId().getPath() + "." + LightsaberCrafter.States.CONSTRUCTION.getSerializedName(), "Part Crafter");
         add("tab." + ModBlocks.LIGHTSABER_CRAFTER.getId().getPath() + "." + LightsaberCrafter.States.HILT.getSerializedName(), "Hilt Crafter");
+        add("subtitle.stf.ignition", "Lightsaber Ignition");
+        add("subtitle.stf.deactivation", "Lightsaber Deactivation");
+        add("subtitle.stf.block", "Lightsaber Blocks");
+        add("subtitle.stf.swing", "Lightsaber Swing");
+        add("subtitle.stf.buzz", "Lightsaber Buzz");
+        add("subtitle.stf.shoot", "Blaster Shoot");
     }
 }
