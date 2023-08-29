@@ -40,13 +40,10 @@ public class LightsaberCrafter extends InventoryBlock {
         pBuilder.add(FACING, MODE);
     }
 
-    @Nullable
-    @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new CrafterBE(pPos, pState);
     }
 
-    @Override
     public RenderShape getRenderShape(BlockState pState) {
         return RenderShape.MODEL;
     }
@@ -67,17 +64,14 @@ public class LightsaberCrafter extends InventoryBlock {
             this.item = item;
         }
 
-        @Override
         public int getId() {
             return id;
         }
 
-        @Override
         public Item icon() {
             return item;
         }
 
-        @Override
         public String getSerializedName() {
             return name;
         }

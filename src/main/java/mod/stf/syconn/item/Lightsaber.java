@@ -37,31 +37,31 @@ public class Lightsaber extends Item {
     }
 
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        LightsaberData data = LightsaberHelper.getData(pStack);
-        if (pLevel.isClientSide()) {
-            ticks--;
-            if (data != null && pIsSelected && data.isActive() && ticks <= 0) {
-                if (!MovableLightBlock.hasLightSource(pStack)){
-                    MovableLightBlock.createLightSource(pEntity.getOnPos().above(), pLevel, pStack, 13);
-                    pos=pEntity.getOnPos().above();
-                }
-                else if (MovableLightBlock.stillExists(pLevel, pStack)){
-                    if (MovableLightBlock.playerMoved(pStack, pEntity.getOnPos().above())) {
-                        MovableLightBlock.moveLightSource(pEntity.getOnPos().above(), pLevel, pStack, 13);
-                        pos=pEntity.getOnPos().above();
-                    }
-                }
-                ticks = 4;
-            }
-            else if (!pIsSelected && MovableLightBlock.stillExists(pLevel, pStack)){
-                MovableLightBlock.removeLightSource(pStack, pLevel);
-                pos=null;
-            }
-            else if (data != null && !data.isActive() && pos != null){
-                pLevel.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
-                pos=null;
-            }
-        }
+//        LightsaberData data = LightsaberHelper.getData(pStack);
+//        if (pLevel.isClientSide()) {
+//            ticks--;
+//            if (data != null && pIsSelected && data.isActive() && ticks <= 0) {
+//                if (!MovableLightBlock.hasLightSource(pStack)){
+//                    MovableLightBlock.createLightSource(pEntity.getOnPos().above(), pLevel, pStack, 13);
+//                    pos=pEntity.getOnPos().above();
+//                }
+//                else if (MovableLightBlock.stillExists(pLevel, pStack)){
+//                    if (MovableLightBlock.playerMoved(pStack, pEntity.getOnPos().above())) {
+//                        MovableLightBlock.moveLightSource(pEntity.getOnPos().above(), pLevel, pStack, 13);
+//                        pos=pEntity.getOnPos().above();
+//                    }
+//                }
+//                ticks = 4;
+//            }
+//            else if (!pIsSelected && MovableLightBlock.stillExists(pLevel, pStack)){
+//                MovableLightBlock.removeLightSource(pStack, pLevel);
+//                pos=null;
+//            }
+//            else if (data != null && !data.isActive() && pos != null){
+//                pLevel.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+//                pos=null;
+//            }
+//        }
     }
 
     public boolean canAttackBlock(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer) {

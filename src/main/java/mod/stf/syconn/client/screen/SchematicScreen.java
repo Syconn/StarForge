@@ -6,7 +6,7 @@ import mod.stf.syconn.Reference;
 import mod.stf.syconn.api.screens.BasicContainerScreen;
 import mod.stf.syconn.common.containers.SchematicContainer;
 import mod.stf.syconn.network.Network;
-import mod.stf.syconn.network.messages.MessageLoadBlock;
+import mod.stf.syconn.network.messages.s2c.MessageLoadBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

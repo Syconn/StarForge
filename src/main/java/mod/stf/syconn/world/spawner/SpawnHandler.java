@@ -44,7 +44,7 @@ public class SpawnHandler {
         TrooperPatrol spawner = spawners.get(event.level.dimension().location());
         if(spawner != null)
         {
-            spawner.tick((ServerLevel) event.level, true, true);
+//            spawner.tick((ServerLevel) event.level, true, true);
         }
     }
 }

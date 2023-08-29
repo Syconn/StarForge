@@ -1,5 +1,6 @@
-package mod.stf.syconn.network.messages;
+package mod.stf.syconn.network.messages.s2c;
 
+import mod.stf.syconn.network.messages.IMessage;
 import mod.stf.syconn.world.data.SkinData;
 import mod.stf.syconn.world.data.SkinManager;
 import net.minecraft.core.BlockPos;

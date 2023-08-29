@@ -1,23 +1,19 @@
 package mod.stf.syconn.common.blockEntity;
 
-import mod.stf.syconn.api.blockEntity.IStorageBlock;
 import mod.stf.syconn.api.blockEntity.MenuBlockEntity;
 import mod.stf.syconn.block.LightsaberCrafter;
 import mod.stf.syconn.common.containers.ColorContainer;
 import mod.stf.syconn.common.containers.HiltContainer;
 import mod.stf.syconn.init.ModBlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class CrafterBE extends MenuBlockEntity implements IStorageBlock {
+public class CrafterBE extends MenuBlockEntity {
 
     public CrafterBE(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CRAFTER_BE.get(), pos, state);

@@ -23,6 +23,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod(Reference.MOD_ID)
 public class StarForge {
 
+    // TODO GEOLOGICAL MAP LIKE CLONE WARS BATTLE MAP
+
     public StarForge() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
@@ -35,6 +37,7 @@ public class StarForge {
         ModContainers.REGISTER.register(bus);
         ModRecipeSerializers.REGISTER.register(bus);
         ModRecipes.REGISTER.register(bus);
+        ModSounds.REGISTER.register(bus);
     }
 
     public void createTab(CreativeModeTabEvent.Register e) {

@@ -2,7 +2,9 @@ package mod.stf.syconn.item.guns;
 
 import mod.stf.syconn.common.entity.BlasterBolt;
 import mod.stf.syconn.init.ModItems;
+import mod.stf.syconn.init.ModSounds;
 import mod.stf.syconn.item.GunItem;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
@@ -16,9 +18,12 @@ public class EnergyGun extends GunItem {
         super(pProperties, 20);
     }
 
-    @Override
     public ThrowableProjectile createBullet(LivingEntity player) {
         return new BlasterBolt(player, player.getLevel());
+    }
+
+    public SoundEvent shootSound() {
+        return ModSounds.BLASTER_SHOOT.get();
     }
 
     public static ItemStack create() {

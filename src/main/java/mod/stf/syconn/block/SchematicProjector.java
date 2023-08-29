@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 public class SchematicProjector extends RotatableBlock implements EntityBlock {
 
     public SchematicProjector() {
-        super(BlockBehaviour.Properties.of(Material.METAL).noCollission().noOcclusion());
+        super(BlockBehaviour.Properties.of(Material.METAL).noCollission().noOcclusion().requiresCorrectToolForDrops());
         this.registerDefaultState(this.stateDefinition.any().setValue(FACE, AttachFace.WALL).setValue(FACING, Direction.NORTH));
     }
 

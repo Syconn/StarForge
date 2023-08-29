@@ -34,7 +34,10 @@ public abstract class AbstractBolt extends ThrowableProjectile {
     protected abstract boolean canBeBlocked();
     protected abstract float damage();
 
-    @Override
+    public boolean isInWater() {
+        return false;
+    }
+
     protected void onHitEntity(EntityHitResult pResult) {
         Entity entity = pResult.getEntity();
 
@@ -77,7 +80,7 @@ public abstract class AbstractBolt extends ThrowableProjectile {
         Vec3 vec3d1 = vec3d.add((double)f6 * d0, (double)f5 * d0, (double)f7 * d0);
         HitResult rts = player.getCommandSenderWorld().clip(new ClipContext(vec3d, vec3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.ANY, player));
 
-        if (rts != null && rts.getType() == HitResult.Type.ENTITY || rts.getType() == HitResult.Type.BLOCK) {
+        if (rts.getType() == HitResult.Type.ENTITY || rts.getType() == HitResult.Type.BLOCK) {
 
             if (player.getCommandSenderWorld() instanceof ServerLevel) {
                 ServerLevel world = (ServerLevel) player.getCommandSenderWorld();
@@ -89,13 +92,11 @@ public abstract class AbstractBolt extends ThrowableProjectile {
 
     }
 
-    @Override
     protected void onHitBlock(BlockHitResult p_37258_) {
         BlockState blockstate = this.level.getBlockState(p_37258_.getBlockPos());
         blockstate.onProjectileHit(this.level, blockstate, p_37258_, this);
     }
 
-    @Override
     public boolean isNoGravity() {
         return true;
     }

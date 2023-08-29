@@ -9,6 +9,7 @@
 		"4": "stf:block/holo/arm",
 		"particle": "stf:block/holo/outer_ring"
 	},
+	"render_type": "minecraft:translucent",
 	"elements": [
 		{
 			"name": "projector",

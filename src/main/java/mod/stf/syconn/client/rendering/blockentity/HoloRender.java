@@ -16,18 +16,20 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import static mod.stf.syconn.common.containers.HoloContainer.SLOT_IDS;
+
 @OnlyIn(Dist.CLIENT)
 public class HoloRender implements BlockEntityRenderer<HoloBE> {
 
     private final Minecraft mc = Minecraft.getInstance();
-
-    public HoloRender(BlockEntityRendererProvider.Context pContext) {
-    }
+    public HoloRender(BlockEntityRendererProvider.Context pContext) { }
 
     public void render(HoloBE pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
         if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.HOLO_PROJECTOR.get() && pBlockEntity.getSkin() != null) {
@@ -71,13 +73,8 @@ public class HoloRender implements BlockEntityRenderer<HoloBE> {
                 player.setYHeadRot(0);
             }
 
-            if (pBlockEntity.getMainHand() != null)
-                player.setItemSlot(EquipmentSlot.MAINHAND, pBlockEntity.getMainHand());
-            if (pBlockEntity.getOffHand() != null)
-                player.setItemSlot(EquipmentSlot.OFFHAND, pBlockEntity.getOffHand());
-            for (int i = 0; i < 4; i++) {
-                if (pBlockEntity.getArmour()[i] != null)
-                    player.setItemSlot(EquipmentSlot.byTypeAndIndex(EquipmentSlot.Type.ARMOR, i), pBlockEntity.getArmour()[i]);
+            for (int i = 0; i < pBlockEntity.getInventory().getSlots(); i++) {
+                player.setItemSlot(SLOT_IDS[i], pBlockEntity.getInventory().getStackInSlot(i));
             }
 
             pPoseStack.scale(0.5f, 0.5f, 0.5f);

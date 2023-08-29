@@ -14,8 +14,8 @@ import mod.stf.syconn.item.lightsaber.LColor;
 import mod.stf.syconn.item.lightsaber.LightsaberData;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import mod.stf.syconn.network.Network;
-import mod.stf.syconn.network.messages.MessageChangeColor;
-import mod.stf.syconn.network.messages.MessageClickTab;
+import mod.stf.syconn.network.messages.s2c.MessageChangeColor;
+import mod.stf.syconn.network.messages.s2c.MessageClickTab;
 import mod.stf.syconn.util.ColorConverter;
 import mod.stf.syconn.util.GuiHelper;
 import net.minecraft.client.gui.components.Button;
@@ -30,15 +30,11 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ColorScreen extends TabbedScreen<ColorContainer> {
 
-
-    //TODO REDO UPDATING OF SLIDER KINDA FUCKED POST UPDATE
-    //  - NO COLOR ON SCREEN SAD
     private final ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/lightsaber_forge.png");
     private ColorContainer inv;
     private ColorSlider[] sliderColor = new ColorSlider[3];

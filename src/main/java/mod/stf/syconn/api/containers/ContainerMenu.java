@@ -21,7 +21,6 @@ public abstract class ContainerMenu extends AbstractContainerMenu {
         super(pMenuType, windowId);
         blockEntity = player.getCommandSenderWorld().getBlockEntity(pos);
         this.playerEntity = player;
-        //this.playerInventory = new InvWrapper(playerInventory);
         this.playerInventory = playerInventory;
         this.block = block;
     }
@@ -30,12 +29,10 @@ public abstract class ContainerMenu extends AbstractContainerMenu {
         return blockEntity;
     }
 
-    @Override
     public boolean stillValid(Player playerIn) {
         return stillValid(ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos()), playerEntity, block);
     }
 
-    @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
@@ -56,17 +53,14 @@ public abstract class ContainerMenu extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
             }
-
             if (stack.isEmpty()) {
                 slot.set(ItemStack.EMPTY);
             } else {
                 slot.setChanged();
             }
-
             if (stack.getCount() == itemstack.getCount()) {
                 return ItemStack.EMPTY;
             }
-
             slot.onTake(playerIn, stack);
         }
 

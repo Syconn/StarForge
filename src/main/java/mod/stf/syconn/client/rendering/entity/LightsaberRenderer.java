@@ -2,7 +2,7 @@ package mod.stf.syconn.client.rendering.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import mod.stf.syconn.common.entity.LightsaberEntity;
+import mod.stf.syconn.common.entity.ThrownLightsaber;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 
-public class LightsaberRenderer extends EntityRenderer<LightsaberEntity> {
+public class LightsaberRenderer extends EntityRenderer<ThrownLightsaber> {
 
     private ItemRenderer itemRenderer;
 
@@ -21,7 +21,7 @@ public class LightsaberRenderer extends EntityRenderer<LightsaberEntity> {
         itemRenderer = ctx.getItemRenderer();
     }
 
-    public void render(LightsaberEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
+    public void render(ThrownLightsaber pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
         pMatrixStack.pushPose();
         pMatrixStack.translate(0.0D, (double)0.15F, 0.0D);
         pMatrixStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
@@ -33,7 +33,7 @@ public class LightsaberRenderer extends EntityRenderer<LightsaberEntity> {
         super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
     }
 
-    public ResourceLocation getTextureLocation(LightsaberEntity pEntity) {
+    public ResourceLocation getTextureLocation(ThrownLightsaber pEntity) {
         return null;
     }
 }

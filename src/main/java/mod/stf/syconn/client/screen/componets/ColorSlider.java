@@ -16,7 +16,6 @@ import java.util.function.Consumer;
 
 public class ColorSlider extends ForgeSlider {
 
-    // TODO GEOLOGICAL MAP LIKE CLONE WARS BATTLE MAP
     private final String prefix;
     private final int id;
     private final Consumer<ColorSlider> consumer;

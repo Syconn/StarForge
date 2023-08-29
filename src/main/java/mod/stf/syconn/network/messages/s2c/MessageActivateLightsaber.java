@@ -1,10 +1,13 @@
-package mod.stf.syconn.network.messages;
+package mod.stf.syconn.network.messages.s2c;
 
+import mod.stf.syconn.init.ModSounds;
 import mod.stf.syconn.item.Lightsaber;
 import mod.stf.syconn.item.lightsaber.LightsaberData;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
+import mod.stf.syconn.network.messages.IMessage;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -12,20 +15,14 @@ import java.util.function.Supplier;
 
 public class MessageActivateLightsaber implements IMessage<MessageActivateLightsaber> {
 
-    public MessageActivateLightsaber() {
-    }
+    public MessageActivateLightsaber() { }
 
-    @Override
-    public void encode(MessageActivateLightsaber message, FriendlyByteBuf buffer) {
+    public void encode(MessageActivateLightsaber message, FriendlyByteBuf buffer) { }
 
-    }
-
-    @Override
     public MessageActivateLightsaber decode(FriendlyByteBuf buffer) {
         return new MessageActivateLightsaber();
     }
 
-    @Override
     public void handle(MessageActivateLightsaber message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             ServerPlayer player = supplier.get().getSender();
@@ -34,6 +31,8 @@ public class MessageActivateLightsaber implements IMessage<MessageActivateLights
 
             if (stack.getItem() instanceof Lightsaber && data != null) {
                 data.setState(!data.isActive());
+                if (data.isActive()) player.level.playSound(null, player, ModSounds.LIGHTSABER_IGNITION.get(), SoundSource.PLAYERS, 0.8f, 1.0f);
+                else player.level.playSound(null, player, ModSounds.LIGHTSABER_DEACTIVATION.get(), SoundSource.PLAYERS, 0.8f, 1.0f);
                 LightsaberHelper.setData(stack, data);
             }
         });

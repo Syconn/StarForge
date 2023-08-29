@@ -1,9 +1,9 @@
-package mod.stf.syconn.network.messages;
+package mod.stf.syconn.network.messages.s2c;
 
 import mod.stf.syconn.common.containers.HiltContainer;
 import mod.stf.syconn.common.recipes.LightsaberRecipe;
 import mod.stf.syconn.common.recipes.ModIngredient;
-import mod.stf.syconn.init.ModRecipes;
+import mod.stf.syconn.network.messages.IMessage;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;

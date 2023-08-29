@@ -28,7 +28,6 @@ public abstract class InventoryBlock extends Block implements EntityBlock {
         super(properties);
     }
 
-    @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
         if (!level.isClientSide) {
             BlockEntity be = level.getBlockEntity(pos);

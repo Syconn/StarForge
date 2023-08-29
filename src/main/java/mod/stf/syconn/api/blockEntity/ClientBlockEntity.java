@@ -16,15 +16,12 @@ public abstract class ClientBlockEntity extends BlockEntity {
         super(pType, pWorldPosition, pBlockState);
     }
 
-    @Nullable
-    @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
     protected abstract CompoundTag saveData();
 
-    @Override
     public CompoundTag getUpdateTag() {
         return saveData();
     }

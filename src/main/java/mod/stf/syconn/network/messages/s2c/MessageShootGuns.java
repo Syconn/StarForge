@@ -1,6 +1,7 @@
-package mod.stf.syconn.network.messages;
+package mod.stf.syconn.network.messages.s2c;
 
 import mod.stf.syconn.common.entity.TieFighter;
+import mod.stf.syconn.network.messages.IMessage;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;

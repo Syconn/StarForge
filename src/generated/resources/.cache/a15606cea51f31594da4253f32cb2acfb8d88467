@@ -1,0 +1,4 @@
+// 1.19.4	2023-08-27T16:28:34.4141945	Tags for minecraft:block mod id stf
+16e7c8499b263bb1f38687040820c4e082a141c2 data/minecraft/tags/blocks/mineable/pickaxe.json
+72d5444babcf1998eae10693fd48e9513454200a data/minecraft/tags/blocks/needs_iron_tool.json
+abb34174304e6478465584cb8fe6ffc4ba8cbe5d data/minecraft/tags/blocks/needs_stone_tool.json

@@ -126,6 +126,6 @@ public class SchematicBe extends ClientMenuBlockEntity {
     }
 
     public ItemStackHandler getInventory() {
-        return null;
+        return itemHandler;
     }
 }

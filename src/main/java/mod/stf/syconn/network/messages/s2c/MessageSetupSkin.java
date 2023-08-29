@@ -1,9 +1,10 @@
-package mod.stf.syconn.network.messages;
+package mod.stf.syconn.network.messages.s2c;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import mod.stf.syconn.api.util.SkinGrabber;
 import mod.stf.syconn.api.util.data.PixelImage;
 import mod.stf.syconn.common.blockEntity.HoloBE;
+import mod.stf.syconn.network.messages.IMessage;
 import mod.stf.syconn.world.data.SkinManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

@@ -1,0 +1,8 @@
+{
+  "item.lightsaber.ignition": { "subtitle": "subtitle.stf.ignition", "sounds": [ "stf:item/lightsaber/ignition" ] },
+  "item.lightsaber.deactivation": { "subtitle": "subtitle.stf.deactivation", "sounds": [ "stf:item/lightsaber/deactivation" ] },
+  "item.lightsaber.block": { "subtitle": "subtitle.stf.block", "sounds": [ "stf:item/lightsaber/block" ] },
+  "item.lightsaber.swing": { "subtitle": "subtitle.stf.swing", "sounds": [ "stf:item/lightsaber/swing" ] },
+  "item.lightsaber.buzz": { "subtitle": "subtitle.stf.buzz", "sounds": [ "stf:item/lightsaber/buzz" ] },
+  "item.blaster.shoot": { "subtitle": "subtitle.stf.shoot", "sounds": [ "stf:item/blaster/shoot" ] }
+}

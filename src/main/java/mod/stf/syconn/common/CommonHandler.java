@@ -13,14 +13,15 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonHandler {
 
-    public CommonHandler() {
-    }
+    public CommonHandler() {}
 
     @SubscribeEvent
     public static void onAttributeCreate(EntityAttributeCreationEvent event) {
@@ -40,4 +41,6 @@ public class CommonHandler {
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
         event.register(SkinData.class);
     }
+
+
 }

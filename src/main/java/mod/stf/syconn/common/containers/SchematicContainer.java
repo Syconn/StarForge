@@ -6,7 +6,7 @@ import mod.stf.syconn.init.ModBlocks;
 import mod.stf.syconn.init.ModContainers;
 import mod.stf.syconn.init.ModItems;
 import mod.stf.syconn.network.Network;
-import mod.stf.syconn.network.messages.MessageLoadBlock;
+import mod.stf.syconn.network.messages.s2c.MessageLoadBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;

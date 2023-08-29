@@ -12,26 +12,20 @@ public class BlasterBolt extends AbstractBolt {
         super(type, level);
     }
 
-    @Override
-    protected boolean canBeBlocked() {
-        return true;
-    }
-
-    @Override
-    protected float damage() {
-        return 5.3F;
-    }
-
     public BlasterBolt(LivingEntity entity, Level level) {
         super(ModEntities.BLASTER_BOLT.get(), entity, level);
     }
 
-    @Override
-    protected void defineSynchedData() {
-
+    protected boolean canBeBlocked() {
+        return true;
     }
 
-    @Override
+    protected float damage() {
+        return 5.3F;
+    }
+
+    protected void defineSynchedData() {}
+
     public boolean isNoGravity() {
         return true;
     }

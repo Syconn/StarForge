@@ -10,13 +10,14 @@ import mod.stf.syconn.client.rendering.model.PlayerLikeModel;
 import mod.stf.syconn.client.rendering.model.TieModel;
 import mod.stf.syconn.client.screen.ColorScreen;
 import mod.stf.syconn.client.screen.HiltScreen;
+import mod.stf.syconn.client.screen.HoloScreen;
 import mod.stf.syconn.client.screen.SchematicScreen;
 import mod.stf.syconn.init.*;
 import mod.stf.syconn.item.Lightsaber;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import mod.stf.syconn.network.Network;
-import mod.stf.syconn.network.messages.MessageActivateLightsaber;
-import mod.stf.syconn.network.messages.MessageThrowLightsaber;
+import mod.stf.syconn.network.messages.s2c.MessageActivateLightsaber;
+import mod.stf.syconn.network.messages.s2c.MessageThrowLightsaber;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -48,10 +49,7 @@ public class ClientHandler {
         MenuScreens.register(ModContainers.COLOR_CONTAINER.get(), ColorScreen::new);
         MenuScreens.register(ModContainers.HILT_CONTAINER.get(), HiltScreen::new);
         MenuScreens.register(ModContainers.SCHEM_CONTAINER.get(), SchematicScreen::new);
-
-
-        // TODO UPDATE JSON WITH RENDERTYPE
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.LIGHTSABER_CRAFTER.get(), RenderType.translucent());
+        MenuScreens.register(ModContainers.HOLO_CONTAINER.get(), HoloScreen::new);
 
         registerProperties();
     }
@@ -112,7 +110,6 @@ public class ClientHandler {
             }
         }
     }
-
     @SubscribeEvent
     public static void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.LIGHTSABER.get(), LightsaberRenderer::new);

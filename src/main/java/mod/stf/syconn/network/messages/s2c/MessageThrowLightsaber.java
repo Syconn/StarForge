@@ -1,7 +1,7 @@
-package mod.stf.syconn.network.messages;
+package mod.stf.syconn.network.messages.s2c;
 
-import mod.stf.syconn.common.entity.LightsaberEntity;
-import mod.stf.syconn.item.lightsaber.LightsaberHelper;
+import mod.stf.syconn.common.entity.ThrownLightsaber;
+import mod.stf.syconn.network.messages.IMessage;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
@@ -24,7 +24,7 @@ public class MessageThrowLightsaber implements IMessage<MessageThrowLightsaber> 
     public void handle(MessageThrowLightsaber message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             ServerPlayer player = supplier.get().getSender();
-            LightsaberEntity lightsaber = new LightsaberEntity(player, player.getLevel(), player.getMainHandItem());
+            ThrownLightsaber lightsaber = new ThrownLightsaber(player, player.getLevel(), player.getMainHandItem());
             lightsaber.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.0F, 1.0F);
             player.level.addFreshEntity(lightsaber);
             player.getMainHandItem().setCount(0);

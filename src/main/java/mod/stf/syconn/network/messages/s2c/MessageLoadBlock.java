@@ -1,15 +1,12 @@
-package mod.stf.syconn.network.messages;
+package mod.stf.syconn.network.messages.s2c;
 
-import mod.stf.syconn.api.containers.slots.SpecificSlotHandler;
 import mod.stf.syconn.api.util.data.Schematic;
 import mod.stf.syconn.common.blockEntity.SchematicBe;
-import mod.stf.syconn.init.ModItems;
+import mod.stf.syconn.network.messages.IMessage;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
