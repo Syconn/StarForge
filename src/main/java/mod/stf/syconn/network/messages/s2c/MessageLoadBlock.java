@@ -22,17 +22,14 @@ public class MessageLoadBlock implements IMessage<MessageLoadBlock> {
         this.pos = pos;
     }
 
-    @Override
     public void encode(MessageLoadBlock message, FriendlyByteBuf buffer) {
         buffer.writeBlockPos(message.pos);
     }
 
-    @Override
     public MessageLoadBlock decode(FriendlyByteBuf buffer) {
         return new MessageLoadBlock(buffer.readBlockPos());
     }
 
-    @Override
     public void handle(MessageLoadBlock message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             ServerPlayer player = supplier.get().getSender();

@@ -22,12 +22,10 @@ import java.util.Map;
 @OnlyIn(Dist.CLIENT)
 public class SchematicRender implements BlockEntityRenderer<SchematicBe> {
 
-    Minecraft mc = Minecraft.getInstance();
+    private final Minecraft mc = Minecraft.getInstance();
 
-    public SchematicRender(BlockEntityRendererProvider.Context pContext) {
-    }
+    public SchematicRender(BlockEntityRendererProvider.Context pContext) { }
 
-    @Override
     public void render(SchematicBe pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
         if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.SCHEMATIC_PROJECTOR.get() && !pBlockEntity.getImages().isEmpty()) {
             BlockPos anchorPos = pBlockEntity.getImages().entrySet().iterator().next().getKey();

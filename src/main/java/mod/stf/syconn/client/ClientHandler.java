@@ -2,12 +2,10 @@ package mod.stf.syconn.client;
 
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.client.rendering.blockentity.HoloRender;
+import mod.stf.syconn.client.rendering.blockentity.MapRender;
 import mod.stf.syconn.client.rendering.blockentity.SchematicRender;
 import mod.stf.syconn.client.rendering.entity.*;
-import mod.stf.syconn.client.rendering.model.BlockModel;
-import mod.stf.syconn.client.rendering.model.BoltModel;
-import mod.stf.syconn.client.rendering.model.PlayerLikeModel;
-import mod.stf.syconn.client.rendering.model.TieModel;
+import mod.stf.syconn.client.rendering.model.*;
 import mod.stf.syconn.client.screen.ColorScreen;
 import mod.stf.syconn.client.screen.HiltScreen;
 import mod.stf.syconn.client.screen.HoloScreen;
@@ -121,6 +119,7 @@ public class ClientHandler {
 
         event.registerBlockEntityRenderer(ModBlockEntities.HOLO_BE.get(), HoloRender::new);
         event.registerBlockEntityRenderer(ModBlockEntities.SCHEMATIC_BE.get(), SchematicRender::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.MAP_BE.get(), MapRender::new);
     }
 
     @SubscribeEvent
@@ -129,5 +128,6 @@ public class ClientHandler {
         event.registerLayerDefinition(PlayerLikeModel.MODEL, PlayerLikeModel::createBodyLayer);
         event.registerLayerDefinition(TieModel.LAYER_LOCATION, TieModel::createBodyLayer);
         event.registerLayerDefinition(BlockModel.LAYER_LOCATION, BlockModel::createBodyLayer);
+        event.registerLayerDefinition(BlockOutlineModel.LAYER_LOCATION, BlockOutlineModel::createBodyLayer);
     }
 }
