@@ -6,13 +6,13 @@ import net.minecraft.util.StringRepresentable;
 public enum MultiBlockAlignment implements StringRepresentable {
 
     TOP_LEFT(1, -1),
-    MID_LEFT(1, 0),
+    LEFT(1, 0),
     BOT_LEFT(1, 1),
     TOP(0, -1),
     MID(0, 0),
     BOT(0, 1),
     TOP_RIGHT(-1, -1),
-    MID_RIGHT(-1, 0),
+    RIGHT(-1, 0),
     BOT_RIGHT(-1, 1);
 
     private final int x;

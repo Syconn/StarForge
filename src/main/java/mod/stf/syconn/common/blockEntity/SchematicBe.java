@@ -29,7 +29,6 @@ import java.util.Map;
 
 public class SchematicBe extends ClientMenuBlockEntity {
 
-    private String block = "Block";
     private HashMap<BlockPos, PixelImage> blockImage = new HashMap<>();
     private List<BlockPos> schematic = null;
 
@@ -59,17 +58,8 @@ public class SchematicBe extends ClientMenuBlockEntity {
         }
     }
 
-    public void setBlock(String block) {
-        this.block = block;
-        update(worldPosition, getBlockState());
-    }
-
     public void setSchematic(List<BlockPos> schematic) {
         this.schematic = schematic;
-    }
-
-    public String getBlock() {
-        return block.toLowerCase();
     }
 
     public DynamicTexture getBlockImage(BlockPos pos) {
@@ -84,7 +74,6 @@ public class SchematicBe extends ClientMenuBlockEntity {
 
     protected CompoundTag saveData() {
         CompoundTag pTag = new CompoundTag();
-        pTag.putString("block", this.block);
         if (blockImage != null)
             pTag.put("blockimage", NbtUtil.writeServerImageList(blockImage));
         pTag.put("items", itemHandler.serializeNBT());
@@ -93,14 +82,12 @@ public class SchematicBe extends ClientMenuBlockEntity {
 
     protected void saveAdditional(CompoundTag pTag) {
         super.saveAdditional(pTag);
-        pTag.putString("block", this.block);
         if (!blockImage.isEmpty())
             pTag.put("blockimage", NbtUtil.writeServerImageList(blockImage));
     }
 
     public void load(CompoundTag pTag) {
         super.load(pTag);
-        block = pTag.getString("block");
         if (pTag.contains("blockimage"))
             blockImage = NbtUtil.readServerImageList(pTag.getCompound("blockimage"));
     }

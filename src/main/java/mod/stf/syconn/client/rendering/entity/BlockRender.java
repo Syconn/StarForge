@@ -19,7 +19,6 @@ public class BlockRender extends EntityRenderer<Entity> {
     private final BlockModel model;
     private final SchematicBe be;
     private final BlockPos pos;
-    private final Minecraft mc = Minecraft.getInstance();
 
     public BlockRender(EntityRendererProvider.Context pContext, SchematicBe be, BlockPos pos) {
         super(pContext);
@@ -28,7 +27,6 @@ public class BlockRender extends EntityRenderer<Entity> {
         this.model = new BlockModel(pContext.bakeLayer(BlockModel.LAYER_LOCATION));
     }
 
-    @Override
     public void render(Entity pEntity, float pEntityYaw, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
         pPoseStack.pushPose();
         model.setupAnim(pEntity, pPartialTick, 0.0F, -0.1F, 0.0F, 0.0F);
@@ -49,7 +47,6 @@ public class BlockRender extends EntityRenderer<Entity> {
         return Minecraft.getInstance().getTextureManager().register("holo", this.be.getBlockImage(pos));
     }
 
-    @Override
     public ResourceLocation getTextureLocation(Entity pEntity) {
         return new ResourceLocation(Reference.MOD_ID, "textures/entity/block.png");
     }

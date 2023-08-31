@@ -1,29 +1,46 @@
 package mod.stf.syconn.block;
 
+import mod.stf.syconn.common.blockEntity.MapBe;
 import mod.stf.syconn.util.MultiBlockAlignment;
+import net.minecraft.client.gui.MapRenderer;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-public class MapProjector extends Block {
+public class MapProjector extends Block implements EntityBlock {
 
     public static final EnumProperty<MultiBlockAlignment> ALIGNMENT = EnumProperty.create("alignment", MultiBlockAlignment.class);
 
     public MapProjector() {
         super(Properties.of(Material.METAL).requiresCorrectToolForDrops().dynamicShape());
         this.registerDefaultState(this.stateDefinition.any().setValue(ALIGNMENT, MultiBlockAlignment.MID));
+    }
+
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        MultiBlockAlignment al = pState.getValue(ALIGNMENT);
+        if (pLevel.isClientSide && pLevel.getBlockEntity(pPos.offset(pState.getValue(ALIGNMENT).getX(), 0, pState.getValue(ALIGNMENT).getZ())) instanceof MapBe be) { // TODO FIX CLIENT ONLY CODE (I THINK)?
+            be.onClick(al);
+        }
+        return InteractionResult.PASS;
     }
 
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
@@ -40,7 +57,7 @@ public class MapProjector extends Block {
         for (int x = -1; x < 2; x++) {
             for (int z = -1; z < 2; z++) {
                 if (x == 0 && z == 0) continue;
-                if (!pLevel.getBlockState(pPos.offset(x, 0, z)).isAir()) pLevel.setBlock(pPos.offset(x, 0, z), pState.setValue(ALIGNMENT, MultiBlockAlignment.fromAlignment(x, z)), 3);
+                if (pLevel.getBlockState(pPos.offset(x, 0, z)).isAir()) pLevel.setBlock(pPos.offset(x, 0, z), pState.setValue(ALIGNMENT, MultiBlockAlignment.fromAlignment(x, z)), 3);
             }
         }
     }
@@ -72,5 +89,10 @@ public class MapProjector extends Block {
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(ALIGNMENT);
+    }
+
+    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+        if (pState.getValue(ALIGNMENT) == MultiBlockAlignment.MID) return new MapBe(pPos, pState);
+        return null;
     }
 }
