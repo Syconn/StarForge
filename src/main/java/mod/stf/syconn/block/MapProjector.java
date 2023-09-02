@@ -2,8 +2,6 @@ package mod.stf.syconn.block;
 
 import mod.stf.syconn.common.blockEntity.MapBe;
 import mod.stf.syconn.util.MultiBlockAlignment;
-import net.minecraft.client.gui.MapRenderer;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -37,8 +35,8 @@ public class MapProjector extends Block implements EntityBlock {
 
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         MultiBlockAlignment al = pState.getValue(ALIGNMENT);
-        if (pLevel.isClientSide && pLevel.getBlockEntity(pPos.offset(pState.getValue(ALIGNMENT).getX(), 0, pState.getValue(ALIGNMENT).getZ())) instanceof MapBe be) { // TODO FIX CLIENT ONLY CODE (I THINK)?
-            be.onClick(al);
+        if (!pLevel.isClientSide && pLevel.getBlockEntity(pPos.offset(pState.getValue(ALIGNMENT).getX(), 0, pState.getValue(ALIGNMENT).getZ())) instanceof MapBe be) {
+            be.onClick(pLevel, al);
         }
         return InteractionResult.PASS;
     }

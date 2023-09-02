@@ -3,12 +3,13 @@ package mod.stf.syconn.client.rendering.blockentity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mod.stf.syconn.common.blockEntity.MapBe;
 import mod.stf.syconn.init.ModBlocks;
-import mod.stf.syconn.util.data.ChunkData;
 import mod.stf.syconn.util.data.BlockInChunkData;
+import mod.stf.syconn.util.data.ChunkData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.world.level.block.DaylightDetectorBlock;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -23,9 +24,9 @@ public class MapRender implements BlockEntityRenderer<MapBe> {
     public MapRender(BlockEntityRendererProvider.Context pContext) { }
 
     public void render(MapBe pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
-        if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.MAP_PROJECTOR.get()) { // TODO GET UNLOADED CHUNKS SOMEHOW
+        if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.MAP_PROJECTOR.get()) {
             pPoseStack.pushPose();
-            pPoseStack.translate(0, 0.5, 0);
+            pPoseStack.translate(0, 0.45, 0);
             pPoseStack.scale(Scale3x3, Scale3x3, Scale3x3);
             for (ChunkData data : pBlockEntity.getChunk()) {
                 pPoseStack.pushPose();
@@ -42,7 +43,7 @@ public class MapRender implements BlockEntityRenderer<MapBe> {
     }
 
     public int getViewDistance() {
-        return 256;
+        return 32;
     }
 
     public boolean shouldRender(MapBe pBlockEntity, Vec3 pCameraPos) {

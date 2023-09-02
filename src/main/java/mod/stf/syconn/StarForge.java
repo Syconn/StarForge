@@ -15,18 +15,22 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.fml.loading.FileUtils;
 
 @Mod(Reference.MOD_ID)
 public class StarForge {
 
-    // TODO GEOLOGICAL MAP LIKE CLONE WARS BATTLE MAP
-
     public StarForge() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        FileUtils.getOrCreateDirectory(FMLPaths.CONFIGDIR.get().resolve(Reference.MOD_ID), Reference.MOD_ID);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON, Reference.MOD_ID + "/common.toml");
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> bus.addListener(this::createTab));
