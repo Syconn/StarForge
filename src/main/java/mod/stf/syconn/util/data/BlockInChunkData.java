@@ -7,16 +7,53 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 
-public record BlockInChunkData(BlockState state, BlockPos pos, int x, int z) {
+import java.util.ArrayList;
+import java.util.List;
+
+public record BlockInChunkData(BlockState state, BlockPos pos, VectorData data, int x, int z) {
 
     public void render(PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, LevelChunk level, int lowestY) {
         pPoseStack.pushPose();
         pPoseStack.translate(x, pos.getY() - lowestY, z);
-        if (state.getFluidState().isEmpty()) Minecraft.getInstance().getBlockRenderer().renderSingleBlock(state, pPoseStack, pBufferSource, pPackedLight, OverlayTexture.NO_OVERLAY);
-        else RenderUtil.renderLiquid(pPoseStack, pBufferSource, state.getFluidState(), new VectorData(level.getLevel(), pos, level));
+        if (state.getFluidState().isEmpty()) RenderUtil.renderSingleBlock(state, pPoseStack, pBufferSource, pPackedLight, level.getLevel(), pos, data);
+        else RenderUtil.renderLiquid(pPoseStack, pBufferSource, state, data);
         pPoseStack.popPose();
+    }
+
+    public CompoundTag save() {
+        CompoundTag tag = new CompoundTag();
+        tag.put("state", NbtUtils.writeBlockState(state));
+        tag.put("pos", NbtUtils.writeBlockPos(pos));
+        tag.putInt("x", x);
+        tag.putInt("z", z);
+        return tag;
+    }
+
+    public static CompoundTag saveAll(List<BlockInChunkData> data) {
+        CompoundTag tag = new CompoundTag();
+        ListTag listTag = new ListTag();
+        data.forEach(blockInChunkData -> listTag.add(blockInChunkData.save()));
+        tag.put("blocks", listTag);
+        return tag;
+    }
+
+    public static BlockInChunkData read(CompoundTag tag, LevelChunk chunk, boolean posx, boolean negx, boolean posz, boolean negz) {
+        return new BlockInChunkData(NbtUtils.readBlockState(Minecraft.getInstance().level.holderLookup(Registries.BLOCK), tag.getCompound("state")),
+                NbtUtils.readBlockPos(tag.getCompound("pos")), new VectorData(chunk.getLevel(), NbtUtils.readBlockPos(tag.getCompound("pos")), posx, negx, posz, negz),
+                tag.getInt("x"), tag.getInt("z"));
+    }
+
+    public static List<BlockInChunkData> readAll(CompoundTag tag, LevelChunk chunk, boolean posx, boolean negx, boolean posz, boolean negz) {
+        List<BlockInChunkData> blocks = new ArrayList<>();
+        if(tag.contains("blocks", Tag.TAG_LIST)) tag.getList("blocks", Tag.TAG_COMPOUND).forEach(data -> blocks.add(read((CompoundTag) data, chunk, posx, negx, posz, negz)));
+        return blocks;
     }
 }

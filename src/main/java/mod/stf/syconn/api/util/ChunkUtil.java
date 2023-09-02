@@ -33,9 +33,20 @@ public class ChunkUtil {
     }
 
     public static BlockPos getLowestSurfaceBlock(List<ChunkData> chunks) {
-        ChunkPos chunk = chunks.get(0).getChunk().getPos();
-        BlockPos y = new BlockPos(chunk.getBlockX(0), chunks.get(0).getChunk().getHeight(Heightmap.Types.WORLD_SURFACE, chunk.getBlockX(0), chunk.getBlockZ(0)), chunk.getBlockZ(0));
-        for (ChunkData data : chunks) if (y.getY() > getLowestSurfaceBlock(data.getChunk()).getY()) y = getLowestSurfaceBlock(data.getChunk());
-        return y;
+//        ChunkPos chunk = chunks.get(0).getChunk().getPos();
+//        BlockPos y = new BlockPos(chunk.getBlockX(0), chunks.get(0).getChunk().getHeight(Heightmap.Types.WORLD_SURFACE, chunk.getBlockX(0), chunk.getBlockZ(0)), chunk.getBlockZ(0));
+//        for (ChunkData data : chunks) {
+//            System.out.println(getLowestSurfaceBlock(data.getChunk()).getY());
+//            if (y.getY() > getLowestSurfaceBlock(data.getChunk()).getY()) y = getLowestSurfaceBlock(data.getChunk());
+//        }
+//        return y;
+        ChunkPos chunk = chunks.get(0).getChunk().getPos(); // TODO REMOVE LOW EXTREME VALUES
+//        int avgY = chunks.get(0).getChunk().getHeight(Heightmap.Types.WORLD_SURFACE, chunk.getBlockX(0), chunk.getBlockZ(0));
+        int avgY = 0;
+        for (ChunkData data : chunks) {
+            avgY = avgY + getLowestSurfaceBlock(data.getChunk()).getY();
+        }
+        avgY /= chunks.size();
+        return new BlockPos(0, avgY, 0);
     }
 }
