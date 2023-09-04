@@ -4,10 +4,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HalfTransparentBlock;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 
@@ -65,7 +64,7 @@ public class VectorData {
         if (level.getBlockState(pos).getBlock() instanceof HalfTransparentBlock) {
             if (level.getBlockState(pos.relative(d)).getBlock() instanceof HalfTransparentBlock) return false;
         }
-        return !level.getBlockState(pos.relative(d)).canOcclude();
+        return !level.getBlockState(pos.relative(d)).canOcclude() && (!(level.getBlockState(pos.relative(d)).getBlock() instanceof LeavesBlock) || !(level.getBlockState(pos).getBlock() instanceof LeavesBlock));
     }
 
     public float getBlockHeight() {
