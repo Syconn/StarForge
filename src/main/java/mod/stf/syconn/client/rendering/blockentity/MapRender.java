@@ -17,7 +17,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class MapRender implements BlockEntityRenderer<MapBe> {
 
-    private final float Scale3x3 = 0.063f;
+    private final float Scale3x3 = 0.0625f;
 
     private final Minecraft mc = Minecraft.getInstance();
 
@@ -26,7 +26,7 @@ public class MapRender implements BlockEntityRenderer<MapBe> {
     public void render(MapBe pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
         if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.MAP_PROJECTOR.get()) {
             pPoseStack.pushPose();
-            pPoseStack.translate(0, 0.45, 0);
+            pPoseStack.translate(0, 0.4376, 0);
             pPoseStack.scale(Scale3x3, Scale3x3, Scale3x3);
             for (ChunkData data : pBlockEntity.getChunk()) {
                 pPoseStack.pushPose();

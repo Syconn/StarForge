@@ -24,26 +24,34 @@ public class VectorData {
     private final Level level;
     private final float r, g, b;
     private final float blockHeight;
-    public VectorData(Level level, BlockPos pos, boolean posx, boolean negx, boolean posz, boolean negz) { // TODO STOP UNDERGROUND RENDERING
-        this.level = level;                                                                                // TODO SIMPLIFY BLOCK COLOR
+    public VectorData(Level level, BlockPos pos, boolean posx, boolean negx, boolean posz, boolean negz, int lowestY) { // TODO STOP UNDERGROUND RENDERING
+        this.level = level;                                                                                             // TODO SIMPLIFY BLOCK COLOR
         this.pos = pos;
-        for (Direction d : Direction.values()) {
+        for (Direction d : Direction.values()) { // TODO REMOVE UNSEEN SIDES
             // FLUIDS
             if (!level.getBlockState(pos).getFluidState().isEmpty()) fluidValues.put(d, shouldRenderWithinChunk(level.getChunkAt(pos).getPos(), pos, d, posx, negx, posz, negz)
                         || (!Block.isShapeFullBlock(level.getBlockState(pos.relative(d)).getShape(level, pos.relative(d))) && level.getBlockState(pos.relative(d)).getFluidState().isEmpty()) ||
                         (!level.getBlockState(pos.relative(d)).canOcclude() && level.getBlockState(pos.relative(d)).getFluidState().isEmpty()));
+            if (pos.getY() == lowestY && d != Direction.UP) fluidValues.put(d, false);
             // BLOCKS
             else if (shouldRenderWithinChunk(level.getChunkAt(pos).getPos(), pos, d, posx, negx, posz, negz) ||
-                    (!Block.isShapeFullBlock(level.getBlockState(pos.relative(d)).getShape(level, pos.relative(d)))) ||
-                    shouldRenderGlassFace(level, pos, d)) blockFaces.add(d);
+                    (!Block.isShapeFullBlock(level.getBlockState(pos.relative(d)).getShape(level, pos.relative(d)))) || shouldRenderGlassFace(level, pos, d)) {
+                if (pos.getY() == lowestY && d == Direction.UP) blockFaces.add(d);
+                else if (pos.getY() != lowestY) blockFaces.add(d);
+            }
         }
-        blockHeight = level.getBlockState(pos.relative(Direction.UP)).getBlock() instanceof AirBlock ? 0.8F : 1.0F;
+//        blockHeight = level.getBlockState(pos.relative(Direction.UP)).getBlock() instanceof AirBlock ? 0.8F : 1.0F;
+        blockHeight = 1.0F;
         fluidValues.put(Direction.DOWN, false);
         FluidState fluid = level.getBlockState(pos).getFluidState();
         int color = IClientFluidTypeExtensions.of(fluid).getTintColor(fluid, level, pos);
         this.r = (color >> 16 & 0xFF) / 255.0F;
         this.g = (color >> 8 & 0xFF) / 255.0F;
         this.b = (color & 0xFF) / 255.0F;
+    }
+
+    public boolean neverRendered() {
+        return blockFaces.isEmpty();
     }
 
     public static boolean shouldRenderWithinChunk(ChunkPos block, BlockPos pos, Direction d, boolean posx, boolean negx, boolean posz, boolean negz) {

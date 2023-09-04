@@ -23,9 +23,10 @@ public class ChunkData {
     private final LevelChunk chunk;
     private final int x;
     private final int z;
+    private final int lowestY;
     private final boolean posx, negx, posz, negz;
 
-    public ChunkData(int x, int z, LevelChunk chunk, boolean posx, boolean negx, boolean posz, boolean negz) {
+    public ChunkData(int x, int z, LevelChunk chunk, boolean posx, boolean negx, boolean posz, boolean negz, int lowestY) {
         this.x = x;
         this.z = z;
         this.posx = posx;
@@ -33,17 +34,19 @@ public class ChunkData {
         this.posz = posz;
         this.negz = negz;
         this.chunk = chunk;
+        this.lowestY = lowestY;
     }
 
-    public ChunkData(CompoundTag tag) {
+    public ChunkData(CompoundTag tag, int lowestY) {
         this.x = tag.getInt("x");
         this.z = tag.getInt("z");
         this.posx = tag.getBoolean("posx");
         this.negx = tag.getBoolean("negx");
         this.posz = tag.getBoolean("posz");
         this.negz = tag.getBoolean("negz");
+        this.lowestY = lowestY;
         this.chunk = Minecraft.getInstance().level.getChunk(tag.getInt("chunkx"), tag.getInt("chunkz"));
-        this.blocks = BlockInChunkData.readAll(tag.getCompound("blocks"), chunk, posx, negx, posz, negz);
+        this.blocks = BlockInChunkData.readAll(tag.getCompound("blocks"), chunk, posx, negx, posz, negz, lowestY);
     }
 
     public void createChunkRenderer(int lowestY, Level level) {
@@ -53,7 +56,7 @@ public class ChunkData {
                 for (int y = lowestY; y < highestY + 1; y++) {
                     BlockPos pos = new BlockPos(chunk.getPos().getBlockX(x), y, chunk.getPos().getBlockZ(z));
                     if (renderAble(pos, level))
-                        blocks.add(new BlockInChunkData(chunk.getBlockState(pos), pos, new VectorData(chunk.getLevel(), pos, posx, negx, posz, negz), x, z));
+                        blocks.add(new BlockInChunkData(chunk.getBlockState(pos), pos, new VectorData(chunk.getLevel(), pos, posx, negx, posz, negz, lowestY), x, z));
                 }
             }
         }
@@ -113,9 +116,9 @@ public class ChunkData {
         return tag;
     }
 
-    public static List<ChunkData> readAll(CompoundTag tag) {
+    public static List<ChunkData> readAll(CompoundTag tag, int lowestY) {
         List<ChunkData> data = new ArrayList<>();
-        if (tag.contains("chunks", Tag.TAG_LIST)) tag.getList("chunks", Tag.TAG_COMPOUND).forEach(chunk -> data.add(new ChunkData((CompoundTag) chunk)));
+        if (tag.contains("chunks", Tag.TAG_LIST)) tag.getList("chunks", Tag.TAG_COMPOUND).forEach(chunk -> data.add(new ChunkData((CompoundTag) chunk, lowestY)));
         return data;
     }
 }

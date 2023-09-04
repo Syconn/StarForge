@@ -39,15 +39,8 @@ public class ChunkUtil {
         ChunkPos chunk = chunks.get(0).getChunk().getPos();
         BlockPos y = new BlockPos(chunk.getBlockX(0), chunks.get(0).getChunk().getHeight(Heightmap.Types.WORLD_SURFACE, chunk.getBlockX(0), chunk.getBlockZ(0)), chunk.getBlockZ(0));
         for (ChunkData data : chunks) {
-            System.out.println(getLowestSurfaceBlock(data.getChunk()).getY());
             if (y.getY() > getLowestSurfaceBlock(data.getChunk()).getY()) y = getLowestSurfaceBlock(data.getChunk());
         }
         return y;
-//        List<Integer> heights = new ArrayList<>();
-//        for (ChunkData data : chunks) heights.add(getLowestSurfaceBlock(data.getChunk()).getY());
-//        Collections.sort(heights, Collections.reverseOrder());
-//        if (heights.get(1) - heights.get(0) >= 10) heights.remove(0);
-//        if (heights.get(1) - heights.get(0) >= 10) heights.remove(0);
-//        return new BlockPos(0, (int) heights.stream().mapToDouble(a -> a).average().getAsDouble(), 0);
     }
 }

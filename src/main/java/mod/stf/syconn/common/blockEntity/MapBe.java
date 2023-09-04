@@ -38,7 +38,7 @@ public class MapBe extends ClientBlockEntity {
                 for (int z = min; z <= max; z++) {
                     LevelChunk chunk = level.getChunk(center.x + x, center.z + z);
                     level.getServer().getLevel(Level.OVERWORLD).setChunkForced(chunk.getPos().x, chunk.getPos().z, true);
-                    chunks.add(new ChunkData(chunk.getPos().x - center.x, chunk.getPos().z - center.z, chunk, x == max, x == min, z == max, z == min));
+                    chunks.add(new ChunkData(chunk.getPos().x - center.x, chunk.getPos().z - center.z, chunk, x == max, x == min, z == max, z == min, lowestY));
                 }
             }
 
@@ -79,7 +79,7 @@ public class MapBe extends ClientBlockEntity {
         super.load(pTag);
         lowestY = pTag.getInt("lowesty");
         centerPos = new ChunkPos(pTag.getInt("chunkx"), pTag.getInt("chunkz"));
-        if (pTag.contains("chunks")) chunks = ChunkData.readAll(pTag.getCompound("chunks"));
+        if (pTag.contains("chunks")) chunks = ChunkData.readAll(pTag.getCompound("chunks"), lowestY);
     }
 
     public AABB getRenderBoundingBox() {

@@ -5,7 +5,6 @@ import mod.stf.syconn.api.util.RenderUtil;
 import mod.stf.syconn.api.util.data.VectorData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -45,15 +44,15 @@ public record BlockInChunkData(BlockState state, BlockPos pos, VectorData data, 
         return tag;
     }
 
-    public static BlockInChunkData read(CompoundTag tag, LevelChunk chunk, boolean posx, boolean negx, boolean posz, boolean negz) {
+    public static BlockInChunkData read(CompoundTag tag, LevelChunk chunk, boolean posx, boolean negx, boolean posz, boolean negz, int lowestY) {
         return new BlockInChunkData(NbtUtils.readBlockState(Minecraft.getInstance().level.holderLookup(Registries.BLOCK), tag.getCompound("state")),
-                NbtUtils.readBlockPos(tag.getCompound("pos")), new VectorData(chunk.getLevel(), NbtUtils.readBlockPos(tag.getCompound("pos")), posx, negx, posz, negz),
+                NbtUtils.readBlockPos(tag.getCompound("pos")), new VectorData(chunk.getLevel(), NbtUtils.readBlockPos(tag.getCompound("pos")), posx, negx, posz, negz, lowestY),
                 tag.getInt("x"), tag.getInt("z"));
     }
 
-    public static List<BlockInChunkData> readAll(CompoundTag tag, LevelChunk chunk, boolean posx, boolean negx, boolean posz, boolean negz) {
+    public static List<BlockInChunkData> readAll(CompoundTag tag, LevelChunk chunk, boolean posx, boolean negx, boolean posz, boolean negz, int lowestY) {
         List<BlockInChunkData> blocks = new ArrayList<>();
-        if(tag.contains("blocks", Tag.TAG_LIST)) tag.getList("blocks", Tag.TAG_COMPOUND).forEach(data -> blocks.add(read((CompoundTag) data, chunk, posx, negx, posz, negz)));
+        if(tag.contains("blocks", Tag.TAG_LIST)) tag.getList("blocks", Tag.TAG_COMPOUND).forEach(data -> blocks.add(read((CompoundTag) data, chunk, posx, negx, posz, negz, lowestY)));
         return blocks;
     }
 }
