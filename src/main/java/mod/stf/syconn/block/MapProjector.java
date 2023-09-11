@@ -38,7 +38,7 @@ public class MapProjector extends Block implements EntityBlock {
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         MultiBlockAlignment al = pState.getValue(ALIGNMENT);
         if (!pLevel.isClientSide && pLevel.getBlockEntity(pPos.offset(pState.getValue(ALIGNMENT).getX(), 0, pState.getValue(ALIGNMENT).getZ())) instanceof MapBe be) {
-            be.onClick(pLevel, al);
+            be.onClick(pLevel, pPos, al);
         }
         pLevel.setBlock(pPos, pState.setValue(TOP, false), 2);
         return InteractionResult.PASS;

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import mod.stf.syconn.common.blockEntity.MapBe;
 import mod.stf.syconn.init.ModBlocks;
 import mod.stf.syconn.util.data.BlockInChunkData;
-import mod.stf.syconn.util.data.ChunkData;
+import mod.stf.syconn.util.data.ChunkInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -27,7 +27,7 @@ public class MapRender implements BlockEntityRenderer<MapBe> {
             pPoseStack.pushPose();
             pPoseStack.translate(0.025, 0.5015, 0.025);
             pPoseStack.scale(Scale3x3, Scale3x3, Scale3x3);
-            for (ChunkData data : pBlockEntity.getChunk()) {
+            for (ChunkInfo data : pBlockEntity.getChunk()) {
                 pPoseStack.pushPose();
                 pPoseStack.translate(data.getX() * 16, 0, data.getZ() * 16);
                 for (BlockInChunkData blockInChunkData : data.getBlocks()) blockInChunkData.render(pPoseStack, pBufferSource, pPackedLight, data.getChunk(), pBlockEntity.getRenderY());

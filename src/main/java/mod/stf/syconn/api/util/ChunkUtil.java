@@ -1,20 +1,14 @@
 package mod.stf.syconn.api.util;
 
-import com.google.common.primitives.Ints;
 import mod.stf.syconn.init.ModTags;
-import mod.stf.syconn.util.data.ChunkData;
-import net.minecraft.client.Minecraft;
+import mod.stf.syconn.util.data.ChunkInfo;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class ChunkUtil {
 
@@ -40,10 +34,10 @@ public class ChunkUtil {
         return pos;
     }
 
-    public static BlockPos getLowestSurfaceBlock(List<ChunkData> chunks) {
+    public static BlockPos getLowestSurfaceBlock(List<ChunkInfo> chunks) {
         ChunkPos chunk = chunks.get(0).getChunk().getPos();
         BlockPos y = new BlockPos(chunk.getBlockX(0), chunks.get(0).getChunk().getHeight(Heightmap.Types.WORLD_SURFACE, chunk.getBlockX(0), chunk.getBlockZ(0)), chunk.getBlockZ(0));
-        for (ChunkData data : chunks) {
+        for (ChunkInfo data : chunks) {
             if (y.getY() > getLowestSurfaceBlock(data.getChunk()).getY()) y = getLowestSurfaceBlock(data.getChunk());
         }
         return y;

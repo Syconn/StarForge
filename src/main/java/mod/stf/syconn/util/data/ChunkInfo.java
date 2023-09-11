@@ -2,7 +2,6 @@ package mod.stf.syconn.util.data;
 
 import mod.stf.syconn.api.util.ChunkUtil;
 import mod.stf.syconn.api.util.data.VectorData;
-import mod.stf.syconn.init.ModBlocks;
 import mod.stf.syconn.init.ModTags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -16,12 +15,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraftforge.common.Tags;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChunkData {
+public class ChunkInfo {
 
     private List<BlockInChunkData> blocks = new ArrayList<>();
     private final LevelChunk chunk;
@@ -29,7 +27,7 @@ public class ChunkData {
     private final int z;
     private final boolean posx, negx, posz, negz;
 
-    public ChunkData(int x, int z, LevelChunk chunk, boolean posx, boolean negx, boolean posz, boolean negz) {
+    public ChunkInfo(int x, int z, LevelChunk chunk, boolean posx, boolean negx, boolean posz, boolean negz) {
         this.x = x;
         this.z = z;
         this.posx = posx;
@@ -39,7 +37,7 @@ public class ChunkData {
         this.chunk = chunk;
     }
 
-    public ChunkData(CompoundTag tag, int lowestY) {
+    public ChunkInfo(CompoundTag tag, int lowestY) {
         this.x = tag.getInt("x");
         this.z = tag.getInt("z");
         this.posx = tag.getBoolean("posx");
@@ -114,7 +112,7 @@ public class ChunkData {
         return tag;
     }
 
-    public static CompoundTag saveAll(List<ChunkData> data) {
+    public static CompoundTag saveAll(List<ChunkInfo> data) {
         CompoundTag tag = new CompoundTag();
         ListTag listTag = new ListTag();
         data.forEach(chunk -> listTag.add(chunk.save()));
@@ -122,9 +120,9 @@ public class ChunkData {
         return tag;
     }
 
-    public static List<ChunkData> readAll(CompoundTag tag, int lowestY) {
-        List<ChunkData> data = new ArrayList<>();
-        if (tag.contains("chunks", Tag.TAG_LIST)) tag.getList("chunks", Tag.TAG_COMPOUND).forEach(chunk -> data.add(new ChunkData((CompoundTag) chunk, lowestY)));
+    public static List<ChunkInfo> readAll(CompoundTag tag, int lowestY) {
+        List<ChunkInfo> data = new ArrayList<>();
+        if (tag.contains("chunks", Tag.TAG_LIST)) tag.getList("chunks", Tag.TAG_COMPOUND).forEach(chunk -> data.add(new ChunkInfo((CompoundTag) chunk, lowestY)));
         return data;
     }
 }

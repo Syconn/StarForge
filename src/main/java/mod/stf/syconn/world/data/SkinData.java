@@ -24,10 +24,6 @@ public class SkinData implements ISSavable {
         }
     }
 
-    public void setSkins(Map<String, PixelImage> skins){
-        this.skins = skins;
-    }
-
     public boolean contains(String name){
         return skins.containsKey(name);
     }
