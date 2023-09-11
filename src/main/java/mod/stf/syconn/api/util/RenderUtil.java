@@ -4,12 +4,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import mod.stf.syconn.api.util.data.VectorData;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -23,13 +23,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.client.RenderTypeHelper;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.textures.UnitTextureAtlasSprite;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RenderUtil {
@@ -39,27 +38,28 @@ public class RenderUtil {
         if (rendershape != RenderShape.INVISIBLE) {
             switch (rendershape) {
                 case MODEL -> {
-                    BakedModel bakedmodel = Minecraft.getInstance().getModelManager().getBlockModelShaper().getBlockModel(pState);
-                    int i = Minecraft.getInstance().getBlockColors().getColor(pState, level, pos, 0);
-                    float f = (float) (i >> 16 & 255) / 255.0F;
-                    float f1 = (float) (i >> 8 & 255) / 255.0F;
-                    float f2 = (float) (i & 255) / 255.0F;
+                    BakedModel bakedmodel = Minecraft.getInstance().getModelManager().getBlockModelShaper().getBlockModel(pState); // TODO MOVE TO VECTOR DATA + TEXTURE SPRITE
+                    // TODO Fix below Water
                     for (RenderType rt : bakedmodel.getRenderTypes(pState, RandomSource.create(42), ModelData.EMPTY)) {
                         RandomSource randomsource = RandomSource.create();
-                        for(Direction direction : data.getBlockFaces()) {
+                        for(Direction direction : handleHiddenFaces(data.getBlockFaces())) {
                             randomsource.setSeed(42L);
-                            renderQuadList(pPoseStack.last(), pBufferSource.getBuffer(RenderTypeHelper.getEntityRenderType(rt, false)), f, f1, f2, bakedmodel.getQuads(pState, direction, randomsource, ModelData.EMPTY, rt), pPackedLight);
+                            renderQuadList(pPoseStack.last(), pBufferSource.getBuffer(RenderTypeHelper.getEntityRenderType(rt, false)), data.getRGB()[0], data.getRGB()[1], data.getRGB()[2], bakedmodel.getQuads(pState, direction, randomsource, ModelData.EMPTY, rt), pPackedLight);
                         }
                         randomsource.setSeed(42L);
-                        renderQuadList(pPoseStack.last(), pBufferSource.getBuffer(RenderTypeHelper.getEntityRenderType(rt, false)), f, f1, f2, bakedmodel.getQuads(pState, null, randomsource, ModelData.EMPTY, rt), pPackedLight);
+                        renderQuadList(pPoseStack.last(), pBufferSource.getBuffer(RenderTypeHelper.getEntityRenderType(rt, false)), data.getRGB()[0], data.getRGB()[1], data.getRGB()[2], bakedmodel.getQuads(pState, null, randomsource, ModelData.EMPTY, rt), pPackedLight);
                     }
                 }
-                case ENTITYBLOCK_ANIMATED -> {
-                    ItemStack stack = new ItemStack(pState.getBlock());
-                    IClientItemExtensions.of(stack).getCustomRenderer().renderByItem(stack, ItemDisplayContext.NONE, pPoseStack, pBufferSource, pPackedLight, OverlayTexture.NO_OVERLAY);
-                }
+                case ENTITYBLOCK_ANIMATED -> IClientItemExtensions.of(new ItemStack(pState.getBlock())).getCustomRenderer().renderByItem(new ItemStack(pState.getBlock()), ItemDisplayContext.NONE, pPoseStack, pBufferSource, pPackedLight, OverlayTexture.NO_OVERLAY);
             }
         }
+    }
+
+    private static List<Direction> handleHiddenFaces(List<Direction> input) {
+        List<Direction> list = new ArrayList<>(input);
+        if (Minecraft.getInstance().options.getCameraType() == CameraType.THIRD_PERSON_FRONT) list.remove(Minecraft.getInstance().player.getDirection().getOpposite());
+        else list.remove(Minecraft.getInstance().player.getDirection());
+        return list;
     }
 
     private static void renderQuadList(PoseStack.Pose pPose, VertexConsumer pConsumer, float pRed, float pGreen, float pBlue, List<BakedQuad> pQuads, int pPackedLight) {
@@ -76,12 +76,11 @@ public class RenderUtil {
                 f1 = 1.0F;
                 f2 = 1.0F;
             }
-
             pConsumer.putBulkData(pPose, bakedquad, f, f1, f2, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
     }
     
-    public static void renderLiquid(PoseStack pPoseStack, MultiBufferSource pBufferSource, BlockState fluid, VectorData data) { // TODO OCEAN RENDER DOESNT WORK
+    public static void renderLiquid(PoseStack pPoseStack, MultiBufferSource pBufferSource, BlockState fluid, VectorData data) {
         if (!fluid.getFluidState().isEmpty()) {
             ResourceLocation fluidStill = IClientFluidTypeExtensions.of(fluid.getFluidState()).getStillTexture();
             TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
@@ -102,10 +101,7 @@ public class RenderUtil {
 
             // Bottom Face
             if (data.getVectorData(Direction.DOWN)) {
-                add(builder, pPoseStack, 1, 0, 1, sprite.getU0(), sprite.getV1(), r, g, b, a);
-                add(builder, pPoseStack, 0, 0, 1, sprite.getU1(), sprite.getV1(), r, g, b, a);
-                add(builder, pPoseStack, 0, 0, 0, sprite.getU1(), sprite.getV0(), r, g, b, a);
-                add(builder, pPoseStack, 1, 0, 0, sprite.getU0(), sprite.getV0(), r, g, b, a);
+
             }
 
             // Front Faces [NORTH - SOUTH]
@@ -139,22 +135,26 @@ public class RenderUtil {
                 add(builder, pPoseStack, 1, data.getBlockHeight(), 0, sprite.getU0(), sprite.getV0(), r, g, b, a);
             }
 
-//            // Bottom Face of Top
-//            add(builder, pPoseStack, 1, data.getBlockHeight(), 1, data.getU0(), data.getV1(), r, g, b, a);
-//            add(builder, pPoseStack, 0, data.getBlockHeight(), 1, data.getU1(), data.getV1(), r, g, b, a);
-//            add(builder, pPoseStack, 0, data.getBlockHeight(), 0, data.getU1(), data.getV0(), r, g, b, a);
-//            add(builder, pPoseStack, 1, data.getBlockHeight(), 0, data.getU0(), data.getV0(), r, g, b, a);
-//
+            //            // Bottom Face of Top
+//            add(builder, pPoseStack, 1, data.getBlockHeight(), 1, sprite.getU0(), sprite.getV1(), r, g, b, a);
+//            add(builder, pPoseStack, 0, data.getBlockHeight(), 1, sprite.getU1(), sprite.getV1(), r, g, b, a);
+//            add(builder, pPoseStack, 0, data.getBlockHeight(), 0, sprite.getU1(), sprite.getV0(), r, g, b, a);
+//            add(builder, pPoseStack, 1, data.getBlockHeight(), 0, sprite.getU0(), sprite.getV0(), r, g, b, a);
+//            add(builder, pPoseStack, 1, 0, 1, sprite.getU0(), sprite.getV1(), r, g, b, a);
+//            add(builder, pPoseStack, 0, 0, 1, sprite.getU1(), sprite.getV1(), r, g, b, a);
+//            add(builder, pPoseStack, 0, 0, 0, sprite.getU1(), sprite.getV0(), r, g, b, a);
+//            add(builder, pPoseStack, 1, 0, 0, sprite.getU0(), sprite.getV0(), r, g, b, a);
+
 //            // Back Faces
-//            add(builder, pPoseStack, 1, data.getBlockHeight(), 0, data.getU0(), data.getV0(), r, g, b, a);
-//            add(builder, pPoseStack, 0, data.getBlockHeight(), 0, data.getU1(), data.getV0(), r, g, b, a);
-//            add(builder, pPoseStack, 0, 0, 0, data.getU1(), data.getV1(), r, g, b, a);
-//            add(builder, pPoseStack, 1, 0, 0, data.getU0(), data.getV1(), r, g, b, a);
+//            add(builder, pPoseStack, 1, data.getBlockHeight(), 0, sprite.getU0(), sprite.getV0(), r, g, b, a);
+//            add(builder, pPoseStack, 0, data.getBlockHeight(), 0, sprite.getU1(), sprite.getV0(), r, g, b, a);
+//            add(builder, pPoseStack, 0, 0, 0, sprite.getU1(), sprite.getV1(), r, g, b, a);
+//            add(builder, pPoseStack, 1, 0, 0, sprite.getU0(), sprite.getV1(), r, g, b, a);
 //
-//            add(builder, pPoseStack, 1, 0, 1, data.getU0(), data.getV1(), r, g, b, a);
-//            add(builder, pPoseStack, 0, 0, 1, data.getU1(), data.getV1(), r, g, b, a);
-//            add(builder, pPoseStack, 0, data.getBlockHeight(), 1, data.getU1(), data.getV0(), r, g, b, a);
-//            add(builder, pPoseStack, 1, data.getBlockHeight(), 1, data.getU0(), data.getV0(), r, g, b, a);
+//            add(builder, pPoseStack, 1, 0, 1, sprite.getU0(), sprite.getV1(), r, g, b, a);
+//            add(builder, pPoseStack, 0, 0, 1, sprite.getU1(), sprite.getV1(), r, g, b, a);
+//            add(builder, pPoseStack, 0, data.getBlockHeight(), 1, sprite.getU1(), sprite.getV0(), r, g, b, a);
+//            add(builder, pPoseStack, 1, data.getBlockHeight(), 1, sprite.getU0(), sprite.getV0(), r, g, b, a);
             pPoseStack.popPose();
         }
     }

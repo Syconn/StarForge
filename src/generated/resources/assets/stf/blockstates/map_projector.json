@@ -1,7 +1,58 @@
 {
   "variants": {
-    "": {
+    "alignment=bot,top=false": {
+      "model": "minecraft:block/air"
+    },
+    "alignment=bot,top=true": {
+      "model": "minecraft:block/air"
+    },
+    "alignment=bot_left,top=false": {
+      "model": "minecraft:block/air"
+    },
+    "alignment=bot_left,top=true": {
+      "model": "minecraft:block/air"
+    },
+    "alignment=bot_right,top=false": {
+      "model": "minecraft:block/air"
+    },
+    "alignment=bot_right,top=true": {
+      "model": "minecraft:block/air"
+    },
+    "alignment=left,top=false": {
+      "model": "minecraft:block/air"
+    },
+    "alignment=left,top=true": {
+      "model": "minecraft:block/air"
+    },
+    "alignment=mid,top=false": {
       "model": "stf:block/map_projector"
+    },
+    "alignment=mid,top=true": {
+      "model": "stf:block/map_projector_top"
+    },
+    "alignment=right,top=false": {
+      "model": "minecraft:block/air"
+    },
+    "alignment=right,top=true": {
+      "model": "minecraft:block/air"
+    },
+    "alignment=top,top=false": {
+      "model": "minecraft:block/air"
+    },
+    "alignment=top,top=true": {
+      "model": "minecraft:block/air"
+    },
+    "alignment=top_left,top=false": {
+      "model": "minecraft:block/air"
+    },
+    "alignment=top_left,top=true": {
+      "model": "minecraft:block/air"
+    },
+    "alignment=top_right,top=false": {
+      "model": "minecraft:block/air"
+    },
+    "alignment=top_right,top=true": {
+      "model": "minecraft:block/air"
     }
   }
 }

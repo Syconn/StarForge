@@ -5,22 +5,26 @@ import net.minecraft.util.StringRepresentable;
 
 public enum MultiBlockAlignment implements StringRepresentable {
 
-    TOP_LEFT(1, -1),
-    LEFT(1, 0),
-    BOT_LEFT(1, 1),
-    TOP(0, -1),
-    MID(0, 0),
-    BOT(0, 1),
-    TOP_RIGHT(-1, -1),
-    RIGHT(-1, 0),
-    BOT_RIGHT(-1, 1);
+    TOP_LEFT(1, -1, "edge", 0),
+    LEFT(1, 0, "side", 0),
+    BOT_LEFT(1, 1, "edge", 0),
+    TOP(0, -1, "side", 0),
+    MID(0, 0, "mid", 0),
+    BOT(0, 1, "side", 0),
+    TOP_RIGHT(-1, -1, "edge", 0),
+    RIGHT(-1, 0, "side", 0),
+    BOT_RIGHT(-1, 1, "edge", 0);
 
     private final int x;
     private final int z;
+    private final String side;
+    private final int yRot;
 
-    MultiBlockAlignment(int x, int z) {
+    MultiBlockAlignment(int x, int z, String side, int yRot) {
         this.x = x;
         this.z = z;
+        this.side = side;
+        this.yRot = yRot;
     }
 
     public int getX() {
@@ -29,6 +33,14 @@ public enum MultiBlockAlignment implements StringRepresentable {
 
     public int getZ() {
         return z;
+    }
+
+    public int getYRot() {
+        return yRot;
+    }
+
+    public String getSide() {
+        return side;
     }
 
     public String getSerializedName() {

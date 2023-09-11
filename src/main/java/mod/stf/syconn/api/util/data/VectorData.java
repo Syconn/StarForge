@@ -1,5 +1,7 @@
 package mod.stf.syconn.api.util.data;
 
+import mod.stf.syconn.init.ModTags;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.ChunkPos;
@@ -23,34 +25,30 @@ public class VectorData {
     private final Level level;
     private final float r, g, b;
     private final float blockHeight;
-    public VectorData(Level level, BlockPos pos, boolean posx, boolean negx, boolean posz, boolean negz, int lowestY) { // TODO STOP UNDERGROUND RENDERING
-        this.level = level;                                                                                             // TODO SIMPLIFY BLOCK COLOR
+    public VectorData(Level level, BlockPos pos, boolean posx, boolean negx, boolean posz, boolean negz, int lowestY) { // TODO CREATE BLOCK MODELS HERE
+        this.level = level;
         this.pos = pos;
-        for (Direction d : Direction.values()) { // TODO REMOVE UNSEEN SIDES
+        for (Direction d : Direction.values()) {
             // FLUIDS
             if (!level.getBlockState(pos).getFluidState().isEmpty()) fluidValues.put(d, shouldRenderWithinChunk(level.getChunkAt(pos).getPos(), pos, d, posx, negx, posz, negz)
                         || (!Block.isShapeFullBlock(level.getBlockState(pos.relative(d)).getShape(level, pos.relative(d))) && level.getBlockState(pos.relative(d)).getFluidState().isEmpty()) ||
                         (!level.getBlockState(pos.relative(d)).canOcclude() && level.getBlockState(pos.relative(d)).getFluidState().isEmpty()));
             if (pos.getY() == lowestY && d != Direction.UP) fluidValues.put(d, false);
             // BLOCKS
-            else if (shouldRenderWithinChunk(level.getChunkAt(pos).getPos(), pos, d, posx, negx, posz, negz) ||
-                    (!Block.isShapeFullBlock(level.getBlockState(pos.relative(d)).getShape(level, pos.relative(d)))) || shouldRenderGlassFace(level, pos, d)) {
+            else if (shouldRenderWithinChunk(level.getChunkAt(pos).getPos(), pos, d, posx, negx, posz, negz) || handleNonFullBlocks(d) || shouldRenderGlassFace(d)) {
                 if (pos.getY() == lowestY && d == Direction.UP) blockFaces.add(d);
                 else if (pos.getY() != lowestY) blockFaces.add(d);
             }
         }
-//        blockHeight = level.getBlockState(pos.relative(Direction.UP)).getBlock() instanceof AirBlock ? 0.8F : 1.0F;
         blockHeight = 1.0F;
-        fluidValues.put(Direction.DOWN, false);
+        fluidValues.put(Direction.DOWN, level.getBlockState(pos.below()).getFluidState().isEmpty());
         FluidState fluid = level.getBlockState(pos).getFluidState();
-        int color = IClientFluidTypeExtensions.of(fluid).getTintColor(fluid, level, pos);
+        int color;
+        if (!level.getBlockState(pos).getFluidState().isEmpty()) color = IClientFluidTypeExtensions.of(fluid).getTintColor(fluid, level, pos);
+        else color = Minecraft.getInstance().getBlockColors().getColor(level.getBlockState(pos), level, pos, 0);
         this.r = (color >> 16 & 0xFF) / 255.0F;
         this.g = (color >> 8 & 0xFF) / 255.0F;
         this.b = (color & 0xFF) / 255.0F;
-    }
-
-    public boolean neverRendered() {
-        return blockFaces.isEmpty();
     }
 
     public static boolean shouldRenderWithinChunk(ChunkPos block, BlockPos pos, Direction d, boolean posx, boolean negx, boolean posz, boolean negz) {
@@ -60,10 +58,14 @@ public class VectorData {
         return posx && d == Direction.EAST && block.getBlockX(15) == pos.getX();
     }
 
-    public boolean shouldRenderGlassFace(Level level, BlockPos pos, Direction d) {
-        if (level.getBlockState(pos).getBlock() instanceof HalfTransparentBlock) {
-            if (level.getBlockState(pos.relative(d)).getBlock() instanceof HalfTransparentBlock) return false;
-        }
+    public boolean handleNonFullBlocks(Direction d) {
+        if (level.getBlockState(pos.relative(d)).is(ModTags.Blocks.HIDE_FACE_BLOCK) && level.getBlockState(pos).is(ModTags.Blocks.HIDE_FACE_BLOCK)) return false;
+        return (!Block.isShapeFullBlock(level.getBlockState(pos.relative(d)).getShape(level, pos.relative(d))) ||
+                (level.getBlockState(pos.relative(d)).is(ModTags.Blocks.HIDE_FACE_BLOCK) && level.getBlockState(pos).is(ModTags.Blocks.HIDE_FACE_BLOCK)));
+    }
+
+    public boolean shouldRenderGlassFace(Direction d) {
+        if (level.getBlockState(pos).getBlock() instanceof HalfTransparentBlock) if (level.getBlockState(pos.relative(d)).getBlock() instanceof HalfTransparentBlock) return false;
         return !level.getBlockState(pos.relative(d)).canOcclude() && (!(level.getBlockState(pos.relative(d)).getBlock() instanceof LeavesBlock) || !(level.getBlockState(pos).getBlock() instanceof LeavesBlock));
     }
 

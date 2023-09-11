@@ -31,4 +31,18 @@ public class Mths {
             return 1;
         else return 0;
     }
+
+    public static int mode(final int[] n) {
+        int r = 0;
+        int max = 0;
+        for (int k : n) {
+            int cur = 0;
+            for (int j : n) if (k == j) cur++;
+            if (cur > max) {
+                r = k;
+                max = cur;
+            }
+        }
+        return r;
+    }
 }
