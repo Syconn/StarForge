@@ -33,6 +33,7 @@ public record BlockInChunkData(BlockState state, BlockPos pos, VectorData data, 
         tag.put("pos", NbtUtils.writeBlockPos(pos));
         tag.putInt("x", x);
         tag.putInt("z", z);
+        tag.put("data", data.save());
         return tag;
     }
 
@@ -44,15 +45,14 @@ public record BlockInChunkData(BlockState state, BlockPos pos, VectorData data, 
         return tag;
     }
 
-    public static BlockInChunkData read(CompoundTag tag, LevelChunk chunk, boolean posx, boolean negx, boolean posz, boolean negz, int lowestY) {
+    public static BlockInChunkData read(CompoundTag tag) {
         return new BlockInChunkData(NbtUtils.readBlockState(Minecraft.getInstance().level.holderLookup(Registries.BLOCK), tag.getCompound("state")),
-                NbtUtils.readBlockPos(tag.getCompound("pos")), new VectorData(chunk.getLevel(), NbtUtils.readBlockPos(tag.getCompound("pos")), posx, negx, posz, negz, lowestY),
-                tag.getInt("x"), tag.getInt("z"));
+                NbtUtils.readBlockPos(tag.getCompound("pos")), new VectorData(tag.getCompound("data")), tag.getInt("x"), tag.getInt("z"));
     }
 
-    public static List<BlockInChunkData> readAll(CompoundTag tag, LevelChunk chunk, boolean posx, boolean negx, boolean posz, boolean negz, int lowestY) {
+    public static List<BlockInChunkData> readAll(CompoundTag tag) {
         List<BlockInChunkData> blocks = new ArrayList<>();
-        if(tag.contains("blocks", Tag.TAG_LIST)) tag.getList("blocks", Tag.TAG_COMPOUND).forEach(data -> blocks.add(read((CompoundTag) data, chunk, posx, negx, posz, negz, lowestY)));
+        if(tag.contains("blocks", Tag.TAG_LIST)) tag.getList("blocks", Tag.TAG_COMPOUND).forEach(data -> blocks.add(read((CompoundTag) data)));
         return blocks;
     }
 }

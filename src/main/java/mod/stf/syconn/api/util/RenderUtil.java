@@ -38,7 +38,7 @@ public class RenderUtil {
         if (rendershape != RenderShape.INVISIBLE) {
             switch (rendershape) {
                 case MODEL -> {
-                    BakedModel bakedmodel = Minecraft.getInstance().getModelManager().getBlockModelShaper().getBlockModel(pState); // TODO MOVE TO VECTOR DATA + TEXTURE SPRITE
+                    BakedModel bakedmodel = Minecraft.getInstance().getModelManager().getBlockModelShaper().getBlockModel(pState);
                     // TODO Fix below Water
                     for (RenderType rt : bakedmodel.getRenderTypes(pState, RandomSource.create(42), ModelData.EMPTY)) {
                         RandomSource randomsource = RandomSource.create();
@@ -97,11 +97,6 @@ public class RenderUtil {
                 add(builder, pPoseStack, 1, data.getBlockHeight(), 1, sprite.getU1(), sprite.getV1(), r, g, b, a);
                 add(builder, pPoseStack, 1, data.getBlockHeight(), 0, sprite.getU1(), sprite.getV0(), r, g, b, a);
                 add(builder, pPoseStack, 0, data.getBlockHeight(), 0, sprite.getU0(), sprite.getV0(), r, g, b, a);
-            }
-
-            // Bottom Face
-            if (data.getVectorData(Direction.DOWN)) {
-
             }
 
             // Front Faces [NORTH - SOUTH]

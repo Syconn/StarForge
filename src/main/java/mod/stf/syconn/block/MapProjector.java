@@ -1,7 +1,9 @@
 package mod.stf.syconn.block;
 
+import mod.stf.syconn.client.screen.MapScreen;
 import mod.stf.syconn.common.blockEntity.MapBe;
 import mod.stf.syconn.util.MultiBlockAlignment;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -23,6 +25,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 public class MapProjector extends Block implements EntityBlock {
@@ -36,11 +39,12 @@ public class MapProjector extends Block implements EntityBlock {
     }
 
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        MultiBlockAlignment al = pState.getValue(ALIGNMENT);
-        if (!pLevel.isClientSide && pLevel.getBlockEntity(pPos.offset(pState.getValue(ALIGNMENT).getX(), 0, pState.getValue(ALIGNMENT).getZ())) instanceof MapBe be) {
-            be.onClick(pLevel, pPos, al);
-        }
-        pLevel.setBlock(pPos, pState.setValue(TOP, false), 2);
+//        MultiBlockAlignment al = pState.getValue(ALIGNMENT);
+//        if (!pLevel.isClientSide && pLevel.getBlockEntity(pPos.offset(pState.getValue(ALIGNMENT).getX(), 0, pState.getValue(ALIGNMENT).getZ())) instanceof MapBe be) {
+//            be.onClick(pLevel, pPos, al);
+//        }
+        if (pLevel.isClientSide) Minecraft.getInstance().setScreen(new MapScreen());
+        pLevel.setBlock(pPos, pState.setValue(TOP, false), 2); // TODO Improve
         return InteractionResult.PASS;
     }
 

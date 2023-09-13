@@ -37,7 +37,7 @@ public class ChunkInfo {
         this.chunk = chunk;
     }
 
-    public ChunkInfo(CompoundTag tag, int lowestY) {
+    public ChunkInfo(CompoundTag tag) {
         this.x = tag.getInt("x");
         this.z = tag.getInt("z");
         this.posx = tag.getBoolean("posx");
@@ -45,7 +45,7 @@ public class ChunkInfo {
         this.posz = tag.getBoolean("posz");
         this.negz = tag.getBoolean("negz");
         this.chunk = Minecraft.getInstance().level.getChunk(tag.getInt("chunkx"), tag.getInt("chunkz"));
-        this.blocks = BlockInChunkData.readAll(tag.getCompound("blocks"), chunk, posx, negx, posz, negz, lowestY);
+        this.blocks = BlockInChunkData.readAll(tag.getCompound("blocks"));
     }
 
     public void createChunkRenderer(int lowestY, int renderY, Level level) {
@@ -120,9 +120,9 @@ public class ChunkInfo {
         return tag;
     }
 
-    public static List<ChunkInfo> readAll(CompoundTag tag, int lowestY) {
+    public static List<ChunkInfo> readAll(CompoundTag tag) {
         List<ChunkInfo> data = new ArrayList<>();
-        if (tag.contains("chunks", Tag.TAG_LIST)) tag.getList("chunks", Tag.TAG_COMPOUND).forEach(chunk -> data.add(new ChunkInfo((CompoundTag) chunk, lowestY)));
+        if (tag.contains("chunks", Tag.TAG_LIST)) tag.getList("chunks", Tag.TAG_COMPOUND).forEach(chunk -> data.add(new ChunkInfo((CompoundTag) chunk)));
         return data;
     }
 }

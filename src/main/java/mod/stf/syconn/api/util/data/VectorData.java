@@ -4,6 +4,9 @@ import mod.stf.syconn.init.ModTags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -17,12 +20,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VectorData {
+public class VectorData { // TODO MAKE VECTOR DATA SAVABLE TO NBT
 
     private final Map<Direction, Boolean> fluidValues = new HashMap<>();
     private final List<Direction> blockFaces = new ArrayList<>();
-    private final BlockPos pos;
-    private final Level level;
+    private BlockPos pos;
+    private Level level;
     private final float r, g, b;
     private final float blockHeight;
     public VectorData(Level level, BlockPos pos, boolean posx, boolean negx, boolean posz, boolean negz, int lowestY) { // TODO CREATE BLOCK MODELS HERE
@@ -49,6 +52,27 @@ public class VectorData {
         this.r = (color >> 16 & 0xFF) / 255.0F;
         this.g = (color >> 8 & 0xFF) / 255.0F;
         this.b = (color & 0xFF) / 255.0F;
+    }
+
+    public VectorData(CompoundTag tag) { // ALWAYS CLIENT SIDE
+        this.r = tag.getFloat("r");
+        this.g = tag.getFloat("g");
+        this.b = tag.getFloat("b");
+        this.blockHeight = tag.getFloat("height");
+        if (tag.contains("faces", Tag.TAG_LIST)){
+            ListTag map = tag.getList("faces", Tag.TAG_COMPOUND);
+            map.forEach(nbt -> {
+                CompoundTag data = (CompoundTag) nbt;
+                blockFaces.add(Direction.from3DDataValue(data.getInt("dir")));
+            });
+        }
+        if (tag.contains("fluids", Tag.TAG_LIST)){
+            ListTag map = tag.getList("fluids", Tag.TAG_COMPOUND);
+            map.forEach(nbt -> {
+                CompoundTag data = (CompoundTag) nbt;
+                fluidValues.put(Direction.from3DDataValue(data.getInt("dir")), data.getBoolean("bool"));
+            });
+        }
     }
 
     public static boolean shouldRenderWithinChunk(ChunkPos block, BlockPos pos, Direction d, boolean posx, boolean negx, boolean posz, boolean negz) {
@@ -82,15 +106,31 @@ public class VectorData {
         return blockFaces;
     }
 
-    public BlockPos getPos() {
-        return pos;
-    }
-
-    public Level getLevel() {
-        return level;
-    }
-
     public float[] getRGB() {
         return new float[] {r, g, b};
+    }
+
+    public CompoundTag save() {
+        CompoundTag tag = new CompoundTag();
+        tag.putFloat("r", r);
+        tag.putFloat("g", g);
+        tag.putFloat("b", b);
+        tag.putFloat("height", blockHeight);
+        ListTag listTag = new ListTag();
+        blockFaces.forEach(face -> {
+            CompoundTag d = new CompoundTag();
+            d.putInt("dir", face.get3DDataValue());
+            listTag.add(d);
+        });
+        tag.put("faces", listTag);
+        ListTag listTag2 = new ListTag();
+        fluidValues.forEach((dir, b) -> {
+            CompoundTag d = new CompoundTag();
+            d.putInt("dir", dir.get3DDataValue());
+            d.putBoolean("bool", b);
+            listTag2.add(d);
+        });
+        tag.put("fluids", listTag2);
+        return tag;
     }
 }
