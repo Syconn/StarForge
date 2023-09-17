@@ -1,4 +1,6 @@
-// 1.19.4	2023-08-27T16:28:34.4151951	Loot Tables
+// 1.19.4	2023-09-16T21:41:10.0626584	Loot Tables
 470c3f77a42b6e5a20b89c13b4831df1b28abe08 data/stf/loot_tables/blocks/holo_projector.json
 77d1176108df0d861d2a9ac0166aaf64c74ca225 data/stf/loot_tables/blocks/lightsaber_crafter.json
+7faa90642e545beb2af607a5750beb977d35ef79 data/stf/loot_tables/blocks/map_projector.json
+a4040c064ed47059ba001eda8b32f84a6a291e3c data/stf/loot_tables/blocks/probe.json
 88e523b57ced51d2f881e68c9eb1edb5cfc38e92 data/stf/loot_tables/blocks/schematic_projector.json

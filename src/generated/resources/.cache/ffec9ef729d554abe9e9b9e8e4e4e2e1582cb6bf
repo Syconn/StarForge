@@ -1,2 +1,5 @@
-// 1.19.4	2023-09-09T19:22:06.79316	Block States: stf
+// 1.19.4	2023-09-16T22:05:17.0916961	Block States: stf
 21e25e2e95b659768eb51e5e20d2834c2e07f67e assets/stf/blockstates/map_projector.json
+1045fc848d072ca615c7d69558cbe182291e9b60 assets/stf/blockstates/probe.json
+03fd8c073d826c92250317c7d87492e71af9cb5f assets/stf/models/item/map_projector.json
+8227f29b0053af3e413739e18560af9e670a6cac assets/stf/models/item/probe.json

@@ -17,7 +17,6 @@ public class SkinManager implements ICapabilityProvider, INBTSerializable<Compou
     private SkinData skinData = null;
     private final LazyOptional<SkinData> opt = LazyOptional.of(this::createSkinData);
 
-    @Nonnull
     private SkinData createSkinData() {
         if (skinData == null) {
             skinData = new SkinData();
@@ -25,8 +24,6 @@ public class SkinManager implements ICapabilityProvider, INBTSerializable<Compou
         return skinData;
     }
 
-    @Nonnull
-    @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
         if (cap == SKINS) {
             return opt.cast();
@@ -34,20 +31,16 @@ public class SkinManager implements ICapabilityProvider, INBTSerializable<Compou
         return LazyOptional.empty();
     }
 
-    @Nonnull
-    @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         return getCapability(cap);
     }
 
-    @Override
     public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
         createSkinData().saveNBTData(nbt);
         return nbt;
     }
 
-    @Override
     public void deserializeNBT(CompoundTag nbt) {
         createSkinData().loadNBTData(nbt);
     }

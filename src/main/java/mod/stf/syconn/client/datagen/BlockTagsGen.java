@@ -20,9 +20,10 @@ public class BlockTagsGen extends BlockTagsProvider {
     }
 
     protected void addTags(HolderLookup.Provider provider) {
+        this.tag(BlockTags.NEEDS_DIAMOND_TOOL).add(ModBlocks.PROBE.get(), ModBlocks.MAP_PROJECTOR.get());
         this.tag(BlockTags.NEEDS_IRON_TOOL).add(ModBlocks.LIGHTSABER_CRAFTER.get());
         this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.HOLO_PROJECTOR.get(), ModBlocks.SCHEMATIC_PROJECTOR.get());
-        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.HOLO_PROJECTOR.get(), ModBlocks.SCHEMATIC_PROJECTOR.get(), ModBlocks.LIGHTSABER_CRAFTER.get());
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.HOLO_PROJECTOR.get(), ModBlocks.SCHEMATIC_PROJECTOR.get(), ModBlocks.LIGHTSABER_CRAFTER.get(), ModBlocks.PROBE.get(), ModBlocks.MAP_PROJECTOR.get());
 
         this.tag(ModTags.Blocks.HIDE_FACE_BLOCK).add(Blocks.DIRT_PATH).add(Blocks.FARMLAND);
         this.tag(ModTags.Blocks.DONT_RENDER_BLOCK).addTag(BlockTags.REPLACEABLE_PLANTS).addTag(BlockTags.FLOWERS);

@@ -2,6 +2,8 @@
   "values": [
     "stf:holo_projector",
     "stf:schematic_projector",
-    "stf:lightsaber_crafter"
+    "stf:lightsaber_crafter",
+    "stf:probe",
+    "stf:map_projector"
   ]
 }

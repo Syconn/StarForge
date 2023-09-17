@@ -23,10 +23,12 @@ public class MapScreen extends Screen {
 
     protected void init() {
         super.init();
+        int relX = (this.width - this.imageWidth) / 2;
+        int relY = (this.height - this.imageHeight) / 2;
         addRenderableWidget(new EditBox(font, 0, 0, 30, 20, Component.literal("X")));
         addRenderableWidget(new EditBox(font, 0, 21, 30, 20, Component.literal("Y")));
         addRenderableWidget(new EditBox(font, 0, 42, 30, 20, Component.literal("Z")));
-        addRenderableWidget(new ExtendedButton(40, 21, 30, 20, Component.literal("Render"), this::renderMap));
+        addRenderableWidget(new ExtendedButton(relX, relY, 30, 20, Component.literal("Render"), this::renderMap));
         addRenderableWidget(new ToggleButton(40, 0, 40, 20, "Scale: ", "Normal", "Large", "Normal", this::toggle));
     }
 
@@ -40,8 +42,8 @@ public class MapScreen extends Screen {
 
 
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
         renderBackground(pPoseStack);
+        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
     }
 
     public void renderBackground(PoseStack pPoseStack) {

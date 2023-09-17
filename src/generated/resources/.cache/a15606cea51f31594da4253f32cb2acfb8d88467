@@ -1,5 +1,6 @@
-// 1.19.4	2023-09-09T23:53:16.8413239	Tags for minecraft:block mod id stf
-16e7c8499b263bb1f38687040820c4e082a141c2 data/minecraft/tags/blocks/mineable/pickaxe.json
+// 1.19.4	2023-09-16T21:41:10.0606588	Tags for minecraft:block mod id stf
+ae1109f38c815faac462baeb16b7375e1a6f20de data/minecraft/tags/blocks/mineable/pickaxe.json
+eaabe5d38cd56a773d325f6051e2463bf008c60a data/minecraft/tags/blocks/needs_diamond_tool.json
 72d5444babcf1998eae10693fd48e9513454200a data/minecraft/tags/blocks/needs_iron_tool.json
 abb34174304e6478465584cb8fe6ffc4ba8cbe5d data/minecraft/tags/blocks/needs_stone_tool.json
 cf1900b9451893d3563fe30f1f5c3064fe330c97 data/stf/tags/blocks/dont_render_block.json

@@ -39,11 +39,11 @@ public class MapProjector extends Block implements EntityBlock {
     }
 
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-//        MultiBlockAlignment al = pState.getValue(ALIGNMENT);
-//        if (!pLevel.isClientSide && pLevel.getBlockEntity(pPos.offset(pState.getValue(ALIGNMENT).getX(), 0, pState.getValue(ALIGNMENT).getZ())) instanceof MapBe be) {
-//            be.onClick(pLevel, pPos, al);
-//        }
-        if (pLevel.isClientSide) Minecraft.getInstance().setScreen(new MapScreen());
+        MultiBlockAlignment al = pState.getValue(ALIGNMENT); // TODO SPY CAMERAS
+        if (!pLevel.isClientSide && pLevel.getBlockEntity(pPos.offset(pState.getValue(ALIGNMENT).getX(), 0, pState.getValue(ALIGNMENT).getZ())) instanceof MapBe be) {
+            be.onClick(pLevel, pPos, al);
+        }
+//        if (pLevel.isClientSide) Minecraft.getInstance().setScreen(new MapScreen());
         pLevel.setBlock(pPos, pState.setValue(TOP, false), 2); // TODO Improve
         return InteractionResult.PASS;
     }

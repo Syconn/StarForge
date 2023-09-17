@@ -18,9 +18,11 @@ public class BlockLootTables extends BlockLootSubProvider {
         dropSelf(ModBlocks.HOLO_PROJECTOR.get());
         dropSelf(ModBlocks.SCHEMATIC_PROJECTOR.get());
         dropSelf(ModBlocks.LIGHTSABER_CRAFTER.get());
+        dropSelf(ModBlocks.MAP_PROJECTOR.get());
+        dropSelf(ModBlocks.PROBE.get());
     }
 
     protected Iterable<Block> getKnownBlocks() {
-        return List.of(ModBlocks.HOLO_PROJECTOR.get(), ModBlocks.SCHEMATIC_PROJECTOR.get(), ModBlocks.LIGHTSABER_CRAFTER.get());
+        return List.of(ModBlocks.HOLO_PROJECTOR.get(), ModBlocks.SCHEMATIC_PROJECTOR.get(), ModBlocks.LIGHTSABER_CRAFTER.get(), ModBlocks.PROBE.get(), ModBlocks.MAP_PROJECTOR.get());
     }
 }

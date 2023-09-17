@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "orbit=false": {
+      "model": "stf:block/probe"
+    },
+    "orbit=true": {
+      "model": "stf:block/probe_air"
+    }
+  }
+}
