@@ -1,12 +1,8 @@
 package mod.stf.syconn.world.data;
 
-import com.google.common.primitives.Ints;
-import mod.stf.syconn.Config;
 import mod.stf.syconn.api.capability.ISSavable;
-import mod.stf.syconn.api.util.ChunkUtil;
-import mod.stf.syconn.api.util.Mths;
 import mod.stf.syconn.init.ModBlocks;
-import mod.stf.syconn.util.data.ChunkInfo;
+import mod.stf.syconn.util.data.ChunkHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -14,78 +10,67 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.chunk.LevelChunk;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ChunkData implements ISSavable {
 
-    private final Map<UUID, List<BlockPos>> player_probes = new HashMap<>();
-    private final Map<BlockPos, List<ChunkInfo>> renderer = new HashMap<>();
 
-    public boolean addOrRemovePosition(UUID uuid, BlockPos pos) {
-        if (player_probes.containsKey(uuid)){
-            List<BlockPos> posList = player_probes.get(uuid);
-            if (posList.contains(pos)) {
-                posList.remove(pos);
-                player_probes.put(uuid, posList);
-                return false;
-            } else {
-                posList.add(pos);
-                player_probes.put(uuid, posList);
-            }
-        } else player_probes.put(uuid, List.of(pos));
-        return true;
+    // BLOCKPOS of Projectors | satalite can only connect to one projector | Projectors can have multiple Satalites
+    private final Map<BlockPos, List<BlockPos>> projector_chunks = new HashMap<>();
+    private final Map<ChunkPos, ChunkHandler> renderer = new HashMap<>(); // Hold Render Data for ChunkPos
+
+    public ChunkHandler getChunkHandler(BlockPos pos, Level level) {
+        if (!renderer.containsKey(new ChunkPos(pos))) renderer.put(new ChunkPos(pos), new ChunkHandler(level, new ChunkPos(pos)));
+        return renderer.get(new ChunkPos(pos));
     }
 
-    public void remove(BlockPos pos) {
-        player_probes.forEach((uuid, posList) -> {
-            posList.remove(pos);
-            player_probes.put(uuid, posList);
-        });
+    public List<BlockPos> getChunkOptions(BlockPos pos) {
+        if (!projector_chunks.containsKey(pos)) return List.of();
+        return projector_chunks.get(pos);
     }
 
-    public void changePos(BlockPos pos, BlockPos newPos) {
-        player_probes.forEach((uuid, posList) -> {
-            posList.remove(pos);
-            posList.add(newPos);
-            player_probes.put(uuid, posList);
-        });
+    public void changeProbeLocation(BlockPos last, BlockPos next) {
+        projector_chunks.forEach((proj, list) -> { if (list.contains(last)) { list.remove(last); list.add(next); }});
     }
 
-    public void update(Level level) {
-        renderer.clear();
-        player_probes.forEach((uuid, posList) -> {
-            posList.forEach(pos -> { if (!level.getBlockState(pos).is(ModBlocks.PROBE.get())) posList.remove(pos); });
-            player_probes.put(uuid, posList);
-//            posList.forEach(pos -> { if (!renderer.containsKey(pos)) renderer.put(pos, setChunk(level, level.getChunkAt(pos).getPos())); });
-        });
+    public void removeProbe(BlockPos pos) {
+        projector_chunks.forEach((proj, list) -> list.remove(pos));
+        renderer.remove(new ChunkPos(pos));
     }
 
-    private List<ChunkInfo> setChunk(Level level, ChunkPos center) {
-        List<ChunkInfo> chunks = new ArrayList<>();
-        List<Integer> sideYs = new ArrayList<>();
-        int max = 2;
-        for (int x = -max; x <= max; x++) {
-            for (int z = -max; z <= max; z++) {
-                LevelChunk chunk = level.getChunk(center.x + x, center.z + z);
-//                level.getServer().getLevel(Level.OVERWORLD).setChunkForced(chunk.getPos().x, chunk.getPos().z, true);
-                chunks.add(new ChunkInfo(chunk.getPos().x - center.x, chunk.getPos().z - center.z, chunk, x == max, x == -max, z == max, z == -max));
-                sideYs.addAll(ChunkUtil.getEdgeSurfaceBlock(chunk, x == max, x == -max, z == max, z == -max));
-            }
+    public void addProjectorOptions(BlockPos key, List<BlockPos> pos) {
+        if (!pos.isEmpty()) {
+            if (projector_chunks.containsKey(key)) {
+                List<BlockPos> list = projector_chunks.get(key);
+                list.addAll(pos);
+                projector_chunks.put(key, list);
+            } else projector_chunks.put(key, pos);
         }
-        int lowestY = ChunkUtil.getLowestSurfaceBlock(chunks).getY();
-        int renderY = Mths.mode(Ints.toArray(sideYs));
-        if (lowestY < Config.minYRenderHeight.get()) lowestY = Config.minYRenderHeight.get();
-        for (ChunkInfo chunk : chunks) chunk.createChunkRenderer(lowestY, renderY, level);
-        return chunks;
+    }
+
+    public void removeProjector(BlockPos pos) {
+        List<BlockPos> list = projector_chunks.remove(pos);
+        if (list != null) list.forEach(pos2 -> renderer.remove(new ChunkPos(pos2)));
+    }
+
+    public void update(Level level) { // OPTIMISE MAYBE
+        renderer.clear();
+        projector_chunks.forEach((projector, posList) -> {
+            posList.forEach(pos -> { if (!level.getBlockState(pos).is(ModBlocks.PROBE.get())) posList.remove(pos); });
+            projector_chunks.put(projector, posList);
+            posList.forEach(pos -> renderer.put(new ChunkPos(pos), new ChunkHandler(level, level.getChunkAt(pos).getPos())));
+        });
     }
 
     public void saveNBTData(CompoundTag compound) {
         ListTag map = new ListTag();
-        player_probes.forEach((uuid, list) -> {
+        projector_chunks.forEach((projector, list) -> {
             CompoundTag tag = new CompoundTag();
-            tag.putUUID("uuid", uuid);
+            tag.put("projector", NbtUtils.writeBlockPos(projector));
             ListTag posses = new ListTag();
             list.forEach(pos -> {
                 CompoundTag tag2 = new CompoundTag();
@@ -96,23 +81,20 @@ public class ChunkData implements ISSavable {
             map.add(tag);
         });
         compound.put("player_probes", map);
+        compound.put("renderer", map);
+        ListTag map2 = new ListTag();
         renderer.forEach((pos, info) -> {
             CompoundTag tag = new CompoundTag();
-            tag.put("pos", NbtUtils.writeBlockPos(pos));
-            ListTag infoList = new ListTag();
-            info.forEach(chunk -> {
-                CompoundTag tag2 = new CompoundTag();
-                tag2.put("data", chunk.save());
-                infoList.add(tag2);
-            });
-            tag.put("info", infoList);
-            map.add(tag);
+            tag.putInt("posx", pos.x);
+            tag.putInt("posz", pos.z);
+            tag.put("chunkhandler", info.save());
+            map2.add(tag);
         });
-        compound.put("renderer", map);
+        compound.put("renderer", map2);
     }
 
     public void loadNBTData(CompoundTag compound) {
-        this.player_probes.clear();
+        this.projector_chunks.clear();
         this.renderer.clear();
         if (compound.contains("player_probes", Tag.TAG_LIST)){
             ListTag map = compound.getList("player_probes", Tag.TAG_COMPOUND);
@@ -121,17 +103,14 @@ public class ChunkData implements ISSavable {
                 List<BlockPos> posList = new ArrayList<>();
                 ListTag posses = tag.getList("posses", Tag.TAG_COMPOUND);
                 posses.forEach(tag1 -> posList.add(NbtUtils.readBlockPos(((CompoundTag) tag1).getCompound("pos"))));
-                player_probes.put(tag.getUUID("uuid"), posList);
+                projector_chunks.put(NbtUtils.readBlockPos(tag.getCompound("projector")), posList);
             });
         }
         if (compound.contains("renderer", Tag.TAG_LIST)){
             ListTag map = compound.getList("renderer", Tag.TAG_COMPOUND);
             map.forEach(nbt -> {
                 CompoundTag tag = (CompoundTag) nbt;
-                List<ChunkInfo> info = new ArrayList<>();
-                ListTag infoList = tag.getList("info", Tag.TAG_COMPOUND);
-                infoList.forEach(tag1 -> info.add(new ChunkInfo(((CompoundTag) tag1).getCompound("info"))));
-                renderer.put(NbtUtils.readBlockPos(tag.getCompound("pos")), info);
+                renderer.put(new ChunkPos(tag.getInt("posx"), tag.getInt("posz")), new ChunkHandler(tag.getCompound("chunkhandler")));
             });
         }
     }

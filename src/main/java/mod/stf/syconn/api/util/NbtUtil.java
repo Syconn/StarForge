@@ -7,9 +7,31 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class NbtUtil {
+
+    public static CompoundTag writeBlockPosses(List<BlockPos> pos) {
+        CompoundTag tag = new CompoundTag();
+        ListTag posses = new ListTag();
+        for (BlockPos blockPos : pos) {
+            CompoundTag tag2 = new CompoundTag();
+            tag2.put("pos", NbtUtils.writeBlockPos(blockPos));
+            posses.add(tag2);
+        }
+        tag.put("posses", posses);
+        return tag;
+    }
+
+    public static List<BlockPos> readBlockPosses(CompoundTag tag) {
+        List<BlockPos> list = new ArrayList<>();
+        ListTag posses = tag.getList("posses", Tag.TAG_COMPOUND);
+        posses.forEach(tag1 -> list.add(NbtUtils.readBlockPos(((CompoundTag) tag1).getCompound("pos"))));
+        return list;
+    }
+
     public static HashMap<BlockPos, PixelImage> readServerImageList(CompoundTag tag){
         HashMap<BlockPos, PixelImage> map = new HashMap<>();
         if(tag.contains("map", Tag.TAG_LIST))

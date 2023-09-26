@@ -29,19 +29,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
 
-public class Probe extends Block { // TODO BEACON BLOCK ITEM TO CONNECT TO PROBE
+public class Probe extends Block {
 
     public static final BooleanProperty ORBIT = BooleanProperty.create("orbit");
 
     public Probe() { // TODO ANIMATE FLY UP?
         super(Properties.of(Material.METAL));
         this.registerDefaultState(this.stateDefinition.any().setValue(ORBIT, false));
-    }
-
-    public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
-        if (pPlacer != null && !pLevel.isClientSide) {
-            pLevel.getCapability(ChunkManager.CHUNKS).ifPresent(cap -> cap.addOrRemovePosition(pPlacer.getUUID(), pPos));
-        }
     }
 
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
@@ -52,19 +46,11 @@ public class Probe extends Block { // TODO BEACON BLOCK ITEM TO CONNECT TO PROBE
 
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (!pLevel.isClientSide && pHand == InteractionHand.MAIN_HAND) {
-            if (pPlayer.isShiftKeyDown()) {
-                pLevel.getCapability(ChunkManager.CHUNKS).ifPresent(cap -> {
-                    boolean add = cap.addOrRemovePosition(pPlayer.getUUID(), pPos);
-                    pPlayer.sendSystemMessage(Component.literal(add ? "Added Beacon Probe" : "Removed Beacon Probe").withStyle(add ? ChatFormatting.GREEN : ChatFormatting.RED));
-                });
+            if (pLevel.getBlockState(new BlockPos(pPos.getX(), pLevel.getMaxBuildHeight() - 1, pPos.getZ())).isAir()) {
+                pLevel.setBlock(new BlockPos(pPos.getX(), 100, pPos.getZ()), pState.setValue(ORBIT, true), 2);
+                pLevel.getCapability(ChunkManager.CHUNKS).ifPresent(cap -> cap.changeProbeLocation(pPos, new BlockPos(pPos.getX(), pLevel.getMaxBuildHeight() - 1, pPos.getZ())));
+                pLevel.removeBlock(pPos, true);
                 return InteractionResult.CONSUME;
-            } else {
-                if (pLevel.getBlockState(new BlockPos(pPos.getX(), pLevel.getMaxBuildHeight() - 1, pPos.getZ())).isAir()) {
-                    pLevel.setBlock(new BlockPos(pPos.getX(), 100, pPos.getZ()), pState.setValue(ORBIT, true), 2);
-                    pLevel.getCapability(ChunkManager.CHUNKS).ifPresent(cap -> cap.changePos(pPos, new BlockPos(pPos.getX(), pLevel.getMaxBuildHeight() - 1, pPos.getZ())));
-                    pLevel.removeBlock(pPos, true);
-                    return InteractionResult.CONSUME;
-                }
             }
         }
         return InteractionResult.PASS;
@@ -74,14 +60,14 @@ public class Probe extends Block { // TODO BEACON BLOCK ITEM TO CONNECT TO PROBE
         if (!pLevel.isClientSide) {
             pLevel.removeBlock(pHit.getBlockPos(), false);
             int y = pLevel.getHeight(Heightmap.Types.WORLD_SURFACE_WG, pHit.getBlockPos().getX(), pHit.getBlockPos().getZ());
-            pLevel.getCapability(ChunkManager.CHUNKS).ifPresent(cap -> cap.changePos(pHit.getBlockPos(), new BlockPos(pHit.getBlockPos().getX(), y, pHit.getBlockPos().getZ())));
+            pLevel.getCapability(ChunkManager.CHUNKS).ifPresent(cap -> cap.changeProbeLocation(pHit.getBlockPos(), new BlockPos(pHit.getBlockPos().getX(), y, pHit.getBlockPos().getZ())));
             pLevel.setBlock(new BlockPos(pHit.getBlockPos().getX(), y, pHit.getBlockPos().getZ()), pState.setValue(ORBIT, false), 2);
         }
     }
 
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
-        if (!pLevel.isClientSide) pLevel.getCapability(ChunkManager.CHUNKS).ifPresent(cap -> cap.remove(pPos));
+        if (!pLevel.isClientSide) pLevel.getCapability(ChunkManager.CHUNKS).ifPresent(cap -> cap.removeProbe(pPos));
     }
 
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {

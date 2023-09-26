@@ -25,6 +25,7 @@ public class LangDatagen extends LanguageProvider {
         add(ModItems.JEDI_EGG.get(), "Jedi Spawn Egg");
         add(ModItems.TIE_ITEM.get(), "Tie Fighter Spawn Egg");
         add(ModItems.SCHEMATIC_ITEM.get(), "Schematic Item");
+        add(ModItems.PROBE_LINKER.get(), "Probe Linker");
         add(ModBlocks.LIGHTSABER_CRAFTER.get(), "Lightsaber Workstation");
         add(ModBlocks.SCHEMATIC_PROJECTOR.get(), "Schematic Projector");
         add(ModBlocks.HOLO_PROJECTOR.get(), "Holographic Projector");

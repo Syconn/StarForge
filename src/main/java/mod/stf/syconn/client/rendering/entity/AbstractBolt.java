@@ -78,7 +78,7 @@ public abstract class AbstractBolt extends ThrowableProjectile {
         float f7 = f2 * f4;
         double d0 = 100; //distance
         Vec3 vec3d1 = vec3d.add((double)f6 * d0, (double)f5 * d0, (double)f7 * d0);
-        HitResult rts = player.getCommandSenderWorld().clip(new ClipContext(vec3d, vec3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.ANY, player));
+        HitResult rts = player.getCommandSenderWorld().clip(new ClipContext(vec3d, vec3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.ANY, player)); // TODO WHAT IS THE POINT OF THIS GARBAGE
 
         if (rts.getType() == HitResult.Type.ENTITY || rts.getType() == HitResult.Type.BLOCK) {
 
@@ -89,7 +89,6 @@ public abstract class AbstractBolt extends ThrowableProjectile {
                 world.addFreshEntity(b);
             }
         }
-
     }
 
     protected void onHitBlock(BlockHitResult p_37258_) {

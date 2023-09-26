@@ -26,18 +26,20 @@ public class MapRender implements BlockEntityRenderer<MapBe> {
     public void render(MapBe pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
         // pPoseStack.translate(0.025, 0.5015, 0.025); Scale3x3
         // pPoseStack.translate(0.21, 0.5264, 0.214); Scale5x5
-        if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.MAP_PROJECTOR.get()) {
-            pPoseStack.pushPose();
-            pPoseStack.translate(0.21, 0.5264, 0.214);
-            pPoseStack.scale(Scale5x5, Scale5x5, Scale5x5);
-            for (ChunkInfo data : pBlockEntity.getChunk()) {
-                pPoseStack.pushPose();
-                pPoseStack.translate(data.getX() * 16, 0, data.getZ() * 16);
-                for (BlockInChunkData blockInChunkData : data.getBlocks()) blockInChunkData.render(pPoseStack, pBufferSource, pPackedLight, data.getChunk(), pBlockEntity.getRenderY());
-                pPoseStack.popPose();
-            }
-            pPoseStack.popPose();
-        }
+
+
+//        if (mc.level.getBlockState(pBlockEntity.getBlockPos()).getBlock() == ModBlocks.MAP_PROJECTOR.get()) {
+//            pPoseStack.pushPose();
+//            pPoseStack.translate(0.21, 0.5264, 0.214);
+//            pPoseStack.scale(Scale5x5, Scale5x5, Scale5x5);
+//            for (ChunkInfo data : pBlockEntity.getChunk()) {
+//                pPoseStack.pushPose();
+//                pPoseStack.translate(data.getX() * 16, 0, data.getZ() * 16);
+//                for (BlockInChunkData blockInChunkData : data.getBlocks()) blockInChunkData.render(pPoseStack, pBufferSource, pPackedLight, data.getChunk(), pBlockEntity.getRenderY());
+//                pPoseStack.popPose();
+//            }
+//            pPoseStack.popPose();
+//        }
     }
 
     public boolean shouldRenderOffScreen(MapBe pBlockEntity) {

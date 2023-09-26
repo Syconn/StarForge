@@ -2,9 +2,16 @@ package mod.stf.syconn.block;
 
 import mod.stf.syconn.client.screen.MapScreen;
 import mod.stf.syconn.common.blockEntity.MapBe;
+import mod.stf.syconn.common.blockEntity.SchematicBe;
+import mod.stf.syconn.init.ModBlockEntities;
+import mod.stf.syconn.item.ProbeLinkItem;
+import mod.stf.syconn.network.Network;
+import mod.stf.syconn.network.messages.c2s.C2SOpenProjector;
 import mod.stf.syconn.util.MultiBlockAlignment;
+import mod.stf.syconn.world.data.ChunkManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,10 +20,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -25,10 +35,11 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
-public class MapProjector extends Block implements EntityBlock {
+public class MapProjector extends BaseEntityBlock  {
 
     public static final EnumProperty<MultiBlockAlignment> ALIGNMENT = EnumProperty.create("alignment", MultiBlockAlignment.class);
     public static final BooleanProperty TOP = BooleanProperty.create("top");
@@ -39,13 +50,20 @@ public class MapProjector extends Block implements EntityBlock {
     }
 
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        MultiBlockAlignment al = pState.getValue(ALIGNMENT); // TODO SPY CAMERAS
-        if (!pLevel.isClientSide && pLevel.getBlockEntity(pPos.offset(pState.getValue(ALIGNMENT).getX(), 0, pState.getValue(ALIGNMENT).getZ())) instanceof MapBe be) {
-            be.onClick(pLevel, pPos, al);
+        // TODO SPY CAMERAS
+        if (!(pPlayer.getItemInHand(pHand).getItem() instanceof ProbeLinkItem)) {
+            BlockPos bePos = pPos.offset(pState.getValue(ALIGNMENT).getX(), 0, pState.getValue(ALIGNMENT).getZ());
+            if (!pLevel.isClientSide && pPlayer instanceof ServerPlayer sp && pLevel.getBlockEntity(bePos) instanceof MapBe be) {
+                be.setSelections();
+                Network.getPlayChannel().sendTo(new C2SOpenProjector(bePos), sp.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+            }
+            pLevel.setBlock(pPos, pState.setValue(TOP, false), 2); // TODO Improve
         }
-//        if (pLevel.isClientSide) Minecraft.getInstance().setScreen(new MapScreen());
-        pLevel.setBlock(pPos, pState.setValue(TOP, false), 2); // TODO Improve
         return InteractionResult.PASS;
+    }
+
+    public RenderShape getRenderShape(BlockState pState) {
+        return RenderShape.MODEL;
     }
 
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
@@ -85,6 +103,7 @@ public class MapProjector extends Block implements EntityBlock {
         if (!pLevel.isClientSide) {
             if (!pState.getBlock().equals(pNewState.getBlock())) {
                 BlockPos mid = pPos.offset(pState.getValue(ALIGNMENT).getX(), 0, pState.getValue(ALIGNMENT).getZ());
+                pLevel.getCapability(ChunkManager.CHUNKS).ifPresent(cap -> cap.removeProjector(mid));
                 for (int x = -1; x < 2; x++) {
                     for (int z = -1; z < 2; z++) {
                         pLevel.setBlock(mid.offset(x, 0, z), Blocks.AIR.defaultBlockState(), 3);
@@ -101,5 +120,9 @@ public class MapProjector extends Block implements EntityBlock {
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         if (pState.getValue(ALIGNMENT) == MultiBlockAlignment.MID) return new MapBe(pPos, pState);
         return null;
+    }
+
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+        return pLevel.isClientSide() ? null : createTickerHelper(pBlockEntityType, ModBlockEntities.MAP_BE.get(), MapBe::tick);
     }
 }

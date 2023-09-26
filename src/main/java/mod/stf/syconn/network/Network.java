@@ -2,6 +2,7 @@ package mod.stf.syconn.network;
 
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.network.messages.*;
+import mod.stf.syconn.network.messages.c2s.C2SOpenProjector;
 import mod.stf.syconn.network.messages.s2c.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
@@ -35,6 +36,7 @@ public class Network {
         register(MessageResetHolo.class, new MessageResetHolo(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageShootGuns.class, new MessageShootGuns(), NetworkDirection.PLAY_TO_SERVER);
         register(MessageLoadBlock.class, new MessageLoadBlock(), NetworkDirection.PLAY_TO_SERVER);
+        register(C2SOpenProjector.class, new C2SOpenProjector(), NetworkDirection.PLAY_TO_CLIENT);
     }
 
     private static <T> void register(Class<T> clazz, IMessage<T> message, NetworkDirection direction)

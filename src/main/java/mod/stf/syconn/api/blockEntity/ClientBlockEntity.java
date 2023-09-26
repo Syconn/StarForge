@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,5 +30,10 @@ public abstract class ClientBlockEntity extends BlockEntity {
     public void update(){
         level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
         setChanged();
+    }
+
+    public static void update(Level level, BlockPos pos, BlockState state){
+        level.sendBlockUpdated(pos, state, state, 2);
+        setChanged(level, pos, state);
     }
 }
