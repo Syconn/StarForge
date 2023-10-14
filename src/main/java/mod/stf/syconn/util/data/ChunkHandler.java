@@ -19,6 +19,11 @@ public class ChunkHandler {
     private final List<ChunkInfo> chunks;
     private final int renderY;
 
+    public ChunkHandler() {
+        chunks = new ArrayList<>();
+        renderY = 0;
+    }
+
     public ChunkHandler(Level level, ChunkPos center) {
         List<ChunkInfo> chunks = new ArrayList<>();
         List<Integer> sideYs = new ArrayList<>();
@@ -27,11 +32,11 @@ public class ChunkHandler {
             for (int z = -max; z <= max; z++) {
                 LevelChunk chunk = level.getChunk(center.x + x, center.z + z);
 //                level.getServer().getLevel(Level.OVERWORLD).setChunkForced(chunk.getPos().x, chunk.getPos().z, true);
-                chunks.add(new ChunkInfo(chunk.getPos().x - center.x, chunk.getPos().z - center.z, chunk, x == max, x == -max, z == max, z == -max));
+                chunks.add(new ChunkInfo(chunk.getPos().x - center.x, chunk.getPos().z - center.z, chunk.getPos(), x == max, x == -max, z == max, z == -max, x == 1, x == -1, z == 1, z == -1));
                 sideYs.addAll(ChunkUtil.getEdgeSurfaceBlock(chunk, x == max, x == -max, z == max, z == -max));
             }
         }
-        int lowestY = ChunkUtil.getLowestSurfaceBlock(chunks).getY();
+        int lowestY = ChunkUtil.getLowestSurfaceBlock(level, chunks).getY();
         this.renderY = Mths.mode(Ints.toArray(sideYs));
         if (lowestY < Config.minYRenderHeight.get()) lowestY = Config.minYRenderHeight.get();
         for (ChunkInfo chunk : chunks) chunk.createChunkRenderer(lowestY, this.renderY, level);
@@ -40,14 +45,21 @@ public class ChunkHandler {
 
     public ChunkHandler(CompoundTag tag) {
         List<ChunkInfo> chunks = new ArrayList<>();
-        ListTag infoList = tag.getList("info", Tag.TAG_COMPOUND);
-        infoList.forEach(tag1 -> chunks.add(new ChunkInfo(((CompoundTag) tag1).getCompound("info"))));
+        ListTag infoList = tag.getList("chunks", Tag.TAG_COMPOUND);
+        infoList.forEach(tag1 -> chunks.add(new ChunkInfo(((CompoundTag) tag1).getCompound("data"))));
         this.chunks = chunks;
         this.renderY = tag.getInt("renderY");
     }
 
     public List<ChunkInfo> getChunks() {
         return chunks;
+    }
+
+    public List<ChunkInfo> getProcessedChunks(boolean fastRender) {
+        List<ChunkInfo> list = new ArrayList<>();
+        if (fastRender) { for (ChunkInfo info : chunks) if (info.getX() > -2 && info.getX() < 2 && info.getZ() > -2 && info.getZ() < 2) list.add(info); }
+        else return chunks;
+        return list;
     }
 
     public int getRenderY() {

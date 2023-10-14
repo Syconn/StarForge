@@ -13,8 +13,8 @@ import mod.stf.syconn.common.recipes.ModIngredient;
 import mod.stf.syconn.init.ModBlocks;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import mod.stf.syconn.network.Network;
-import mod.stf.syconn.network.messages.s2c.MessageClickTab;
-import mod.stf.syconn.network.messages.s2c.MessageCraftHilt;
+import mod.stf.syconn.network.messages.c2s.C2SClickTab;
+import mod.stf.syconn.network.messages.c2s.C2SCraftHilt;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -56,7 +56,7 @@ public class HiltScreen extends TabbedScreen<HiltContainer> {
 
     public void tabbedClicked(Button button) {
         super.tabbedClicked(button);
-        Network.getPlayChannel().sendToServer(new MessageClickTab(((TabButton)button).getId(), inv.getBlockEntity().getBlockPos()));
+        Network.getPlayChannel().sendToServer(new C2SClickTab(((TabButton)button).getId(), inv.getBlockEntity().getBlockPos()));
     }
 
     protected void containerTick() {
@@ -91,7 +91,7 @@ public class HiltScreen extends TabbedScreen<HiltContainer> {
         }));
 
         addRenderableWidget(craftButton = new ExtendedButton(relX + 155, relY + 78, 36, 18, Component.literal("Craft"), pButton -> {
-            Network.getPlayChannel().sendToServer(new MessageCraftHilt(inv.selectedRecipe.id()));
+            Network.getPlayChannel().sendToServer(new C2SCraftHilt(inv.selectedRecipe.id()));
         }));
     }
 

@@ -1,4 +1,4 @@
-package mod.stf.syconn.network.messages.s2c;
+package mod.stf.syconn.network.messages.c2s;
 
 import mod.stf.syconn.common.blockEntity.HoloBE;
 import mod.stf.syconn.network.messages.IMessage;
@@ -10,20 +10,20 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class MessageHoloMode implements IMessage<MessageHoloMode> {
+public class C2SHoloMode implements IMessage<C2SHoloMode> {
 
     private String mode;
     private BlockPos pos;
 
-    public MessageHoloMode() {}
+    public C2SHoloMode() {}
 
-    public MessageHoloMode(String mode, BlockPos pos) {
+    public C2SHoloMode(String mode, BlockPos pos) {
         this.mode = mode;
         this.pos = pos;
     }
 
     @Override
-    public void encode(MessageHoloMode message, FriendlyByteBuf buffer) {
+    public void encode(C2SHoloMode message, FriendlyByteBuf buffer) {
         CompoundTag nbt = new CompoundTag();
         nbt.putString("mode", message.mode);
         buffer.writeNbt(nbt);
@@ -31,13 +31,13 @@ public class MessageHoloMode implements IMessage<MessageHoloMode> {
     }
 
     @Override
-    public MessageHoloMode decode(FriendlyByteBuf buffer) {
+    public C2SHoloMode decode(FriendlyByteBuf buffer) {
         CompoundTag nbt = buffer.readNbt();
-        return new MessageHoloMode(nbt.getString("mode"), buffer.readBlockPos());
+        return new C2SHoloMode(nbt.getString("mode"), buffer.readBlockPos());
     }
 
     @Override
-    public void handle(MessageHoloMode message, Supplier<NetworkEvent.Context> supplier) {
+    public void handle(C2SHoloMode message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             ServerPlayer player = supplier.get().getSender();
 

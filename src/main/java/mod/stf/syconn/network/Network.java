@@ -2,8 +2,8 @@ package mod.stf.syconn.network;
 
 import mod.stf.syconn.Reference;
 import mod.stf.syconn.network.messages.*;
-import mod.stf.syconn.network.messages.c2s.C2SOpenProjector;
-import mod.stf.syconn.network.messages.s2c.*;
+import mod.stf.syconn.network.messages.c2s.*;
+import mod.stf.syconn.network.messages.s2c.S2COpenProjector;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -25,18 +25,21 @@ public class Network {
                 .clientAcceptedVersions(PROTOCOL_VERSION::equals)
                 .serverAcceptedVersions(PROTOCOL_VERSION::equals)
                 .simpleChannel();
-        register(MessageActivateLightsaber.class, new MessageActivateLightsaber(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageThrowLightsaber.class, new MessageThrowLightsaber(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageChangeColor.class, new MessageChangeColor(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageClickTab.class, new MessageClickTab(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageCraftHilt.class, new MessageCraftHilt(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageHoloMode.class, new MessageHoloMode(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageSetupSkin.class, new MessageSetupSkin(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageSlimSkin.class, new MessageSlimSkin(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageResetHolo.class, new MessageResetHolo(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageShootGuns.class, new MessageShootGuns(), NetworkDirection.PLAY_TO_SERVER);
-        register(MessageLoadBlock.class, new MessageLoadBlock(), NetworkDirection.PLAY_TO_SERVER);
-        register(C2SOpenProjector.class, new C2SOpenProjector(), NetworkDirection.PLAY_TO_CLIENT);
+        register(C2SActivateLightsaber.class, new C2SActivateLightsaber(), NetworkDirection.PLAY_TO_SERVER);
+        register(C2SThrowLightsaber.class, new C2SThrowLightsaber(), NetworkDirection.PLAY_TO_SERVER);
+        register(C2SChangeColor.class, new C2SChangeColor(), NetworkDirection.PLAY_TO_SERVER);
+        register(C2SClickTab.class, new C2SClickTab(), NetworkDirection.PLAY_TO_SERVER);
+        register(C2SCraftHilt.class, new C2SCraftHilt(), NetworkDirection.PLAY_TO_SERVER);
+        register(C2SHoloMode.class, new C2SHoloMode(), NetworkDirection.PLAY_TO_SERVER);
+        register(C2SSetupSkin.class, new C2SSetupSkin(), NetworkDirection.PLAY_TO_SERVER);
+        register(C2SSlimSkin.class, new C2SSlimSkin(), NetworkDirection.PLAY_TO_SERVER);
+        register(C2SResetHolo.class, new C2SResetHolo(), NetworkDirection.PLAY_TO_SERVER);
+        register(C2SShootGuns.class, new C2SShootGuns(), NetworkDirection.PLAY_TO_SERVER);
+        register(C2SLoadBlock.class, new C2SLoadBlock(), NetworkDirection.PLAY_TO_SERVER);
+        register(C2SSetName.class, new C2SSetName(), NetworkDirection.PLAY_TO_SERVER);
+        register(C2SSetRender.class, new C2SSetRender(), NetworkDirection.PLAY_TO_SERVER);
+        register(C2SSetFastRender.class, new C2SSetFastRender(), NetworkDirection.PLAY_TO_SERVER);
+        register(S2COpenProjector.class, new S2COpenProjector(), NetworkDirection.PLAY_TO_CLIENT);
     }
 
     private static <T> void register(Class<T> clazz, IMessage<T> message, NetworkDirection direction)

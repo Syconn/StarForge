@@ -1,4 +1,4 @@
-package mod.stf.syconn.network.messages.s2c;
+package mod.stf.syconn.network.messages.c2s;
 
 import mod.stf.syconn.common.blockEntity.HoloBE;
 import mod.stf.syconn.network.messages.IMessage;
@@ -9,32 +9,32 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class MessageSlimSkin implements IMessage<MessageSlimSkin> {
+public class C2SSlimSkin implements IMessage<C2SSlimSkin> {
 
     private boolean slim;
     private BlockPos pos;
 
-    public MessageSlimSkin() {
+    public C2SSlimSkin() {
     }
 
-    public MessageSlimSkin(boolean slim, BlockPos pos) {
+    public C2SSlimSkin(boolean slim, BlockPos pos) {
         this.slim = slim;
         this.pos = pos;
     }
 
     @Override
-    public void encode(MessageSlimSkin message, FriendlyByteBuf buffer) {
+    public void encode(C2SSlimSkin message, FriendlyByteBuf buffer) {
         buffer.writeBoolean(message.slim);
         buffer.writeBlockPos(message.pos);
     }
 
     @Override
-    public MessageSlimSkin decode(FriendlyByteBuf buffer) {
-        return new MessageSlimSkin(buffer.readBoolean(), buffer.readBlockPos());
+    public C2SSlimSkin decode(FriendlyByteBuf buffer) {
+        return new C2SSlimSkin(buffer.readBoolean(), buffer.readBlockPos());
     }
 
     @Override
-    public void handle(MessageSlimSkin message, Supplier<NetworkEvent.Context> supplier) {
+    public void handle(C2SSlimSkin message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             ServerPlayer player = supplier.get().getSender();
 

@@ -6,7 +6,7 @@ import mod.stf.syconn.init.ModBlocks;
 import mod.stf.syconn.init.ModContainers;
 import mod.stf.syconn.init.ModItems;
 import mod.stf.syconn.network.Network;
-import mod.stf.syconn.network.messages.s2c.MessageLoadBlock;
+import mod.stf.syconn.network.messages.c2s.C2SLoadBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -27,7 +27,7 @@ public class SchematicContainer extends ContainerMenu {
 
     @Override
     public void slotsChanged(Container pContainer) {
-        Network.getPlayChannel().sendToServer(new MessageLoadBlock(blockEntity.getBlockPos()));
+        Network.getPlayChannel().sendToServer(new C2SLoadBlock(blockEntity.getBlockPos()));
         super.slotsChanged(pContainer);
     }
 }

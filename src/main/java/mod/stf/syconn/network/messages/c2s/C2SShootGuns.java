@@ -1,4 +1,4 @@
-package mod.stf.syconn.network.messages.s2c;
+package mod.stf.syconn.network.messages.c2s;
 
 import mod.stf.syconn.common.entity.TieFighter;
 import mod.stf.syconn.network.messages.IMessage;
@@ -9,23 +9,23 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class MessageShootGuns implements IMessage<MessageShootGuns> {
+public class C2SShootGuns implements IMessage<C2SShootGuns> {
 
-    public MessageShootGuns() {
+    public C2SShootGuns() {
     }
 
     @Override
-    public void encode(MessageShootGuns message, FriendlyByteBuf buffer) {
+    public void encode(C2SShootGuns message, FriendlyByteBuf buffer) {
 
     }
 
     @Override
-    public MessageShootGuns decode(FriendlyByteBuf buffer) {
-        return new MessageShootGuns();
+    public C2SShootGuns decode(FriendlyByteBuf buffer) {
+        return new C2SShootGuns();
     }
 
     @Override
-    public void handle(MessageShootGuns message, Supplier<NetworkEvent.Context> supplier) {
+    public void handle(C2SShootGuns message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             ServerPlayer player = supplier.get().getSender();
             if (player != null){

@@ -1,5 +1,6 @@
 package mod.stf.syconn.item;
 
+import mod.stf.syconn.block.Probe;
 import mod.stf.syconn.init.ModBlocks;
 import mod.stf.syconn.world.data.ChunkManager;
 import net.minecraft.core.BlockPos;
@@ -18,12 +19,16 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static mod.stf.syconn.block.MapProjector.ALIGNMENT;
 
 public class ProbeLinkItem extends Item {
 
@@ -35,7 +40,7 @@ public class ProbeLinkItem extends Item {
         ItemStack stack = pPlayer.getItemInHand(pUsedHand);
         CompoundTag tag = stack.getOrCreateTag();
         BlockPos hit = rayTrace(pPlayer);
-        if (!hit.equals(BlockPos.ZERO) && pLevel.getBlockState(hit).is(ModBlocks.PROBE.get())) {
+        if (!hit.equals(BlockPos.ZERO) && pLevel.getBlockState(hit).is(ModBlocks.PROBE.get()) && pLevel.getBlockState(hit).getValue(Probe.ORBIT)) {
             if (tag.contains("blockpos")) {
                 ListTag map = tag.getList("blockpos", Tag.TAG_COMPOUND);
                 if (shouldAddToMap(map, hit)) {
@@ -60,9 +65,13 @@ public class ProbeLinkItem extends Item {
     public InteractionResult useOn(UseOnContext pContext) {
         Level level = pContext.getLevel();
         if (level.getBlockState(pContext.getClickedPos()).is(ModBlocks.MAP_PROJECTOR.get())) {
-            level.getCapability(ChunkManager.CHUNKS).ifPresent(cap -> cap.addProjectorOptions(pContext.getClickedPos(), getBlockPos(pContext.getItemInHand().getOrCreateTag())));
-            pContext.getPlayer().getItemInHand(pContext.getHand()).getOrCreateTag().remove("blockpos");
-            return InteractionResult.SUCCESS;
+            BlockState state = pContext.getLevel().getBlockState(pContext.getClickedPos());
+            BlockPos bePos = pContext.getClickedPos().offset(state.getValue(ALIGNMENT).getX(), 0, state.getValue(ALIGNMENT).getZ());
+            if (!pContext.getLevel().isClientSide) {
+                level.getCapability(ChunkManager.CHUNKS).ifPresent(cap -> cap.addProjectorOptions(bePos, getBlockPos(pContext.getItemInHand().getOrCreateTag())));
+                pContext.getPlayer().getItemInHand(pContext.getHand()).getOrCreateTag().remove("blockpos");
+                return InteractionResult.SUCCESS;
+            }
         }
         return super.useOn(pContext);
     }

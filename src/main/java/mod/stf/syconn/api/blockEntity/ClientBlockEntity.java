@@ -21,10 +21,8 @@ public abstract class ClientBlockEntity extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    protected abstract CompoundTag saveData();
-
     public CompoundTag getUpdateTag() {
-        return saveData();
+        return saveWithoutMetadata();
     }
 
     public void update(){

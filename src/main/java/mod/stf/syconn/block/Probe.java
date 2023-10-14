@@ -1,7 +1,11 @@
 package mod.stf.syconn.block;
 
+import mod.stf.syconn.client.screen.ProbeScreen;
+import mod.stf.syconn.common.blockEntity.ProbeBe;
+import mod.stf.syconn.init.ModBlockEntities;
 import mod.stf.syconn.world.data.ChunkManager;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -15,6 +19,8 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -29,12 +35,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
 
-public class Probe extends Block {
+public class Probe extends Block implements EntityBlock {
 
     public static final BooleanProperty ORBIT = BooleanProperty.create("orbit");
 
     public Probe() { // TODO ANIMATE FLY UP?
-        super(Properties.of(Material.METAL));
+        super(Properties.of(Material.METAL)); // TODO NO LONGER MOVING DOWN
         this.registerDefaultState(this.stateDefinition.any().setValue(ORBIT, false));
     }
 
@@ -45,23 +51,40 @@ public class Probe extends Block {
     }
 
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (!pLevel.isClientSide && pHand == InteractionHand.MAIN_HAND) {
-            if (pLevel.getBlockState(new BlockPos(pPos.getX(), pLevel.getMaxBuildHeight() - 1, pPos.getZ())).isAir()) {
-                pLevel.setBlock(new BlockPos(pPos.getX(), 100, pPos.getZ()), pState.setValue(ORBIT, true), 2);
-                pLevel.getCapability(ChunkManager.CHUNKS).ifPresent(cap -> cap.changeProbeLocation(pPos, new BlockPos(pPos.getX(), pLevel.getMaxBuildHeight() - 1, pPos.getZ())));
-                pLevel.removeBlock(pPos, true);
-                return InteractionResult.CONSUME;
-            }
+        if (pHand == InteractionHand.MAIN_HAND) {
+            // TODO CHANGE TO pLevel.getMaxBuildHeight() - 1
+            if (!pPlayer.isShiftKeyDown()) {
+                if (!pLevel.isClientSide) {
+                    BlockPos topPos = new BlockPos(pPos.getX(), 100, pPos.getZ());
+                    if (pLevel.getBlockState(topPos).isAir() && !pPos.equals(topPos)) {
+                        pLevel.setBlock(topPos, pState.setValue(ORBIT, true), 2);
+                        pLevel.getBlockEntity(topPos, ModBlockEntities.PROBE_BE.get()).get().setCustomName(pLevel.getBlockEntity(pHit.getBlockPos(), ModBlockEntities.PROBE_BE.get()).get().getName());
+                        pLevel.removeBlock(pPos, true);
+                        return InteractionResult.CONSUME;
+                    } else {
+                        Component component = pLevel.getBlockEntity(pHit.getBlockPos(), ModBlockEntities.PROBE_BE.get()).get().getName();
+                        pLevel.removeBlock(pHit.getBlockPos(), false);
+                        int y = pLevel.getHeight(Heightmap.Types.WORLD_SURFACE_WG, pHit.getBlockPos().getX(), pHit.getBlockPos().getZ());
+                        pLevel.getCapability(ChunkManager.CHUNKS).ifPresent(cap -> cap.removeProbe(pHit.getBlockPos()));
+                        pLevel.setBlock(new BlockPos(pHit.getBlockPos().getX(), y, pHit.getBlockPos().getZ()), pState.setValue(ORBIT, false), 2);
+                        pLevel.getBlockEntity(new BlockPos(pHit.getBlockPos().getX(), y, pHit.getBlockPos().getZ()), ModBlockEntities.PROBE_BE.get()).get().setCustomName(component);
+                    }
+                }
+            } else if (pLevel.isClientSide) Minecraft.getInstance().setScreen(new ProbeScreen(pPos, pLevel.getBlockEntity(pPos, ModBlockEntities.PROBE_BE.get()).get().getName()));
         }
+
         return InteractionResult.PASS;
     }
 
     public void onProjectileHit(Level pLevel, BlockState pState, BlockHitResult pHit, Projectile pProjectile) {
         if (!pLevel.isClientSide) {
+            Component component = pLevel.getBlockEntity(pHit.getBlockPos(), ModBlockEntities.PROBE_BE.get()).get().getName();
             pLevel.removeBlock(pHit.getBlockPos(), false);
             int y = pLevel.getHeight(Heightmap.Types.WORLD_SURFACE_WG, pHit.getBlockPos().getX(), pHit.getBlockPos().getZ());
-            pLevel.getCapability(ChunkManager.CHUNKS).ifPresent(cap -> cap.changeProbeLocation(pHit.getBlockPos(), new BlockPos(pHit.getBlockPos().getX(), y, pHit.getBlockPos().getZ())));
-            pLevel.setBlock(new BlockPos(pHit.getBlockPos().getX(), y, pHit.getBlockPos().getZ()), pState.setValue(ORBIT, false), 2);
+            BlockPos newPos = new BlockPos(pHit.getBlockPos().getX(), y, pHit.getBlockPos().getZ());
+            pLevel.setBlock(newPos, pState.setValue(ORBIT, false), 2);
+            pLevel.getBlockEntity(newPos, ModBlockEntities.PROBE_BE.get()).get().setCustomName(component);
+            pLevel.getCapability(ChunkManager.CHUNKS).ifPresent(cap -> cap.removeProjector(pHit.getBlockPos()));
         }
     }
 
@@ -76,5 +99,9 @@ public class Probe extends Block {
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(ORBIT);
+    }
+
+    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+        return new ProbeBe(pPos, pState);
     }
 }

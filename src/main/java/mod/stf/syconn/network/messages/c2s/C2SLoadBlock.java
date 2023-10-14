@@ -1,4 +1,4 @@
-package mod.stf.syconn.network.messages.s2c;
+package mod.stf.syconn.network.messages.c2s;
 
 import mod.stf.syconn.api.util.data.Schematic;
 import mod.stf.syconn.common.blockEntity.SchematicBe;
@@ -11,26 +11,26 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class MessageLoadBlock implements IMessage<MessageLoadBlock> {
+public class C2SLoadBlock implements IMessage<C2SLoadBlock> {
 
     private BlockPos pos;
 
-    public MessageLoadBlock() {
+    public C2SLoadBlock() {
     }
 
-    public MessageLoadBlock(BlockPos pos) {
+    public C2SLoadBlock(BlockPos pos) {
         this.pos = pos;
     }
 
-    public void encode(MessageLoadBlock message, FriendlyByteBuf buffer) {
+    public void encode(C2SLoadBlock message, FriendlyByteBuf buffer) {
         buffer.writeBlockPos(message.pos);
     }
 
-    public MessageLoadBlock decode(FriendlyByteBuf buffer) {
-        return new MessageLoadBlock(buffer.readBlockPos());
+    public C2SLoadBlock decode(FriendlyByteBuf buffer) {
+        return new C2SLoadBlock(buffer.readBlockPos());
     }
 
-    public void handle(MessageLoadBlock message, Supplier<NetworkEvent.Context> supplier) {
+    public void handle(C2SLoadBlock message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             ServerPlayer player = supplier.get().getSender();
             if (player != null){

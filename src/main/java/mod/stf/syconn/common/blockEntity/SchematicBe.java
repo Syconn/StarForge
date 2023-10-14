@@ -72,14 +72,6 @@ public class SchematicBe extends ClientMenuBlockEntity {
         return blockImage;
     }
 
-    protected CompoundTag saveData() {
-        CompoundTag pTag = new CompoundTag();
-        if (blockImage != null)
-            pTag.put("blockimage", NbtUtil.writeServerImageList(blockImage));
-        pTag.put("items", itemHandler.serializeNBT());
-        return pTag;
-    }
-
     protected void saveAdditional(CompoundTag pTag) {
         super.saveAdditional(pTag);
         if (!blockImage.isEmpty())

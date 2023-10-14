@@ -1,4 +1,4 @@
-package mod.stf.syconn.network.messages.s2c;
+package mod.stf.syconn.network.messages.c2s;
 
 import mod.stf.syconn.common.entity.ThrownLightsaber;
 import mod.stf.syconn.network.messages.IMessage;
@@ -8,20 +8,20 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class MessageThrowLightsaber implements IMessage<MessageThrowLightsaber> {
+public class C2SThrowLightsaber implements IMessage<C2SThrowLightsaber> {
 
-    public MessageThrowLightsaber() {}
-
-    @Override
-    public void encode(MessageThrowLightsaber message, FriendlyByteBuf buffer) {}
+    public C2SThrowLightsaber() {}
 
     @Override
-    public MessageThrowLightsaber decode(FriendlyByteBuf buffer) {
-        return new MessageThrowLightsaber();
+    public void encode(C2SThrowLightsaber message, FriendlyByteBuf buffer) {}
+
+    @Override
+    public C2SThrowLightsaber decode(FriendlyByteBuf buffer) {
+        return new C2SThrowLightsaber();
     }
 
     @Override
-    public void handle(MessageThrowLightsaber message, Supplier<NetworkEvent.Context> supplier) {
+    public void handle(C2SThrowLightsaber message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             ServerPlayer player = supplier.get().getSender();
             ThrownLightsaber lightsaber = new ThrownLightsaber(player, player.getLevel(), player.getMainHandItem());

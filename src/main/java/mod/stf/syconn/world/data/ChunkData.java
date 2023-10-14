@@ -33,10 +33,6 @@ public class ChunkData implements ISSavable {
         return projector_chunks.get(pos);
     }
 
-    public void changeProbeLocation(BlockPos last, BlockPos next) {
-        projector_chunks.forEach((proj, list) -> { if (list.contains(last)) { list.remove(last); list.add(next); }});
-    }
-
     public void removeProbe(BlockPos pos) {
         projector_chunks.forEach((proj, list) -> list.remove(pos));
         renderer.remove(new ChunkPos(pos));
@@ -59,11 +55,15 @@ public class ChunkData implements ISSavable {
 
     public void update(Level level) { // OPTIMISE MAYBE
         renderer.clear();
-        projector_chunks.forEach((projector, posList) -> {
-            posList.forEach(pos -> { if (!level.getBlockState(pos).is(ModBlocks.PROBE.get())) posList.remove(pos); });
-            projector_chunks.put(projector, posList);
-            posList.forEach(pos -> renderer.put(new ChunkPos(pos), new ChunkHandler(level, level.getChunkAt(pos).getPos())));
-        });
+
+        for (Map.Entry<BlockPos,List<BlockPos>> e : projector_chunks.entrySet()) {
+            List<BlockPos> positions = new ArrayList<>();
+            for (BlockPos pos : e.getValue()) {
+                if (level.getBlockState(pos).is(ModBlocks.PROBE.get())) positions.add(pos);
+            }
+            projector_chunks.put(e.getKey(), positions);
+            positions.forEach(pos -> renderer.put(new ChunkPos(pos), new ChunkHandler(level, level.getChunkAt(pos).getPos())));
+        }
     }
 
     public void saveNBTData(CompoundTag compound) {

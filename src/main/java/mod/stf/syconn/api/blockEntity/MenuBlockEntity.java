@@ -26,7 +26,6 @@ public abstract class MenuBlockEntity extends BlockEntity implements IStorageBlo
 
     public abstract void tickServer();
 
-    @Override
     public void setRemoved() {
         super.setRemoved();
         handler.invalidate();
@@ -34,8 +33,6 @@ public abstract class MenuBlockEntity extends BlockEntity implements IStorageBlo
 
     protected abstract ItemStackHandler createHandler();
 
-    @Nonnull
-    @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
             return handler.cast();
@@ -43,13 +40,11 @@ public abstract class MenuBlockEntity extends BlockEntity implements IStorageBlo
         return super.getCapability(cap, side);
     }
 
-    @Override
     protected void saveAdditional(CompoundTag pTag) {
         super.saveAdditional(pTag);
         pTag.put("items", itemHandler.serializeNBT());
     }
 
-    @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
         itemHandler.deserializeNBT(pTag.getCompound("items"));

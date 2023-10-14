@@ -1,4 +1,4 @@
-package mod.stf.syconn.network.messages.s2c;
+package mod.stf.syconn.network.messages.c2s;
 
 import mod.stf.syconn.init.ModSounds;
 import mod.stf.syconn.item.Lightsaber;
@@ -13,17 +13,17 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class MessageActivateLightsaber implements IMessage<MessageActivateLightsaber> {
+public class C2SActivateLightsaber implements IMessage<C2SActivateLightsaber> {
 
-    public MessageActivateLightsaber() { }
+    public C2SActivateLightsaber() { }
 
-    public void encode(MessageActivateLightsaber message, FriendlyByteBuf buffer) { }
+    public void encode(C2SActivateLightsaber message, FriendlyByteBuf buffer) { }
 
-    public MessageActivateLightsaber decode(FriendlyByteBuf buffer) {
-        return new MessageActivateLightsaber();
+    public C2SActivateLightsaber decode(FriendlyByteBuf buffer) {
+        return new C2SActivateLightsaber();
     }
 
-    public void handle(MessageActivateLightsaber message, Supplier<NetworkEvent.Context> supplier) {
+    public void handle(C2SActivateLightsaber message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             ServerPlayer player = supplier.get().getSender();
             ItemStack stack = player.getMainHandItem();

@@ -6,7 +6,7 @@ import mod.stf.syconn.Reference;
 import mod.stf.syconn.api.screens.BasicContainerScreen;
 import mod.stf.syconn.common.containers.SchematicContainer;
 import mod.stf.syconn.network.Network;
-import mod.stf.syconn.network.messages.s2c.MessageLoadBlock;
+import mod.stf.syconn.network.messages.c2s.C2SLoadBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -32,7 +32,7 @@ public class SchematicScreen extends BasicContainerScreen<SchematicContainer> {
         relX = (this.width - this.imageWidth) / 2 + imageWidth / 2 - 30;
         relY = (this.height - this.imageHeight) / 2 + 20;
         addRenderableWidget(new ExtendedButton(relX, relY + 45, 60, 20, Component.literal("Load Block"), pButton -> {
-            Network.getPlayChannel().sendToServer(new MessageLoadBlock(pos));
+            Network.getPlayChannel().sendToServer(new C2SLoadBlock(pos));
             //onClose();
         }));
     }

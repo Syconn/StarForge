@@ -15,18 +15,14 @@ public abstract class ClientMenuBlockEntity extends MenuBlockEntity {
         super(pType, pWorldPosition, pBlockState);
     }
 
-    @Nullable
-    @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    protected abstract CompoundTag saveData();
-
-    @Override
     public CompoundTag getUpdateTag() {
-        return saveData();
+        return saveWithoutMetadata();
     }
+
 
     public void update(BlockPos pos, BlockState state){
         level.sendBlockUpdated(pos, state, state, 2);

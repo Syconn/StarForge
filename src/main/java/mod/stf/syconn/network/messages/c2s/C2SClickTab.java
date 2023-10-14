@@ -1,4 +1,4 @@
-package mod.stf.syconn.network.messages.s2c;
+package mod.stf.syconn.network.messages.c2s;
 
 import mod.stf.syconn.block.LightsaberCrafter;
 import mod.stf.syconn.network.messages.IMessage;
@@ -12,31 +12,31 @@ import net.minecraftforge.network.NetworkHooks;
 
 import java.util.function.Supplier;
 
-public class MessageClickTab implements IMessage<MessageClickTab> {
+public class C2SClickTab implements IMessage<C2SClickTab> {
 
     private int id;
     private BlockPos pos;
 
-    public MessageClickTab() {}
+    public C2SClickTab() {}
 
-    public MessageClickTab(int id, BlockPos pos) {
+    public C2SClickTab(int id, BlockPos pos) {
         this.id = id;
         this.pos = pos;
     }
 
     @Override
-    public void encode(MessageClickTab message, FriendlyByteBuf buffer) {
+    public void encode(C2SClickTab message, FriendlyByteBuf buffer) {
         buffer.writeInt(message.id);
         buffer.writeBlockPos(message.pos);
     }
 
     @Override
-    public MessageClickTab decode(FriendlyByteBuf buffer) {
-        return new MessageClickTab(buffer.readInt(), buffer.readBlockPos());
+    public C2SClickTab decode(FriendlyByteBuf buffer) {
+        return new C2SClickTab(buffer.readInt(), buffer.readBlockPos());
     }
 
     @Override
-    public void handle(MessageClickTab message, Supplier<NetworkEvent.Context> supplier) {
+    public void handle(C2SClickTab message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             ServerPlayer player = supplier.get().getSender();
             BlockState oldState = player.level.getBlockState(message.pos);

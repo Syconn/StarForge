@@ -9,6 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Block;
@@ -22,19 +23,24 @@ import java.util.List;
 public class ChunkInfo {
 
     private List<BlockInChunkData> blocks = new ArrayList<>();
-    private final LevelChunk chunk;
+    private final ChunkPos chunkPos;
     private final int x;
     private final int z;
     private final boolean posx, negx, posz, negz;
+    private final boolean fastPosx, fastNegx, fastPosz, fastNegz;
 
-    public ChunkInfo(int x, int z, LevelChunk chunk, boolean posx, boolean negx, boolean posz, boolean negz) {
+    public ChunkInfo(int x, int z, ChunkPos chunkPos, boolean posx, boolean negx, boolean posz, boolean negz, boolean fastPosx, boolean fastNegx, boolean fastPosz, boolean fastNegz) {
         this.x = x;
         this.z = z;
         this.posx = posx;
         this.negx = negx;
         this.posz = posz;
         this.negz = negz;
-        this.chunk = chunk;
+        this.fastPosx = fastPosx;
+        this.fastNegx = fastNegx;
+        this.fastPosz = fastPosz;
+        this.fastNegz = fastNegz;
+        this.chunkPos = chunkPos;
     }
 
     public ChunkInfo(CompoundTag tag) {
@@ -44,22 +50,26 @@ public class ChunkInfo {
         this.negx = tag.getBoolean("negx");
         this.posz = tag.getBoolean("posz");
         this.negz = tag.getBoolean("negz");
-        this.chunk = Minecraft.getInstance().level.getChunk(tag.getInt("chunkx"), tag.getInt("chunkz"));
+        this.fastPosx = tag.getBoolean("fastPosx");
+        this.fastPosz = tag.getBoolean("fastPosz");
+        this.fastNegx = tag.getBoolean("fastNegx");
+        this.fastNegz = tag.getBoolean("fastNegz");
         this.blocks = BlockInChunkData.readAll(tag.getCompound("blocks"));
+        this.chunkPos = new ChunkPos(tag.getInt("chunkx"), tag.getInt("chunkz"));
     }
 
     public void createChunkRenderer(int lowestY, int renderY, Level level) {
-        int highestY = ChunkUtil.getHighestBlock(chunk).getY();
+        int highestY = ChunkUtil.getHighestBlock(level, chunkPos).getY();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 for (int y = lowestY; y < highestY + 1; y++) {
-                    BlockPos pos = new BlockPos(chunk.getPos().getBlockX(x), y, chunk.getPos().getBlockZ(z));
+                    BlockPos pos = new BlockPos(chunkPos.getBlockX(x), y, chunkPos.getBlockZ(z));
                     if (renderAble(pos, level))
-                        blocks.add(new BlockInChunkData(chunk.getBlockState(pos), pos, new VectorData(chunk.getLevel(), pos, posx, negx, posz, negz, lowestY), x, z));
+                        blocks.add(new BlockInChunkData(level.getBlockState(pos), pos, new VectorData(level, pos, fastPosx, fastNegx, fastPosz, fastNegz, lowestY), new VectorData(level, pos, posx, negx, posz, negz, lowestY), x, z));
                     else if (pos.getY() >= renderY + 1 && !level.getBlockState(pos).is(ModTags.Blocks.DONT_RENDER_BLOCK) && !level.getBlockState(pos).is(Blocks.AIR)) {
                         for (Direction d : Direction.values()) {
                             if (VectorData.shouldRenderWithinChunk(level.getChunkAt(pos).getPos(), pos, d, posx, negx, posz, negz)) {
-                                blocks.add(new BlockInChunkData(Blocks.STONE.defaultBlockState(), pos, new VectorData(chunk.getLevel(), pos, posx, negx, posz, negz, lowestY), x, z));
+                                blocks.add(new BlockInChunkData(Blocks.STONE.defaultBlockState(), pos, new VectorData(level, pos, fastPosx, fastNegx, fastPosz, fastNegz, lowestY), new VectorData(level, pos, posx, negx, posz, negz, lowestY), x, z));
                             }
                         }
                     }
@@ -90,8 +100,8 @@ public class ChunkInfo {
         return z;
     }
 
-    public LevelChunk getChunk() {
-        return chunk;
+    public ChunkPos getChunkPos() {
+        return chunkPos;
     }
 
     public List<BlockInChunkData> getBlocks() {
@@ -106,8 +116,12 @@ public class ChunkInfo {
         tag.putBoolean("posz", posz);
         tag.putBoolean("negz", negz);
         tag.putBoolean("negx", negx);
-        tag.putInt("chunkx", chunk.getPos().x);
-        tag.putInt("chunkz", chunk.getPos().z);
+        tag.putBoolean("fastNegx", fastNegx);
+        tag.putBoolean("fastPosx", fastPosx);
+        tag.putBoolean("fastNegz", fastNegz);
+        tag.putBoolean("fastPosz", fastPosz);
+        tag.putInt("chunkx", chunkPos.x);
+        tag.putInt("chunkz", chunkPos.z);
         tag.put("blocks", BlockInChunkData.saveAll(blocks));
         return tag;
     }

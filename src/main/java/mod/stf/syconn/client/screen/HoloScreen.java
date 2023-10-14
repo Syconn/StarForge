@@ -8,10 +8,10 @@ import mod.stf.syconn.api.screens.componet.ToggleButton;
 import mod.stf.syconn.common.blockEntity.HoloBE;
 import mod.stf.syconn.common.containers.HoloContainer;
 import mod.stf.syconn.network.Network;
-import mod.stf.syconn.network.messages.s2c.MessageHoloMode;
-import mod.stf.syconn.network.messages.s2c.MessageResetHolo;
-import mod.stf.syconn.network.messages.s2c.MessageSetupSkin;
-import mod.stf.syconn.network.messages.s2c.MessageSlimSkin;
+import mod.stf.syconn.network.messages.c2s.C2SHoloMode;
+import mod.stf.syconn.network.messages.c2s.C2SResetHolo;
+import mod.stf.syconn.network.messages.c2s.C2SSetupSkin;
+import mod.stf.syconn.network.messages.c2s.C2SSlimSkin;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -42,19 +42,19 @@ public class HoloScreen extends BasicContainerScreen<HoloContainer> {
         relY = (this.height - this.imageHeight) / 2 + 20;
         addRenderableWidget(new ToggleButton(relX - 18, relY, 100, 20, "Mode: ", "Username", "URL", be.getMode(), pButton -> {
             text.setValue(((ToggleButton) pButton).current);
-            Network.getPlayChannel().sendToServer(new MessageHoloMode(((ToggleButton) pButton).current, pos));
+            Network.getPlayChannel().sendToServer(new C2SHoloMode(((ToggleButton) pButton).current, pos));
             slim.visible = ((ToggleButton) pButton).current.matches("URL");
         }));
         addRenderableWidget(new ExtendedButton(relX, relY + 60, 60, 20, Component.literal("Set Skin"), pButton -> {
             if (!text.getValue().contains(" ") && !text.getValue().matches("Username") && !text.getValue().matches("URL")) {
-                Network.getPlayChannel().sendToServer(new MessageSetupSkin(text.getValue(), pos, slim.getMessage().getContents().equals("Slim")));
+                Network.getPlayChannel().sendToServer(new C2SSetupSkin(text.getValue(), pos, slim.getMessage().getContents().equals("Slim")));
                 onClose();
             }
         }));
         addRenderableWidget(text = new EditBox(font, relX - 30, relY + 30, 120, 20, Component.literal(be.getUrlOrName())));
-        addRenderableWidget(slim = new ToggleButton(relX, relY + 85, 60, 20, "", "Standard", "Slim", be.isSlim() ? "Slim" : "Standard", pButton -> Network.getPlayChannel().sendToServer(new MessageSlimSkin(pButton.getMessage().equals("Slim"), pos))));
+        addRenderableWidget(slim = new ToggleButton(relX, relY + 85, 60, 20, "", "Standard", "Slim", be.isSlim() ? "Slim" : "Standard", pButton -> Network.getPlayChannel().sendToServer(new C2SSlimSkin(pButton.getMessage().equals("Slim"), pos))));
         if (Reference.DEV_MODE) addRenderableWidget(new ExtendedButton(0, 0, 60, 20, Component.literal("RESET"), pButton -> {
-            Network.getPlayChannel().sendToServer(new MessageResetHolo(pos));
+            Network.getPlayChannel().sendToServer(new C2SResetHolo(pos));
         }));
 
         relX = (this.width - this.imageWidth) / 2;

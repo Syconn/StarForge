@@ -1,4 +1,4 @@
-package mod.stf.syconn.network.messages.s2c;
+package mod.stf.syconn.network.messages.c2s;
 
 import mod.stf.syconn.common.containers.ColorContainer;
 import mod.stf.syconn.item.lightsaber.LColor;
@@ -14,28 +14,28 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class MessageChangeColor implements IMessage<MessageChangeColor> {
+public class C2SChangeColor implements IMessage<C2SChangeColor> {
 
     private int color;
 
-    public MessageChangeColor() {}
+    public C2SChangeColor() {}
 
-    public MessageChangeColor(int color) {
+    public C2SChangeColor(int color) {
         this.color = color;
     }
 
     @Override
-    public void encode(MessageChangeColor message, FriendlyByteBuf buffer) {
+    public void encode(C2SChangeColor message, FriendlyByteBuf buffer) {
         buffer.writeInt(message.color);
     }
 
     @Override
-    public MessageChangeColor decode(FriendlyByteBuf buffer) {
-        return new MessageChangeColor(buffer.readInt());
+    public C2SChangeColor decode(FriendlyByteBuf buffer) {
+        return new C2SChangeColor(buffer.readInt());
     }
 
     @Override
-    public void handle(MessageChangeColor message, Supplier<NetworkEvent.Context> supplier) {
+    public void handle(C2SChangeColor message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             ServerPlayer player = supplier.get().getSender();
 

@@ -1,4 +1,4 @@
-package mod.stf.syconn.network.messages.s2c;
+package mod.stf.syconn.network.messages.c2s;
 
 import mod.stf.syconn.network.messages.IMessage;
 import mod.stf.syconn.world.data.SkinData;
@@ -9,29 +9,29 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class MessageResetHolo implements IMessage<MessageResetHolo> {
+public class C2SResetHolo implements IMessage<C2SResetHolo> {
 
     private BlockPos pos;
 
-    public MessageResetHolo() {
+    public C2SResetHolo() {
     }
 
-    public MessageResetHolo(BlockPos pos) {
+    public C2SResetHolo(BlockPos pos) {
         this.pos = pos;
     }
 
     @Override
-    public void encode(MessageResetHolo message, FriendlyByteBuf buffer) {
+    public void encode(C2SResetHolo message, FriendlyByteBuf buffer) {
         buffer.writeBlockPos(message.pos);
     }
 
     @Override
-    public MessageResetHolo decode(FriendlyByteBuf buffer) {
-        return new MessageResetHolo(buffer.readBlockPos());
+    public C2SResetHolo decode(FriendlyByteBuf buffer) {
+        return new C2SResetHolo(buffer.readBlockPos());
     }
 
     @Override
-    public void handle(MessageResetHolo message, Supplier<NetworkEvent.Context> supplier) {
+    public void handle(C2SResetHolo message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             if (supplier.get().getSender() != null) {
                 supplier.get().getSender().level.getCapability(SkinManager.SKINS).ifPresent(SkinData::resetSkins);

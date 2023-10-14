@@ -1,4 +1,4 @@
-package mod.stf.syconn.network.messages.s2c;
+package mod.stf.syconn.network.messages.c2s;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import mod.stf.syconn.api.util.SkinGrabber;
@@ -14,23 +14,23 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class MessageSetupSkin implements IMessage<MessageSetupSkin> {
+public class C2SSetupSkin implements IMessage<C2SSetupSkin> {
 
     private String urlOrName;
     private BlockPos pos;
     private boolean slim;
 
-    public MessageSetupSkin() {
+    public C2SSetupSkin() {
     }
 
-    public MessageSetupSkin(String urlOrName, BlockPos pos, boolean slim) {
+    public C2SSetupSkin(String urlOrName, BlockPos pos, boolean slim) {
         this.urlOrName = urlOrName;
         this.pos = pos;
         this.slim = slim;
     }
 
     @Override
-    public void encode(MessageSetupSkin message, FriendlyByteBuf buffer) {
+    public void encode(C2SSetupSkin message, FriendlyByteBuf buffer) {
         CompoundTag nbt = new CompoundTag();
         nbt.putString("urlorname", message.urlOrName);
         buffer.writeNbt(nbt);
@@ -39,13 +39,13 @@ public class MessageSetupSkin implements IMessage<MessageSetupSkin> {
     }
 
     @Override
-    public MessageSetupSkin decode(FriendlyByteBuf buffer) {
+    public C2SSetupSkin decode(FriendlyByteBuf buffer) {
         CompoundTag nbt = buffer.readNbt();
-        return new MessageSetupSkin(nbt.getString("urlorname"), buffer.readBlockPos(), buffer.readBoolean());
+        return new C2SSetupSkin(nbt.getString("urlorname"), buffer.readBlockPos(), buffer.readBoolean());
     }
 
     @Override
-    public void handle(MessageSetupSkin message, Supplier<NetworkEvent.Context> supplier) {
+    public void handle(C2SSetupSkin message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             ServerPlayer player = supplier.get().getSender();
 

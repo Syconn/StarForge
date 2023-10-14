@@ -1,4 +1,4 @@
-package mod.stf.syconn.network.messages.s2c;
+package mod.stf.syconn.network.messages.c2s;
 
 import mod.stf.syconn.common.containers.HiltContainer;
 import mod.stf.syconn.common.recipes.LightsaberRecipe;
@@ -15,25 +15,25 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class MessageCraftHilt implements IMessage<MessageCraftHilt> {
+public class C2SCraftHilt implements IMessage<C2SCraftHilt> {
     
     private ResourceLocation id;
     
-    public MessageCraftHilt() {}
+    public C2SCraftHilt() {}
 
-    public MessageCraftHilt(ResourceLocation id) {
+    public C2SCraftHilt(ResourceLocation id) {
         this.id = id;
     }
 
-    public void encode(MessageCraftHilt message, FriendlyByteBuf buffer) {
+    public void encode(C2SCraftHilt message, FriendlyByteBuf buffer) {
         buffer.writeResourceLocation(message.id);
     }
 
-    public MessageCraftHilt decode(FriendlyByteBuf buffer) {
-        return new MessageCraftHilt(buffer.readResourceLocation());
+    public C2SCraftHilt decode(FriendlyByteBuf buffer) {
+        return new C2SCraftHilt(buffer.readResourceLocation());
     }
 
-    public void handle(MessageCraftHilt message, Supplier<NetworkEvent.Context> supplier) {
+    public void handle(C2SCraftHilt message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             ServerPlayer player = supplier.get().getSender();
 

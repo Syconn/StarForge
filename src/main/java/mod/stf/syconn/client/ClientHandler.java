@@ -14,15 +14,13 @@ import mod.stf.syconn.init.*;
 import mod.stf.syconn.item.Lightsaber;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import mod.stf.syconn.network.Network;
-import mod.stf.syconn.network.messages.s2c.MessageActivateLightsaber;
-import mod.stf.syconn.network.messages.s2c.MessageThrowLightsaber;
+import mod.stf.syconn.network.messages.c2s.C2SActivateLightsaber;
+import mod.stf.syconn.network.messages.c2s.C2SThrowLightsaber;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
@@ -100,10 +98,10 @@ public class ClientHandler {
         if (player != null) {
             if(KEY_LIGHTSABER_ACTIVATE.isDown() && KEY_LIGHTSABER_ACTIVATE.consumeClick())
             {
-                Network.getPlayChannel().sendToServer(new MessageActivateLightsaber());
+                Network.getPlayChannel().sendToServer(new C2SActivateLightsaber());
             }
             if (Minecraft.getInstance().options.keyDrop.isDown() && player.isShiftKeyDown() && player.getMainHandItem().getItem() instanceof Lightsaber){
-                Network.getPlayChannel().sendToServer(new MessageThrowLightsaber());
+                Network.getPlayChannel().sendToServer(new C2SThrowLightsaber());
                 Minecraft.getInstance().options.keyDrop.consumeClick();
             }
         }

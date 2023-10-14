@@ -14,8 +14,8 @@ import mod.stf.syconn.item.lightsaber.LColor;
 import mod.stf.syconn.item.lightsaber.LightsaberData;
 import mod.stf.syconn.item.lightsaber.LightsaberHelper;
 import mod.stf.syconn.network.Network;
-import mod.stf.syconn.network.messages.s2c.MessageChangeColor;
-import mod.stf.syconn.network.messages.s2c.MessageClickTab;
+import mod.stf.syconn.network.messages.c2s.C2SChangeColor;
+import mod.stf.syconn.network.messages.c2s.C2SClickTab;
 import mod.stf.syconn.util.ColorConverter;
 import mod.stf.syconn.util.GuiHelper;
 import net.minecraft.client.gui.components.Button;
@@ -85,11 +85,11 @@ public class ColorScreen extends TabbedScreen<ColorContainer> {
 
     protected void tabbedClicked(Button button) {
         super.tabbedClicked(button);
-        Network.getPlayChannel().sendToServer(new MessageClickTab(((TabButton)button).getId(), inv.getBlockEntity().getBlockPos()));
+        Network.getPlayChannel().sendToServer(new C2SClickTab(((TabButton)button).getId(), inv.getBlockEntity().getBlockPos()));
     }
 
     public void buttonShit(Button button){
-        Network.getPlayChannel().sendToServer(new MessageChangeColor(ColorConverter.convert(rgb[0], rgb[1], rgb[2])));
+        Network.getPlayChannel().sendToServer(new C2SChangeColor(ColorConverter.convert(rgb[0], rgb[1], rgb[2])));
     }
 
     public IItemHandler handler(){

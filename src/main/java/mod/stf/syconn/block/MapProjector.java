@@ -1,15 +1,12 @@
 package mod.stf.syconn.block;
 
-import mod.stf.syconn.client.screen.MapScreen;
 import mod.stf.syconn.common.blockEntity.MapBe;
-import mod.stf.syconn.common.blockEntity.SchematicBe;
 import mod.stf.syconn.init.ModBlockEntities;
 import mod.stf.syconn.item.ProbeLinkItem;
 import mod.stf.syconn.network.Network;
-import mod.stf.syconn.network.messages.c2s.C2SOpenProjector;
+import mod.stf.syconn.network.messages.s2c.S2COpenProjector;
 import mod.stf.syconn.util.MultiBlockAlignment;
 import mod.stf.syconn.world.data.ChunkManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -36,7 +33,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 public class MapProjector extends BaseEntityBlock  {
@@ -50,14 +46,11 @@ public class MapProjector extends BaseEntityBlock  {
     }
 
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        // TODO SPY CAMERAS
         if (!(pPlayer.getItemInHand(pHand).getItem() instanceof ProbeLinkItem)) {
             BlockPos bePos = pPos.offset(pState.getValue(ALIGNMENT).getX(), 0, pState.getValue(ALIGNMENT).getZ());
             if (!pLevel.isClientSide && pPlayer instanceof ServerPlayer sp && pLevel.getBlockEntity(bePos) instanceof MapBe be) {
-                be.setSelections();
-                Network.getPlayChannel().sendTo(new C2SOpenProjector(bePos), sp.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+                Network.getPlayChannel().sendTo(new S2COpenProjector(bePos, be.setSelections()), sp.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
             }
-            pLevel.setBlock(pPos, pState.setValue(TOP, false), 2); // TODO Improve
         }
         return InteractionResult.PASS;
     }

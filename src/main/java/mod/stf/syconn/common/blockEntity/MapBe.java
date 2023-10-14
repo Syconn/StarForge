@@ -2,6 +2,7 @@ package mod.stf.syconn.common.blockEntity;
 
 import mod.stf.syconn.api.blockEntity.ClientBlockEntity;
 import mod.stf.syconn.api.util.NbtUtil;
+import mod.stf.syconn.block.MapProjector;
 import mod.stf.syconn.init.ModBlockEntities;
 import mod.stf.syconn.util.data.ChunkHandler;
 import mod.stf.syconn.world.data.ChunkData;
@@ -11,17 +12,17 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.extensions.IForgeBlockEntity;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MapBe extends ClientBlockEntity {
 
-    private ChunkHandler chunkHandler;
+    private ChunkHandler chunkHandler = new ChunkHandler();
     private BlockPos selectedPos = BlockPos.ZERO;
     private List<BlockPos> selections = new ArrayList<>();
+    private Boolean fastRender = false;
     private static int map_update = 0;
     private static int receiving_signal = 0;
 
@@ -34,44 +35,59 @@ public class MapBe extends ClientBlockEntity {
             ChunkData cap = level.getCapability(ChunkManager.CHUNKS).resolve().get();
             if (map_update < 1000) map_update++;
             else if (!be.selectedPos.equals(BlockPos.ZERO)) be.chunkHandler = cap.getChunkHandler(be.selectedPos, level);
-            if (receiving_signal < 1000) receiving_signal++;
-            else if (!be.selectedPos.equals(BlockPos.ZERO) && !cap.getChunkOptions(pos).contains(be.selectedPos)) be.selectedPos = BlockPos.ZERO;
-            update(level, pos, state);
+            if (receiving_signal < 350) receiving_signal++;
+            else {
+                receiving_signal = 0;
+                if (!be.selectedPos.equals(BlockPos.ZERO) && !cap.getChunkOptions(pos).contains(be.selectedPos)) {
+                    be.selectedPos = BlockPos.ZERO;
+                    be.chunkHandler = new ChunkHandler();
+                }
+            }
         }
+        if (!be.chunkHandler.getChunks().isEmpty() && state.getValue(MapProjector.TOP)) level.setBlock(pos, state.setValue(MapProjector.TOP, false), 2);
+        else if (be.chunkHandler.getChunks().isEmpty() && !state.getValue(MapProjector.TOP)) level.setBlock(pos, state.setValue(MapProjector.TOP, true), 2);
+        update(level, pos, state);
     }
 
-    public void setSelections() {
+    public List<BlockPos> setSelections() {
         selections = level.getCapability(ChunkManager.CHUNKS).map(data -> data.getChunkOptions(worldPosition)).orElse(List.of());
         update();
-    }
-
-    public List<BlockPos> getSelections() {
         return selections;
     }
 
-    protected CompoundTag saveData() {
-        CompoundTag tag = new CompoundTag();
-        tag.put("selectedpos", NbtUtils.writeBlockPos(selectedPos));
-        if (chunkHandler != null) tag.put("handler", chunkHandler.save());
-        if (!selections.isEmpty()) tag.put("selections", NbtUtil.writeBlockPosses(selections));
-        return tag;
+    public void setSelectedPos(BlockPos selectedPos, Level level) {
+        this.selectedPos = selectedPos;
+        ChunkData cap = level.getCapability(ChunkManager.CHUNKS).resolve().get();
+        chunkHandler = cap.getChunkHandler(selectedPos, level);
+        update();
+    }
+
+    public void setFastRender(Boolean fastRender) {
+        this.fastRender = fastRender;
+        update();
+    }
+
+    public @Nullable ChunkHandler getChunkHandler() {
+        return chunkHandler;
+    }
+
+    public Boolean isFastRender() {
+        return fastRender;
     }
 
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
+        tag.putBoolean("fastrender", fastRender);
         tag.put("selectedpos", NbtUtils.writeBlockPos(selectedPos));
-        if (!selections.isEmpty()) tag.put("selections", NbtUtil.writeBlockPosses(selections));
-        if (chunkHandler != null) tag.put("handler", chunkHandler.save());
+        tag.put("handler", chunkHandler.save());
+        tag.put("selections", NbtUtil.writeBlockPosses(selections));
     }
 
     public void load(CompoundTag tag) {
         super.load(tag);
+        fastRender = tag.getBoolean("fastrender");
         selectedPos = NbtUtils.readBlockPos(tag.getCompound("selectedpos"));
         if (tag.contains("selections")) selections = NbtUtil.readBlockPosses(tag.getCompound("selections"));
         if (tag.contains("handler")) chunkHandler = new ChunkHandler(tag.getCompound("handler"));
-    }
-
-    public AABB getRenderBoundingBox() {
-        return IForgeBlockEntity.INFINITE_EXTENT_AABB;
     }
 }

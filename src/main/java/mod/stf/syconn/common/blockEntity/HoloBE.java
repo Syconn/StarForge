@@ -61,17 +61,6 @@ public class HoloBE extends ClientMenuBlockEntity {
         return slim;
     }
 
-    protected CompoundTag saveData() {
-        CompoundTag pTag = new CompoundTag();
-        pTag.putString("mode", mode);
-        pTag.putString("urlorname", urlOrName);
-        pTag.putBoolean("slim", slim);
-        pTag.put("items", itemHandler.serializeNBT());
-        if (skin != null)
-            pTag.put("skin", skin.write());
-        return pTag;
-    }
-
     protected void saveAdditional(CompoundTag pTag) {
         super.saveAdditional(pTag);
         pTag.putString("mode", mode);

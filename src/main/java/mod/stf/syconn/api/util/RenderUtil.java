@@ -33,13 +33,12 @@ import java.util.List;
 
 public class RenderUtil {
 
-    public static void renderSingleBlock(BlockState pState, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, BlockAndTintGetter level, BlockPos pos, VectorData data) {
+    public static void renderSingleBlock(BlockState pState, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, VectorData data) {
         RenderShape rendershape = pState.getRenderShape();
         if (rendershape != RenderShape.INVISIBLE) {
             switch (rendershape) {
                 case MODEL -> {
                     BakedModel bakedmodel = Minecraft.getInstance().getModelManager().getBlockModelShaper().getBlockModel(pState);
-                    // TODO Fix below Water
                     for (RenderType rt : bakedmodel.getRenderTypes(pState, RandomSource.create(42), ModelData.EMPTY)) {
                         RandomSource randomsource = RandomSource.create();
                         for(Direction direction : handleHiddenFaces(data.getBlockFaces())) {
