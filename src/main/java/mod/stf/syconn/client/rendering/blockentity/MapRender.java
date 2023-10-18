@@ -23,7 +23,7 @@ public class MapRender implements BlockEntityRenderer<MapBe> {
 
     private final Minecraft mc = Minecraft.getInstance();
 
-    public MapRender(BlockEntityRendererProvider.Context pContext) { }
+    public MapRender(BlockEntityRendererProvider.Context pContext) { } // TODO NEED TO FIX 3x3 Sides
 
     public void render(MapBe pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
         ChunkHandler handler = pBlockEntity.getChunkHandler();
@@ -34,15 +34,12 @@ public class MapRender implements BlockEntityRenderer<MapBe> {
             for (ChunkInfo data : handler.getProcessedChunks(pBlockEntity.isFastRender())) { // TODO Need to add edge faces for 3x3
                 pPoseStack.pushPose();
                 pPoseStack.translate(data.getX() * 16, 0, data.getZ() * 16);
-                for (BlockInChunkData blockInChunkData : data.getBlocks()) blockInChunkData.render(pPoseStack, pBufferSource, pPackedLight, pBlockEntity.getLevel(), handler.getRenderY(), pBlockEntity.isFastRender());
+                for (BlockInChunkData blockInChunkData : data.getBlocks()) blockInChunkData.render(pPoseStack, pBufferSource, pPackedLight, handler.getRenderY(), pBlockEntity.isFastRender());
+                if (pBlockEntity.isFastRender()) for (BlockInChunkData blockInChunkData : data.getFastBlocks()) blockInChunkData.render(pPoseStack, pBufferSource, pPackedLight, handler.getRenderY(), pBlockEntity.isFastRender());;
                 pPoseStack.popPose();
             }
             pPoseStack.popPose();
         }
-    }
-
-    public boolean shouldRenderOffScreen(MapBe pBlockEntity) {
-        return false;
     }
 
     public int getViewDistance() {

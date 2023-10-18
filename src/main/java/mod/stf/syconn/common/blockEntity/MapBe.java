@@ -12,7 +12,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +66,7 @@ public class MapBe extends ClientBlockEntity {
         update();
     }
 
-    public @Nullable ChunkHandler getChunkHandler() {
+    public ChunkHandler getChunkHandler() {
         return chunkHandler;
     }
 

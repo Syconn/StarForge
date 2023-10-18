@@ -23,6 +23,7 @@ import java.util.List;
 public class ChunkInfo {
 
     private List<BlockInChunkData> blocks = new ArrayList<>();
+    private List<BlockInChunkData> fast_blocks = new ArrayList<>();
     private final ChunkPos chunkPos;
     private final int x;
     private final int z;
@@ -55,6 +56,7 @@ public class ChunkInfo {
         this.fastNegx = tag.getBoolean("fastNegx");
         this.fastNegz = tag.getBoolean("fastNegz");
         this.blocks = BlockInChunkData.readAll(tag.getCompound("blocks"));
+        this.fast_blocks = BlockInChunkData.readAll(tag.getCompound("fastblocks"));
         this.chunkPos = new ChunkPos(tag.getInt("chunkx"), tag.getInt("chunkz"));
     }
 
@@ -64,12 +66,22 @@ public class ChunkInfo {
             for (int z = 0; z < 16; z++) {
                 for (int y = lowestY; y < highestY + 1; y++) {
                     BlockPos pos = new BlockPos(chunkPos.getBlockX(x), y, chunkPos.getBlockZ(z));
-                    if (renderAble(pos, level))
+                    if (renderAble(pos, level)) {
                         blocks.add(new BlockInChunkData(level.getBlockState(pos), pos, new VectorData(level, pos, fastPosx, fastNegx, fastPosz, fastNegz, lowestY), new VectorData(level, pos, posx, negx, posz, negz, lowestY), x, z));
+                    }
                     else if (pos.getY() >= renderY + 1 && !level.getBlockState(pos).is(ModTags.Blocks.DONT_RENDER_BLOCK) && !level.getBlockState(pos).is(Blocks.AIR)) {
                         for (Direction d : Direction.values()) {
                             if (VectorData.shouldRenderWithinChunk(level.getChunkAt(pos).getPos(), pos, d, posx, negx, posz, negz)) {
                                 blocks.add(new BlockInChunkData(Blocks.STONE.defaultBlockState(), pos, new VectorData(level, pos, fastPosx, fastNegx, fastPosz, fastNegz, lowestY), new VectorData(level, pos, posx, negx, posz, negz, lowestY), x, z));
+                                break;
+                            }
+                        }
+                    }
+                    if (pos.getY() >= renderY + 1 && !level.getBlockState(pos).is(ModTags.Blocks.DONT_RENDER_BLOCK) && !level.getBlockState(pos).is(Blocks.AIR)) {
+                        for (Direction d : Direction.values()) {
+                            if (VectorData.shouldRenderWithinChunk(level.getChunkAt(pos).getPos(), pos, d, fastPosx, fastNegx, fastPosz, fastNegz)) {
+                                fast_blocks.add(new BlockInChunkData(Blocks.STONE.defaultBlockState(), pos, new VectorData(level, pos, fastPosx, fastNegx, fastPosz, fastNegz, lowestY), new VectorData(level, pos, posx, negx, posz, negz, lowestY), x, z));
+                                break;
                             }
                         }
                     }
@@ -107,6 +119,9 @@ public class ChunkInfo {
     public List<BlockInChunkData> getBlocks() {
         return blocks;
     }
+    public List<BlockInChunkData> getFastBlocks() {
+        return fast_blocks;
+    }
 
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
@@ -123,20 +138,7 @@ public class ChunkInfo {
         tag.putInt("chunkx", chunkPos.x);
         tag.putInt("chunkz", chunkPos.z);
         tag.put("blocks", BlockInChunkData.saveAll(blocks));
+        tag.put("fastblocks", BlockInChunkData.saveAll(fast_blocks));
         return tag;
-    }
-
-    public static CompoundTag saveAll(List<ChunkInfo> data) {
-        CompoundTag tag = new CompoundTag();
-        ListTag listTag = new ListTag();
-        data.forEach(chunk -> listTag.add(chunk.save()));
-        tag.put("chunks", listTag);
-        return tag;
-    }
-
-    public static List<ChunkInfo> readAll(CompoundTag tag) {
-        List<ChunkInfo> data = new ArrayList<>();
-        if (tag.contains("chunks", Tag.TAG_LIST)) tag.getList("chunks", Tag.TAG_COMPOUND).forEach(chunk -> data.add(new ChunkInfo((CompoundTag) chunk)));
-        return data;
     }
 }
